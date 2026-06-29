@@ -126,24 +126,12 @@
       </div>
     </div>
     <nav class="nav-tabs">
-      <button class="tab-btn active" data-target="overview">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Overview
-      </button>
-      <button class="tab-btn" data-target="logDeal">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Log Deal
-      </button>
-      <button class="tab-btn" data-target="pipeline">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Pipeline
-      </button>
-      <button class="tab-btn" data-target="history">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>History
-      </button>
-      <button class="tab-btn" data-target="payouts">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Payouts
-      </button>
-      <button class="tab-btn" data-target="calculator">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="14" y1="18" x2="16" y2="18"/></svg>Calc
-      </button>
+      <button class="tab-btn active" data-target="overview">Overview</button>
+      <button class="tab-btn" data-target="logDeal">Log Deal</button>
+      <button class="tab-btn" data-target="pipeline">Pipeline</button>
+      <button class="tab-btn" data-target="history">History</button>
+      <button class="tab-btn" data-target="payouts">Payouts</button>
+      <button class="tab-btn" data-target="calculator">Calc</button>
     </nav>
   </header>
 
@@ -231,7 +219,7 @@
     </section>
 
     <!-- LOG DEAL -->
-    <section id="logDeal" class="tab-section hidden">
+    <section id="logDeal" class="tab-section">
       <div class="glass-card">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8890A" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
@@ -341,7 +329,7 @@
     </section>
 
     <!-- PIPELINE -->
-    <section id="pipeline" class="tab-section hidden">
+    <section id="pipeline" class="tab-section">
       <div class="glass-card" style="padding:16px 20px;margin-bottom:16px;">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
           <div>
@@ -367,7 +355,7 @@
     </section>
 
     <!-- HISTORY -->
-    <section id="history" class="tab-section hidden">
+    <section id="history" class="tab-section">
       <div class="glass-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
           <h2 style="margin:0;">Deal History</h2>
@@ -388,7 +376,7 @@
     </section>
 
     <!-- PAYOUTS -->
-    <section id="payouts" class="tab-section hidden">
+    <section id="payouts" class="tab-section">
       <div class="stats-grid mb-4 payout-stats-grid">
         <div class="stat-card">
           <div class="stat-label">Total Earned</div>
@@ -435,7 +423,7 @@
     </section>
 
     <!-- CALCULATOR -->
-    <section id="calculator" class="tab-section hidden">
+    <section id="calculator" class="tab-section">
       <div class="glass-card">
         <h2>Earnings Calculator</h2>
         <p class="muted-text mb-4" style="font-size:13px;">Calculate potential earnings including tier bonuses.</p>

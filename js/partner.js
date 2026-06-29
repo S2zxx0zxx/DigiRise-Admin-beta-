@@ -76,17 +76,34 @@ document.addEventListener('DOMContentLoaded', () => {
   )
   
   // Tab Switching
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const sections = document.querySelectorAll('.tab-section');
-  
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabBtns.forEach(b => b.classList.remove('active'));
-      sections.forEach(s => s.classList.add('hidden'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.target).classList.remove('hidden');
+  function initTabs() {
+    const tabBtns = document.querySelectorAll('.tab-btn[data-target]');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.target;
+        
+        // Remove active from all buttons
+        tabBtns.forEach(b => b.classList.remove('active'));
+        // Add active to clicked button
+        btn.classList.add('active');
+        
+        // Hide all sections
+        document.querySelectorAll('.tab-section').forEach(sec => {
+          sec.classList.remove('active');
+        });
+        
+        // Show target section
+        const targetSec = document.getElementById(target);
+        if (targetSec) {
+          targetSec.classList.add('active');
+        }
+      });
     });
-  });
+  }
+
+  // Call initTabs inside DOMContentLoaded
+  // after all other init code
+  initTabs();
 
   // State
   let currentTierObj = TIERS.JOINING;

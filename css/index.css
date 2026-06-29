@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+html {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 html, body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -81,14 +89,16 @@ p, span, a, button, input, label {
 
 .hero-h1 {
   font-family: 'Syne', sans-serif;
-  font-size: clamp(36px, 7vw, 72px);
-  font-weight: 800;
-  line-height: 1.05;
+  font-size: clamp(32px, 6vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
   margin-bottom: 20px;
+  color: #ffffff;
 }
 
 .hero-h1 .grad {
-  background: linear-gradient(135deg, var(--gold-xl), var(--gold), #a06a00);
+  background: linear-gradient(135deg, #F5C842, #C8890A);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -232,10 +242,11 @@ p, span, a, button, input, label {
 }
 
 .comm-earn {
-  font-family: 'Space Mono', monospace;
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--green);
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #22C55E;
+  margin-bottom: 4px;
 }
 
 .comm-earn-label {

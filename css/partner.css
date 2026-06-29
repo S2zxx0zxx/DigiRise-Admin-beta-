@@ -248,7 +248,11 @@ button {
   margin: 0 auto;
 }
 .tab-section {
+  display: none;
   animation: fadeIn 0.3s ease;
+}
+.tab-section.active {
+  display: block;
 }
 
 /* Glass Cards */
