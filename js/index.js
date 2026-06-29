@@ -10,25 +10,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Setup tab switcher for Partner vs Admin logins
   const tabPartner = document.getElementById('tab-btn-partner');
   const tabAdmin = document.getElementById('tab-btn-admin');
-  const partnerForm = document.getElementById('login-form-partner');
-  const adminForm = document.getElementById('login-form-admin');
+  const partnerForm = document.getElementById('partner-login-form');
+  const adminForm = document.getElementById('admin-login-form');
   
   const themeWrapper = document.getElementById('login-theme-wrapper');
   const cardContainer = document.getElementById('login-card-container');
   const subtitleP = document.getElementById('login-subtitle-p');
   const titleH2 = document.getElementById('login-title-h2');
 
-  if (tabPartner && tabAdmin && partnerForm && adminForm) {
+  if (tabPartner && partnerForm) {
     tabPartner.addEventListener('click', () => {
       tabPartner.classList.add('active');
-      tabAdmin.classList.remove('active');
+      if(tabAdmin) tabAdmin.classList.remove('active');
       partnerForm.classList.add('login-form-active');
-      adminForm.classList.remove('login-form-active');
+      if(adminForm) adminForm.classList.remove('login-form-active');
       
       // Remove purple admin theme
       if (themeWrapper) themeWrapper.classList.remove('admin-active-theme');
       if (cardContainer) cardContainer.classList.remove('admin-active-theme');
-      tabAdmin.classList.remove('admin-active-theme');
+      if (tabAdmin) tabAdmin.classList.remove('admin-active-theme');
       if (subtitleP) {
         subtitleP.textContent = "Growth Partner Login";
       }
@@ -37,12 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       clearErrors();
     });
+  }
 
+  if (tabAdmin && adminForm) {
     tabAdmin.addEventListener('click', () => {
       tabAdmin.classList.add('active');
-      tabPartner.classList.remove('active');
+      if(tabPartner) tabPartner.classList.remove('active');
       adminForm.classList.add('login-form-active');
-      partnerForm.classList.remove('login-form-active');
+      if(partnerForm) partnerForm.classList.remove('login-form-active');
       
       // Add purple admin theme classes
       if (themeWrapper) themeWrapper.classList.add('admin-active-theme');
@@ -57,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
       clearErrors();
     });
   }
+
+  // Make sure partner tab is active by default on load
+  if (tabPartner) tabPartner.click();
 });
 
 // Clear login error messages

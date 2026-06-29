@@ -345,3 +345,38 @@ body::before {
 .modal-btn-cancel { flex:1;padding:12px;border-radius:8px;background:transparent;border:1px solid #2a2a2a;color:#666;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit; }
 .modal-btn-save { flex:1;padding:12px;border-radius:8px;background:linear-gradient(135deg,#C8890A,#E8A020);color:#000;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit; }
 
+.login-form { display: none; }
+.login-form.login-form-active { display: block; }
+
+.tab-switcher {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  background: var(--bg3);
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.tab-switch-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-switch-btn.active {
+  background: var(--bg5);
+  color: var(--white);
+}
+
+.admin-active-theme .tab-switch-btn.active {
+  background: var(--purple);
+  color: #fff;
+}
