@@ -1,0 +1,384 @@
+// Shared utilities, constants, and Firebase initialization
+
+// Initialize Firebase (will run after firebase-config.js and Firebase CDN scripts are loaded)
+let app, database;
+
+try {
+  if (typeof firebase === 'undefined') {
+    console.error("Firebase SDK is not loaded. Please make sure CDN scripts are loaded.");
+  } else {
+    app = firebase.initializeApp(firebaseConfig);
+    database = firebase.database();
+    console.log("Firebase initialized successfully.");
+
+    // Phase 0: Test connection / read-write wiring
+    const connectedRef = database.ref(".info/connected");
+    connectedRef.on("value", (snap) => {
+      if (snap.val() === true) {
+        console.log("Firebase Realtime DB: Connected.");
+        // Perform a test write to verify permissions/wiring
+        const testRef = database.ref("test_wiring");
+        testRef.set({
+          lastChecked: new Date().toISOString(),
+          status: "success"
+        }).then(() => {
+          console.log("Test write successful.");
+        }).catch(err => {
+          console.warn("Test write failed (expected if rules deny write):", err);
+        });
+      } else {
+        console.log("Firebase Realtime DB: Disconnected.");
+      }
+    });
+  }
+} catch (e) {
+  console.error("Error initializing Firebase:", e);
+}
+
+// --- Shared Constants ---
+const PACKAGES = {
+  ELITE: { name: 'Elite', price: 75000, commissionPct: 15, color: '#C8890A' },
+  PRO: { name: 'Pro', price: 35000, commissionPct: 15, color: '#C8890A' },
+  GROWTH: { name: 'Growth', price: 25000, commissionPct: 10, color: '#3B82F6' },
+  STARTER: { name: 'Starter', price: 8000, commissionPct: 10, color: '#3B82F6' }
+};
+
+const TIERS = {
+  JOINING: { name: 'Joining', minDeals: 0, bonus: 0 },
+  BRONZE: { name: 'Bronze', minDeals: 3, bonus: 500 },
+  SILVER: { name: 'Silver', minDeals: 7, bonus: 1500 },
+  GOLD: { name: 'Gold', minDeals: 15, bonus: 5000 }
+};
+
+// --- Shared Helper Functions ---
+
+// Format currency in Indian Rupees format (e.g. ₹75,000)
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0
+  }).format(amount);
+}
+
+// HTML Escape to prevent XSS attacks
+function escapeHTML(str) {
+  if (!str) return '';
+  return str
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+// Simple Toast System
+function showToast(message, type = 'info') {
+  let toastEl = document.getElementById('toast');
+  if (!toastEl) {
+    // If not exists, dynamically inject it
+    toastEl = document.createElement('div');
+    toastEl.id = 'toast';
+    toastEl.className = 'toast';
+    document.body.appendChild(toastEl);
+  }
+
+  toastEl.className = `toast show ${type}`;
+  toastEl.textContent = message;
+
+  setTimeout(() => {
+    toastEl.className = 'toast';
+  }, 4000);
+}
+
+// Helper for SHA-256 fallback
+const rightRotate = (value, amount) => (value >>> amount) | (value << (32 - amount));
+
+// Pre-computed SHA-256 round constants (fractional parts of cube roots of the first 64 primes)
+const SHA256_K = [
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+];
+
+// Pre-computed SHA-256 initial hash values (fractional parts of square roots of the first 8 primes)
+const SHA256_H = [
+  0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+];
+
+/* eslint-disable no-bitwise */
+// Pure JavaScript SHA-256 fallback for file:// and non-secure environments
+function sha256Fallback(str) {
+  const h = [...SHA256_H];
+  let asciiBytes = [];
+  const asciiLength = str.length;
+
+  for (let i = 0; i < asciiLength; i++) {
+    asciiBytes[i] = (str.codePointAt(i) || 0) & 0xff;
+  }
+
+  asciiBytes.push(0x80);
+  while ((asciiBytes.length * 8) % 512 !== 448) {
+    asciiBytes.push(0);
+  }
+
+  let originalLengthBits = asciiLength * 8;
+  const originalLengthBytes = [];
+  for (let i = 7; i >= 0; i--) {
+    originalLengthBytes[i] = originalLengthBits & 0xff;
+    originalLengthBits = originalLengthBits >>> 8;
+  }
+  asciiBytes = asciiBytes.concat(originalLengthBytes);
+
+  for (let i = 0; i < asciiBytes.length; i += 64) {
+    const w = [];
+    for (let j = 0; j < 16; j++) {
+      w[j] = (asciiBytes[i + j * 4] << 24) | (asciiBytes[i + j * 4 + 1] << 16) | (asciiBytes[i + j * 4 + 2] << 8) | (asciiBytes[i + j * 4 + 3]);
+    }
+    for (let j = 16; j < 64; j++) {
+      const s0 = rightRotate(w[j - 15], 7) ^ rightRotate(w[j - 15], 18) ^ (w[j - 15] >>> 3);
+      const s1 = rightRotate(w[j - 2], 17) ^ rightRotate(w[j - 2], 19) ^ (w[j - 2] >>> 10);
+      w[j] = (w[j - 16] + s0 + w[j - 7] + s1) | 0;
+    }
+
+    let a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], temp = h[7];
+    for (let j = 0; j < 64; j++) {
+      const S1 = rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25);
+      const ch = (e & f) ^ (~e & g);
+      const temp1 = (temp + S1 + ch + SHA256_K[j] + w[j]) | 0;
+      const S0 = rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22);
+      const maj = (a & b) ^ (a & c) ^ (b & c);
+      const temp2 = (S0 + maj) | 0;
+
+      temp = g; g = f; f = e;
+      e = (d + temp1) | 0;
+      d = c; c = b; b = a;
+      a = (temp1 + temp2) | 0;
+    }
+
+    h[0] = (h[0] + a) | 0;
+    h[1] = (h[1] + b) | 0;
+    h[2] = (h[2] + c) | 0;
+    h[3] = (h[3] + d) | 0;
+    h[4] = (h[4] + e) | 0;
+    h[5] = (h[5] + f) | 0;
+    h[6] = (h[6] + g) | 0;
+    h[7] = (h[7] + temp) | 0;
+  }
+
+  let result = '';
+  for (let i = 0; i < 8; i++) {
+    let hexVal = (h[i] >>> 0).toString(16);
+    while (hexVal.length < 8) {
+      hexVal = '0' + hexVal;
+    }
+    result += hexVal;
+  }
+  return result;
+}
+
+/* eslint-enable no-bitwise */
+
+// --- PHASE 6A: DEMO DATA SEEDER ---
+async function seedDemoData() {
+  try {
+    if (typeof database === 'undefined') return;
+
+    const seededSnap = await database.ref('seeded').once('value');
+    const seededVal = seededSnap.val();
+    // Version 2 = new seed with correct fields
+    if (seededVal === 'v2') {
+      console.log('Already seeded v2 — skipping.');
+      return;
+    }
+    console.log('Seeding/Re-seeding with v2 data...');
+
+    console.log('Seeding demo data...');
+    const now = Date.now();
+    const day = 86400000;
+
+    // 1. Partners
+    await database.ref('partners').set({
+      'DR_DEMO':  { name: 'Demo Partner',  code: 'DR_DEMO',  joined: '28 Jun 2025' },
+      'DR_RAHUL': { name: 'Rahul Sharma',  code: 'DR_RAHUL', joined: '15 Jun 2025' },
+      'DR_PRIYA': { name: 'Priya Singh',   code: 'DR_PRIYA', joined: '20 Jun 2025' }
+    });
+
+    // 2. Deals — DR_DEMO (3 deals = Bronze tier)
+    await database.ref('deals/DR_DEMO').set({
+      'deal1': {
+        clientName: 'Sharma Electronics', industry: 'Retail',
+        clientPhone: '9876543210', cityArea: 'Kolkata',
+        package: 'Pro', price: 35000, pct: 15, commission: 5250,
+        stage: 'Payment Received', notes: 'Very happy client, referral possible',
+        followupDate: '', addedAt: now - 5*day, date: '23 Jun 2025', partnerCode: 'DR_DEMO'
+      },
+      'deal2': {
+        clientName: 'Gupta Sweets', industry: 'Food & Beverage',
+        clientPhone: '9123456780', cityArea: 'Howrah',
+        package: 'Growth', price: 25000, pct: 10, commission: 2500,
+        stage: 'Closed', notes: 'Payment expected this week',
+        followupDate: new Date(now + 2*day).toISOString().split('T')[0],
+        addedAt: now - 2*day, date: '26 Jun 2025', partnerCode: 'DR_DEMO'
+      },
+      'deal3': {
+        clientName: 'TechSphere Solutions', industry: 'IT Services',
+        clientPhone: '9988776655', cityArea: 'Salt Lake',
+        package: 'Elite', price: 75000, pct: 15, commission: 11250,
+        stage: 'Negotiating', notes: 'Big client, price negotiation going on',
+        followupDate: new Date(now + day).toISOString().split('T')[0],
+        addedAt: now, date: '28 Jun 2025', partnerCode: 'DR_DEMO'
+      }
+    });
+
+    // 3. Deals — DR_RAHUL (7 deals = Silver tier)
+    const rahulPkgs = [
+      { pkg:'Elite',   price:75000, pct:15, comm:11250 },
+      { pkg:'Pro',     price:35000, pct:15, comm:5250  },
+      { pkg:'Pro',     price:35000, pct:15, comm:5250  },
+      { pkg:'Growth',  price:25000, pct:10, comm:2500  },
+      { pkg:'Growth',  price:25000, pct:10, comm:2500  },
+      { pkg:'Starter', price:8000,  pct:10, comm:800   },
+      { pkg:'Starter', price:8000,  pct:10, comm:800   }
+    ];
+    const rahulDeals = {};
+    rahulPkgs.forEach((p, i) => {
+      rahulDeals['deal' + (i+1)] = {
+        clientName: 'Client ' + (i+1) + ' (Rahul)',
+        industry: ['Retail','Restaurant','Pharmacy','Textile','Electronics','Travel','Education'][i] || 'General',
+        clientPhone: '98' + String(10000000 + i),
+        cityArea: ['Delhi','Noida','Gurugram','Jaipur','Lucknow','Agra','Kanpur'][i] || 'Delhi',
+        package: p.pkg, price: p.price, pct: p.pct, commission: p.comm,
+        stage: i < 5 ? 'Payment Received' : 'Closed',
+        notes: '', followupDate: '',
+        addedAt: now - (7-i)*3*day,
+        date: '2025-06-' + String(10 + i*3).padStart(2,'0'),
+        partnerCode: 'DR_RAHUL'
+      };
+    });
+    await database.ref('deals/DR_RAHUL').set(rahulDeals);
+
+    // 4. Deals — DR_PRIYA (1 deal = Joining)
+    await database.ref('deals/DR_PRIYA').set({
+      'deal1': {
+        clientName: 'Patel Garments', industry: 'Apparel',
+        clientPhone: '9000011112', cityArea: 'Mumbai',
+        package: 'Starter', price: 8000, pct: 10, commission: 800,
+        stage: 'Pitched', notes: 'Interested, callback requested',
+        followupDate: new Date(now + 3*day).toISOString().split('T')[0],
+        addedAt: now - day, date: '27 Jun 2025', partnerCode: 'DR_PRIYA'
+      }
+    });
+
+    // 5. Payouts — DR_DEMO (1 paid)
+    await database.ref('payouts/DR_DEMO').set({
+      'pay1': {
+        amount: 5250, upi: 'demo@upi', status: 'paid',
+        utr: '424242424242', method: 'UPI',
+        requestedAt: now - 4*day, paidAt: now - 3*day,
+        date: '25 Jun 2025', notifShown: true
+      }
+    });
+
+    // 6. Payouts — DR_RAHUL (1 pending)
+    await database.ref('payouts/DR_RAHUL').set({
+      'pay1': {
+        amount: 28350, upi: 'rahul.sharma@upi', status: 'pending',
+        requestedAt: now - day, date: '27 Jun 2025'
+      }
+    });
+
+    // 7. Announcements
+    await database.ref('announcements').set({
+      'ann1': {
+        title: 'Welcome to DigiRise India Partner Program! 🎉',
+        body: 'Aap officially DigiRise India Growth Partner ban gaye hain. Deals log karo, commission track karo, payout kab bhi request karo. Koi bhi confusion — Satyam ko WhatsApp karo.',
+        urgent: false, date: '28 Jun 2025', postedAt: now - 2*day
+      },
+      'ann2': {
+        title: '🔴 Elite Package — Highest Commission!',
+        body: 'Elite package (₹75,000) pe 15% commission milega — ek deal mein ₹11,250! Premium leads ko Elite recommend karo. Is mahine top seller ko special bonus bhi milega!',
+        urgent: true, date: '28 Jun 2025', postedAt: now - day
+      }
+    });
+
+    // 8. Activity feed
+    const acts = [
+      { icon:'🎉', text:'DigiRise India Partner OS launched!', time: now - 3*day },
+      { icon:'👤', text:'New partner registered: Rahul Sharma (DR_RAHUL)', time: now - 2*day },
+      { icon:'👤', text:'New partner registered: Priya Singh (DR_PRIYA)', time: now - 2*day },
+      { icon:'🤝', text:'Rahul Sharma logged Elite deal — ₹11,250', time: now - day },
+      { icon:'💸', text:'Rahul Sharma requested payout — ₹28,350', time: now - 12*3600000 }
+    ];
+    for (const act of acts) {
+      await database.ref('activity').push(act);
+    }
+
+    // 9. Settings default
+    await database.ref('settings/whatsappNumber').set('919999999999');
+
+    // 10. Mark seeded
+    await database.ref('seeded').set('v2');
+    console.log('✅ Demo data seeded successfully!');
+
+  } catch (err) {
+    console.error('Seeding error:', err);
+  }
+}
+
+setTimeout(seedDemoData, 1500);
+
+// SHA-256 Cryptographic utility with native/pure-JS fallback
+async function hashSHA256(str) {
+  // If we have native Crypto support and are in a secure context
+  if (typeof crypto !== 'undefined' && crypto.subtle && typeof TextEncoder !== 'undefined') {
+    try {
+      const utf8 = new TextEncoder().encode(str);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) {
+      console.warn("Native crypto error, using fallback hash:", e);
+    }
+  }
+
+  return sha256Fallback(str);
+}
+
+// --- Session & Authentication checks ---
+
+// Check if user is logged in and has appropriate role.
+// Returns session object on success, or null after redirecting on failure.
+function checkSession(expectedRole) {
+  const sessionUser = sessionStorage.getItem('sessionUser');
+  const sessionRole = sessionStorage.getItem('sessionRole');
+
+  if (!sessionUser || !sessionRole || sessionRole !== expectedRole) {
+    console.warn(`Unauthorized access attempt. Expected role: ${expectedRole}. Found: ${sessionRole}. Redirecting to login...`);
+    // Redirect to index.html#login
+    globalThis.location.href = 'index.html#login';
+    return null;
+  }
+  return {
+    username: sessionUser,
+    role: sessionRole,
+    partnerCode: sessionStorage.getItem('partnerCode') || ''
+  };
+}
+
+// Perform Logout
+function handleLogout() {
+  sessionStorage.removeItem('sessionUser');
+  sessionStorage.removeItem('sessionRole');
+  sessionStorage.removeItem('partnerCode');
+  showToast("Logged out successfully!", "success");
+  setTimeout(() => {
+    globalThis.location.href = 'index.html#login';
+  }, 500);
+}
+

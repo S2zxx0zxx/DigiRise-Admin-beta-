@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DigiRise India — Growth Partner Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C8890A;
+  --gold-l: #E8A020;
+  --gold-xl: #F5C842;
+  --gold-dim: rgba(200,137,10,0.12);
+  --gold-glow: rgba(200,137,10,0.25);
+  --bg: #080808;
+  --bg2: #101010;
+  --bg3: #181818;
+  --bg4: #202020;
+  --bg5: #2a2a2a;
+  --white: #FFFFFF;
+  --off: #E8E8E8;
+  --muted: #666;
+  --muted2: #444;
+  --green: #22C55E;
+  --green-d: rgba(34,197,94,0.1);
+  --blue: #3B82F6;
+  --blue-d: rgba(59,130,246,0.1);
+  --purple: #A855F7;
+  --purple-d: rgba(168,85,247,0.1);
+  --red: #EF4444;
+  --red-d: rgba(239,68,68,0.1);
+  --bronze: #CD7F32;
+  --silver: #C0C0C0;
+  --r8: 8px; --r12: 12px; --r16: 16px; --r20: 20px; --r50: 50px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ══ SCROLLBAR ══ */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px;}
+
+/* ══ NOISE OVERLAY ══ */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4;}
+
+/* ══ VIEWS ══ */
+.view{display:none;position:relative;z-index:1;}
+.view.active{display:block;}
+
+/* ══════════════════════════════════════
+   PUBLIC PAGE
+══════════════════════════════════════ */
+
+/* HERO */
+.pub-hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:80px 24px 60px;text-align:center;position:relative;overflow:hidden;
+}
+.pub-hero::before{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:700px;height:700px;
+  background:radial-gradient(circle, rgba(200,137,10,0.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--gold-dim);border:1px solid rgba(200,137,10,0.25);
+  color:var(--gold);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  padding:6px 16px;border-radius:var(--r50);margin-bottom:28px;
+}
+.hero-eyebrow span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.8);}}
+.hero-h1{
+  font-family:'Syne',sans-serif;font-size:clamp(36px,7vw,72px);font-weight:800;line-height:1.05;
+  margin-bottom:20px;
+}
+.hero-h1 .grad{
+  background:linear-gradient(135deg,var(--gold-xl),var(--gold),#a06a00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:clamp(14px,2vw,18px);color:var(--muted);max-width:540px;line-height:1.7;margin-bottom:40px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#000;
+  font-weight:700;font-size:14px;padding:14px 28px;border-radius:var(--r50);
+  border:none;cursor:pointer;transition:all .25s;letter-spacing:.5px;
+  box-shadow:0 0 30px rgba(200,137,10,0.3);
+}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(200,137,10,0.5);}
+.btn-ghost{
+  background:transparent;color:var(--white);font-weight:600;font-size:14px;
+  padding:13px 28px;border-radius:var(--r50);border:1px solid var(--bg5);cursor:pointer;
+  transition:all .25s;letter-spacing:.5px;
+}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.hero-stats{
+  display:flex;gap:40px;margin-top:60px;flex-wrap:wrap;justify-content:center;
+}
+.hero-stat{text-align:center;}
+.hero-stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gold);}
+.hero-stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+
+/* SECTIONS */
+.pub-section{padding:80px 24px;max-width:900px;margin:0 auto;}
+.section-label{
+  font-size:11px;color:var(--gold);font-weight:600;letter-spacing:3px;
+  text-transform:uppercase;margin-bottom:12px;
+}
+.section-h2{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:800;margin-bottom:16px;line-height:1.1;}
+.section-sub{font-size:15px;color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:48px;}
+
+/* COMMISSION CARDS */
+.comm-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:540px){.comm-grid{grid-template-columns:1fr;}}
+.comm-card{
+  background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r16);
+  padding:24px;position:relative;overflow:hidden;transition:all .3s;
+}
+.comm-card:hover{border-color:rgba(200,137,10,0.3);transform:translateY(-3px);}
+.comm-card.featured{border-color:rgba(200,137,10,0.4);background:linear-gradient(135deg,rgba(200,137,10,0.06),var(--bg2));}
+.comm-card.featured::before{
+  content:'HIGH VALUE';position:absolute;top:14px;right:14px;
+  font-size:9px;font-weight:700;letter-spacing:2px;color:var(--gold);
+  background:var(--gold-dim);padding:3px 8px;border-radius:4px;
+}
+.comm-pkg-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px;}
+.comm-price{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.comm-earn{
+  font-family:'Space Mono',monospace;
+  font-size:32px;font-weight:700;color:var(--green);
+}
+.comm-earn-label{font-size:11px;color:var(--muted);margin-top:4px;}
+.comm-pct-badge{
+  display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;
+  margin-top:16px;
+}
+.pct-15{background:var(--purple-d);color:var(--purple);border:1px solid rgba(168,85,247,.2);}
+.pct-10{background:var(--blue-d);color:var(--blue);border:1px solid rgba(59,130,246,.2);}
+
+/* TIER CARDS */
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:640px){.tier-grid{grid-template-columns:1fr;}}
+.tier-pub-card{
+  background:var(--bg2);border-radius:var(--r16);padding:24px;
+  border:1px solid var(--bg4);position:relative;overflow:hidden;
+}
+.tier-pub-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.t-bronze::after{background:linear-gradient(90deg,#8B4513,var(--bronze),#8B4513);}
+.t-silver::after{background:linear-gradient(90deg,#888,var(--silver),#888);}
+.t-gold::after{background:linear-gradient(90deg,var(--gold),var(--gold-xl),var(--gold));}
+.tier-icon{font-size:32px;margin-bottom:12px;}
+.tier-pub-name{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px;}
+.t-bronze .tier-pub-name{color:var(--bronze);}
+.t-silver .tier-pub-name{color:var(--silver);}
+.t-gold .tier-pub-name{color:var(--gold);}
+.tier-unlock{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.tier-pub-perks{list-style:none;}
+.tier-pub-perks li{font-size:13px;color:#bbb;padding:5px 0;display:flex;gap:8px;border-bottom:1px solid var(--bg4);}
+.tier-pub-perks li:last-child{border-bottom:none;}
+.tier-pub-perks li::before{content:'✦';color:var(--gold);font-size:9px;margin-top:3px;flex-shrink:0;}
+
+/* PAYOUT PILLS */
+.payout-list{display:flex;flex-direction:column;gap:12px;}
+.payout-item{
+  background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r12);
+  padding:18px 20px;display:flex;gap:16px;align-items:flex-start;
+  transition:border-color .2s;
+}
+.payout-item:hover{border-color:rgba(200,137,10,.2);}
+.payout-item-icon{
+  width:36px;height:36px;border-radius:var(--r8);background:var(--gold-dim);
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
+}
+.payout-item-title{font-weight:600;font-size:14px;margin-bottom:4px;}
+.payout-item-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* CULTURE DO/DON'T */
+.cult-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:540px){.cult-grid{grid-template-columns:1fr;}}
+.cult-box{border-radius:var(--r12);padding:20px;}
+.cult-do{background:var(--green-d);border:1px solid rgba(34,197,94,.15);}
+.cult-dont{background:var(--red-d);border:1px solid rgba(239,68,68,.15);}
+.cult-box h4{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+.cult-do h4{color:var(--green);}
+.cult-dont h4{color:var(--red);}
+.cult-box ul{list-style:none;}
+.cult-box ul li{font-size:13px;color:#bbb;padding:5px 0;display:flex;gap:8px;}
+.cult-do ul li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+.cult-dont ul li::before{content:'✗';color:var(--red);font-weight:700;flex-shrink:0;}
+
+/* PUB CTA */
+.pub-cta{
+  background:linear-gradient(135deg,rgba(200,137,10,0.08),rgba(200,137,10,0.03));
+  border:1px solid rgba(200,137,10,0.2);border-radius:var(--r20);
+  padding:48px;text-align:center;margin:0 24px 80px;max-width:860px;
+  margin-left:auto;margin-right:auto;
+}
+.pub-cta h2{font-family:'Syne',sans-serif;font-size:clamp(22px,4vw,36px);font-weight:800;margin-bottom:12px;}
+.pub-cta p{color:var(--muted);font-size:15px;margin-bottom:28px;}
+
+/* DIVIDER */
+.pub-divider{border:none;border-top:1px solid var(--bg3);margin:0 24px;}
+
+/* ══════════════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════════════ */
+.login-wrap{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;position:relative;overflow:hidden;
+}
+.login-wrap::before{
+  content:'';position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(200,137,10,0.06) 0%,transparent 70%);
+}
+.login-box{
+  background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r20);
+  padding:40px;width:100%;max-width:400px;position:relative;
+}
+.login-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.login-logo{text-align:center;margin-bottom:32px;}
+.login-logo-icon{
+  width:56px;height:56px;background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#000;
+  margin:0 auto 12px;box-shadow:0 0 30px rgba(200,137,10,0.3);
+}
+.login-logo h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+.login-logo p{font-size:12px;color:var(--muted);margin-top:4px;}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.form-input{
+  width:100%;background:var(--bg3);border:1px solid var(--bg5);border-radius:var(--r8);
+  padding:13px 16px;color:var(--white);font-family:'Inter',sans-serif;font-size:14px;
+  outline:none;transition:border-color .2s;
+}
+.form-input:focus{border-color:rgba(200,137,10,.5);}
+.form-input::placeholder{color:var(--muted2);}
+.login-err{font-size:12px;color:var(--red);text-align:center;margin-top:8px;display:none;}
+.login-switch{text-align:center;margin-top:16px;font-size:13px;color:var(--muted);}
+.login-switch a{color:var(--gold);cursor:pointer;text-decoration:none;}
+.login-switch a:hover{text-decoration:underline;}
+
+/* ══════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════ */
+.dash-wrap{min-height:100vh;padding-bottom:60px;}
+
+/* DASH HEADER */
+.dash-header{
+  background:rgba(8,8,8,0.95);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bg4);padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.dash-logo{display:flex;align-items:center;gap:10px;}
+.dash-logo-icon{
+  width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#000;
+}
+.dash-logo-text{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+.dash-logo-text span{display:block;font-size:10px;font-weight:400;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;}
+.dash-user{display:flex;align-items:center;gap:12px;}
+.dash-user-name{font-size:13px;font-weight:600;color:var(--off);}
+.dash-user-tier{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.dash-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;color:#000;
+}
+.logout-btn{
+  background:transparent;border:1px solid var(--bg5);color:var(--muted);
+  font-size:11px;padding:6px 12px;border-radius:var(--r50);cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all .2s;
+}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* DASH NAV */
+.dash-nav{
+  display:flex;gap:0;padding:0 24px;background:var(--bg2);
+  border-bottom:1px solid var(--bg4);overflow-x:auto;
+}
+.dash-tab{
+  padding:14px 20px;font-size:13px;font-weight:500;color:var(--muted);
+  background:transparent;border:none;cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;transition:all .2s;font-family:'Inter',sans-serif;
+}
+.dash-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.dash-tab:hover:not(.active){color:var(--off);}
+
+/* DASH CONTENT */
+.dash-content{max-width:920px;margin:0 auto;padding:28px 20px;}
+.dash-section{display:none;}
+.dash-section.active{display:block;}
+
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+@media(max-width:700px){.stats-row{grid-template-columns:1fr 1fr;}}
+@media(max-width:380px){.stats-row{grid-template-columns:1fr;}}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r12);
+  padding:18px;transition:border-color .2s;
+}
+.stat-card:hover{border-color:var(--bg5);}
+.stat-card-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.stat-card-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;}
+.stat-card-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+.val-gold{color:var(--gold);}
+.val-green{color:var(--green);}
+.val-blue{color:var(--blue);}
+.val-purple{color:var(--purple);}
+
+/* TIER PROGRESS */
+.tier-progress-card{
+  background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r16);
+  padding:24px;margin-bottom:24px;display:flex;gap:24px;align-items:center;
+}
+@media(max-width:540px){.tier-progress-card{flex-direction:column;align-items:flex-start;}}
+.tier-ring-wrap{flex-shrink:0;}
+.tier-ring-svg{width:110px;height:110px;}
+.tier-ring-bg{fill:none;stroke:var(--bg4);stroke-width:8;}
+.tier-ring-fill{fill:none;stroke-width:8;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1s ease;}
+.tier-ring-text-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;fill:var(--white);}
+.tier-ring-text-label{font-size:9px;fill:var(--muted);font-family:'Inter',sans-serif;}
+.tier-info{flex:1;}
+.tier-info-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px;}
+.tier-info-desc{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+.tier-next-info{font-size:12px;color:var(--muted);}
+.tier-next-info strong{color:var(--white);}
+.tier-steps{display:flex;gap:8px;margin-top:12px;}
+.tier-step{flex:1;height:4px;border-radius:2px;background:var(--bg4);}
+.tier-step.done{background:var(--gold);}
+.tier-step.current{background:linear-gradient(90deg,var(--gold),var(--gold-dim));}
+
+/* ANNOUNCE CARD */
+.announce-card{
+  background:linear-gradient(135deg,rgba(200,137,10,0.06),var(--bg2));
+  border:1px solid rgba(200,137,10,.2);border-radius:var(--r12);
+  padding:20px;margin-bottom:14px;position:relative;overflow:hidden;
+}
+.announce-card.urgent{border-color:rgba(239,68,68,.3);background:linear-gradient(135deg,rgba(239,68,68,.05),var(--bg2));}
+.announce-badge{
+  display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;padding:3px 8px;border-radius:4px;margin-bottom:8px;
+}
+.badge-update{background:var(--gold-dim);color:var(--gold);}
+.badge-urgent{background:var(--red-d);color:var(--red);}
+.announce-title{font-weight:600;font-size:15px;margin-bottom:6px;}
+.announce-body{font-size:13px;color:#aaa;line-height:1.6;}
+.announce-date{font-size:11px;color:var(--muted);margin-top:8px;}
+
+/* DEAL LOGGER */
+.deal-logger{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r16);padding:24px;margin-bottom:24px;}
+.deal-logger h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:20px;color:var(--gold);}
+.pkg-select-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+@media(max-width:500px){.pkg-select-grid{grid-template-columns:1fr 1fr;}}
+.pkg-sel-btn{
+  background:var(--bg3);border:1px solid var(--bg5);border-radius:var(--r8);
+  padding:12px 8px;cursor:pointer;transition:all .2s;text-align:center;
+  font-family:'Inter',sans-serif;
+}
+.pkg-sel-btn:hover{border-color:var(--bg5);background:var(--bg4);}
+.pkg-sel-btn.sel{border-color:var(--gold);background:var(--gold-dim);}
+.pkg-sel-name{display:block;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--white);margin-bottom:2px;}
+.pkg-sel-price{font-size:11px;color:var(--muted);}
+.pkg-sel-pct{font-size:11px;margin-top:4px;}
+.pct-gold{color:var(--purple);}
+.pct-blue{color:var(--blue);}
+.deal-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+@media(max-width:500px){.deal-form-row{grid-template-columns:1fr;}}
+.deal-preview{
+  background:var(--bg3);border:1px solid var(--bg5);border-radius:var(--r8);
+  padding:16px;margin-bottom:16px;display:none;
+}
+.deal-preview.show{display:block;}
+.deal-preview-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--bg4);}
+.deal-preview-row:last-child{border-bottom:none;font-weight:700;font-size:15px;}
+.deal-preview-row:last-child .earn{color:var(--green);}
+.btn-add-deal{
+  width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  color:#000;font-weight:700;font-size:14px;padding:14px;border-radius:var(--r8);
+  border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .25s;
+  letter-spacing:.5px;
+}
+.btn-add-deal:hover{box-shadow:0 0 30px rgba(200,137,10,.4);transform:translateY(-1px);}
+.btn-add-deal:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* DEAL HISTORY */
+.deal-history-list{display:flex;flex-direction:column;gap:10px;}
+.deal-item{
+  background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r12);
+  padding:16px 20px;display:flex;justify-content:space-between;align-items:center;
+  transition:border-color .2s;animation:slideIn .3s ease;
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.deal-item:hover{border-color:var(--bg5);}
+.deal-item-client{font-weight:600;font-size:14px;margin-bottom:3px;}
+.deal-item-meta{font-size:12px;color:var(--muted);}
+.deal-item-right{text-align:right;}
+.deal-item-earn{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green);}
+.deal-empty{text-align:center;padding:40px;color:var(--muted);font-size:14px;}
+
+/* PAYOUT TRACKER */
+.payout-tracker{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r16);padding:24px;margin-bottom:24px;}
+.payout-tracker h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:20px;color:var(--gold);}
+.payout-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+@media(max-width:500px){.payout-summary{grid-template-columns:1fr;}}
+.payout-box{background:var(--bg3);border-radius:var(--r8);padding:14px;text-align:center;}
+.payout-box-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+.payout-box-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
+.payout-req-form{display:flex;gap:10px;align-items:flex-end;}
+@media(max-width:400px){.payout-req-form{flex-direction:column;}}
+.payout-req-form .form-group{flex:1;margin-bottom:0;}
+.btn-payout-req{
+  background:var(--green-d);border:1px solid rgba(34,197,94,.3);color:var(--green);
+  font-weight:600;font-size:13px;padding:12px 20px;border-radius:var(--r8);
+  cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;transition:all .2s;
+  flex-shrink:0;
+}
+.btn-payout-req:hover{background:rgba(34,197,94,.2);}
+.payout-history{margin-top:20px;}
+.payout-history h4{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.payout-entry{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid var(--bg4);font-size:13px;
+}
+.payout-entry:last-child{border-bottom:none;}
+.payout-status{padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.status-pending{background:rgba(217,119,6,.1);color:#D97706;}
+.status-paid{background:var(--green-d);color:var(--green);}
+
+/* COMM CALC DASH */
+.calc-wrap{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r16);padding:24px;margin-bottom:24px;}
+.calc-wrap h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:20px;color:var(--gold);}
+.calc-result-dash{
+  background:var(--bg3);border:1px solid var(--bg4);border-radius:var(--r8);
+  padding:18px;margin-top:16px;
+}
+.c-row{display:flex;justify-content:space-between;padding:7px 0;font-size:13px;border-bottom:1px solid var(--bg4);}
+.c-row:last-child{border-bottom:none;font-size:16px;font-weight:700;}
+.c-row:last-child .c-val{color:var(--gold);font-family:'Syne',sans-serif;font-size:20px;}
+.c-label{color:var(--muted);}
+
+/* ADMIN PANEL */
+.admin-wrap{background:var(--bg2);border:1px solid rgba(168,85,247,.2);border-radius:var(--r16);padding:24px;margin-bottom:24px;}
+.admin-wrap h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;color:var(--purple);}
+.admin-wrap .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.admin-lock{text-align:center;padding:20px;}
+.admin-lock p{font-size:14px;color:var(--muted);margin-bottom:16px;}
+.announce-list-admin{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+.announce-admin-item{
+  background:var(--bg3);border:1px solid var(--bg4);border-radius:var(--r8);
+  padding:14px;display:flex;justify-content:space-between;align-items:center;
+}
+.announce-del{
+  background:var(--red-d);border:1px solid rgba(239,68,68,.2);color:var(--red);
+  font-size:11px;padding:5px 10px;border-radius:4px;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all .2s;
+}
+.announce-del:hover{background:rgba(239,68,68,.2);}
+.textarea-field{
+  width:100%;background:var(--bg3);border:1px solid var(--bg5);border-radius:var(--r8);
+  padding:12px;color:var(--white);font-family:'Inter',sans-serif;font-size:13px;
+  outline:none;resize:vertical;min-height:80px;transition:border-color .2s;
+}
+.textarea-field:focus{border-color:rgba(168,85,247,.4);}
+.toggle-urgent{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;margin-bottom:16px;}
+.toggle-urgent input{accent-color:var(--red);}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--bg3);border:1px solid var(--bg5);border-radius:var(--r12);
+  padding:14px 20px;font-size:13px;font-weight:500;
+  transform:translateY(80px);opacity:0;transition:all .3s;z-index:9999;
+  max-width:300px;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(34,197,94,.3);color:var(--green);}
+.toast.error{border-color:rgba(239,68,68,.3);color:var(--red);}
+.toast.info{border-color:rgba(200,137,10,.3);color:var(--gold);}
+
+/* UTILITY */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:500px){.g2{grid-template-columns:1fr;}}
+.card-head{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.qty-row2{display:flex;align-items:center;gap:14px;}
+.qty-btn2{width:34px;height:34px;border-radius:var(--r8);background:var(--bg3);border:1px solid var(--bg5);color:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;font-family:'Inter',sans-serif;}
+.qty-btn2:hover{background:var(--bg4);}
+.qty-num{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;min-width:36px;text-align:center;}
+.sep{border:none;border-top:1px solid var(--bg4);margin:20px 0;}
+.mb16{margin-bottom:16px;}
+.mb24{margin-bottom:24px;}
+</style>
+</head>
+<body>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════
+     VIEW 1: PUBLIC PAGE
+══════════════════════════════════════ -->
+<div class="view active" id="view-public">
+
+  <!-- HERO -->
+  <section class="pub-hero">
+    <div class="hero-eyebrow"><span></span> Now Recruiting Growth Partners</div>
+    <h1 class="hero-h1">Earn While You <span class="grad">Close Deals</span><br>For DigiRise India</h1>
+    <p class="hero-sub">Commission-based. Work from anywhere. Your timing, your freedom. No targets. No salary. Pure performance — the way it should be.</p>
+    <div class="hero-btns">
+      <button class="btn-gold" onclick="openWA()">Apply on WhatsApp 🚀</button>
+      <button class="btn-ghost" onclick="showView('login')">Partner Login →</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">10–15%</div><div class="hero-stat-label">Commission Per Deal</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">⚡ Instant</div><div class="hero-stat-label">Payout Speed</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">₹11,250</div><div class="hero-stat-label">Max Per Deal</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">100%</div><div class="hero-stat-label">Work From Home</div></div>
+    </div>
+  </section>
+
+  <hr class="pub-divider">
+
+  <!-- COMMISSION -->
+  <section class="pub-section">
+    <div class="section-label">💰 What You Earn</div>
+    <h2 class="section-h2">Commission on Every Deal You Close</h2>
+    <p class="section-sub">Starter aur Growth packages pe 10%, Pro aur Elite pe 15% — kyunki bade deals mein mehnat zyada lagti hai, reward bhi zyada milta hai.</p>
+    <div class="comm-grid">
+      <div class="comm-card featured">
+        <div class="comm-pkg-name">Elite</div>
+        <div class="comm-price">Package Value: ₹75,000</div>
+        <div class="comm-earn">₹11,250</div>
+        <div class="comm-earn-label">You earn per deal</div>
+        <span class="comm-pct-badge pct-15">15% Commission</span>
+      </div>
+      <div class="comm-card featured">
+        <div class="comm-pkg-name">Pro</div>
+        <div class="comm-price">Package Value: ₹35,000</div>
+        <div class="comm-earn">₹5,250</div>
+        <div class="comm-earn-label">You earn per deal</div>
+        <span class="comm-pct-badge pct-15">15% Commission</span>
+      </div>
+      <div class="comm-card">
+        <div class="comm-pkg-name">Growth</div>
+        <div class="comm-price">Package Value: ₹25,000</div>
+        <div class="comm-earn">₹2,500</div>
+        <div class="comm-earn-label">You earn per deal</div>
+        <span class="comm-pct-badge pct-10">10% Commission</span>
+      </div>
+      <div class="comm-card">
+        <div class="comm-pkg-name">Starter</div>
+        <div class="comm-price">Package Value: ₹8,000</div>
+        <div class="comm-earn">₹800</div>
+        <div class="comm-earn-label">You earn per deal</div>
+        <span class="comm-pct-badge pct-10">10% Commission</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="pub-divider">
+
+  <!-- TIER -->
+  <section class="pub-section">
+    <div class="section-label">🏆 Partner Tiers</div>
+    <h2 class="section-h2">Grow With Every Deal You Close</h2>
+    <p class="section-sub">3 deals ke baad Bronze unlock hota hai — phir perks, cash bonuses aur priority leads milne shuru. Koi deadline nahi, koi pressure nahi.</p>
+    <div class="tier-grid">
+      <div class="tier-pub-card t-bronze">
+        <div class="tier-icon">🥉</div>
+        <div class="tier-pub-name">Bronze Partner</div>
+        <div class="tier-unlock">Unlock: 3 deals close karne ke baad</div>
+        <ul class="tier-pub-perks">
+          <li>Bronze Partner Digital Badge</li>
+          <li>₹500 Cash Bonus on 3rd deal</li>
+          <li>Public recognition in Partner Group</li>
+          <li>Warm lead support begins</li>
+        </ul>
+      </div>
+      <div class="tier-pub-card t-silver">
+        <div class="tier-icon">🥈</div>
+        <div class="tier-pub-name">Silver Partner</div>
+        <div class="tier-unlock">Unlock: 7 deals close karne ke baad</div>
+        <ul class="tier-pub-perks">
+          <li>Silver Badge + Certificate</li>
+          <li>₹1,500 Cash Bonus on 7th deal</li>
+          <li>Priority Leads — pehle aapko</li>
+          <li>Instagram Story feature</li>
+          <li>+1% extra commission (all deals)</li>
+        </ul>
+      </div>
+      <div class="tier-pub-card t-gold">
+        <div class="tier-icon">🥇</div>
+        <div class="tier-pub-name">Gold Partner</div>
+        <div class="tier-unlock">Unlock: 15 deals close karne ke baad</div>
+        <ul class="tier-pub-perks">
+          <li>Gold Badge + Framed Certificate</li>
+          <li>₹5,000 Cash Bonus on 15th deal</li>
+          <li>Website pe featured partner</li>
+          <li>Hot leads dedicated pipeline</li>
+          <li>+2% extra commission (all deals)</li>
+          <li>LinkedIn recommendation from Satyam</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="pub-divider">
+
+  <!-- PAYOUT -->
+  <section class="pub-section">
+    <div class="section-label">⚡ Payout Rules</div>
+    <h2 class="section-h2">Instant. Transparent. No Drama.</h2>
+    <p class="section-sub">Deal close karo, payout request karo, UPI pe aajao. Koi fixed date nahi, koi monthly cycle nahi.</p>
+    <div class="payout-list">
+      <div class="payout-item">
+        <div class="payout-item-icon">⚡</div>
+        <div><div class="payout-item-title">Instant Payout — Jab Chaho</div><div class="payout-item-desc">Deal confirm hone ke baad jab bhi ready ho — request karo. UPI pe seedha transfer. Koi wait nahi.</div></div>
+      </div>
+      <div class="payout-item">
+        <div class="payout-item-icon">📋</div>
+        <div><div class="payout-item-title">Transparent Breakdown</div><div class="payout-item-desc">Har payout ke saath WhatsApp pe full breakdown milega — deal name, package, commission %, exact amount.</div></div>
+      </div>
+      <div class="payout-item">
+        <div class="payout-item-icon">📦</div>
+        <div><div class="payout-item-title">Batch Option Bhi Available</div><div class="payout-item-desc">Agar sabko ek saath lena hai — woh bhi okay. Aapki marzi. Instant ya monthly — dono supported.</div></div>
+      </div>
+      <div class="payout-item">
+        <div class="payout-item-icon">🛡️</div>
+        <div><div class="payout-item-title">Full Payment = Full Commission</div><div class="payout-item-desc">Client ki full payment aane ke baad hi commission release hota hai. Clear, fair, no games.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="pub-divider">
+
+  <!-- CULTURE -->
+  <section class="pub-section">
+    <div class="section-label">🛡️ Our Culture</div>
+    <h2 class="section-h2">Professional Partnership — Not MLM</h2>
+    <p class="section-sub">DigiRise India mein join karne ka matlab hai ek real business opportunity — flexible, respectful, honest.</p>
+    <div class="cult-grid">
+      <div class="cult-box cult-do">
+        <h4>✅ Haan — Ye Milega</h4>
+        <ul>
+          <li>Fully flexible timing — apne schedule pe</li>
+          <li>Instant payout on every deal</li>
+          <li>Public recognition for every win</li>
+          <li>Real commissions, clear percentages</li>
+          <li>No pressure, no micro-management</li>
+          <li>Exit anytime — no hard feelings</li>
+        </ul>
+      </div>
+      <div class="cult-box cult-dont">
+        <h4>❌ Nahi — Kabhi Nahi Hoga</h4>
+        <ul>
+          <li>Doston ko join karwane ki pressure</li>
+          <li>Vague "unlimited earning" promises</li>
+          <li>Public shame for slow months</li>
+          <li>Fixed hours ya daily check-ins</li>
+          <li>Delayed payments without reason</li>
+          <li>MLM-style referral chains</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="pub-cta">
+    <h2>Ready to Grow With DigiRise India? 🚀</h2>
+    <p>WhatsApp pe message karo — Satyam khud baat karega. Professional onboarding, same day.</p>
+    <button class="btn-gold" onclick="openWA()">Apply Now — WhatsApp Me 👋</button>
+  </div>
+
+</div><!-- /view-public -->
+
+<!-- ══════════════════════════════════════
+     VIEW 2: LOGIN
+══════════════════════════════════════ -->
+<div class="view" id="view-login">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="login-logo-icon">DR</div>
+        <h2>DigiRise India</h2>
+        <p>Growth Partner Login</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="login-name">Your Full Name</label>
+        <input class="form-input" id="login-name" type="text" placeholder="e.g. Rahul Sharma" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="login-code">Partner Code</label>
+        <input class="form-input" id="login-code" type="text" placeholder="e.g. DR2024" autocomplete="off">
+      </div>
+      <div class="login-err" id="login-err">❌ Name ya code galat hai. Satyam se confirm karo.</div>
+      <button class="btn-gold" style="width:100%;margin-top:8px;" onclick="doLogin()">Login to Dashboard →</button>
+      <div class="login-switch" style="margin-top:12px;">
+        <button class="btn-ghost" style="border:none;padding:0;color:var(--gold);" onclick="showView('admin-login')">Admin Access (Satyam only)</button>
+        &nbsp;·&nbsp;
+        <button class="btn-ghost" style="border:none;padding:0;color:var(--gold);" onclick="showView('public')">← Back to Program</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     VIEW 3: ADMIN LOGIN
+══════════════════════════════════════ -->
+<div class="view" id="view-admin-login">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="login-logo-icon" style="background:linear-gradient(135deg,var(--purple),#7c3aed);">⚙</div>
+        <h2>Admin Access</h2>
+        <p>Satyam — DigiRise India HQ</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="admin-code-input">Admin Secret Code</label>
+        <input class="form-input" id="admin-code-input" type="password" placeholder="Enter admin code">
+      </div>
+      <div class="login-err" id="admin-err">❌ Wrong admin code.</div>
+      <button class="btn-gold" style="width:100%;margin-top:8px;background:linear-gradient(135deg,var(--purple),#7c3aed);" onclick="doAdminLogin()">Enter Admin Panel →</button>
+      <div class="login-switch" style="margin-top:12px;">
+        <button class="btn-ghost" style="border:none;padding:0;color:var(--gold);" onclick="showView('login')">← Partner Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     VIEW 4: DASHBOARD
+══════════════════════════════════════ -->
+<div class="view" id="view-dashboard">
+  <div class="dash-wrap">
+    <header class="dash-header">
+      <div class="dash-logo">
+        <div class="dash-logo-icon">DR</div>
+        <div class="dash-logo-text">DigiRise India <span>Growth Partner HQ</span></div>
+      </div>
+      <div class="dash-user">
+        <div style="text-align:right;">
+          <div class="dash-user-name" id="dash-username">—</div>
+          <div class="dash-user-tier" id="dash-user-tier">Loading...</div>
+        </div>
+        <div class="dash-avatar" id="dash-avatar">?</div>
+        <button class="logout-btn" onclick="doLogout()">Logout</button>
+      </div>
+    </header>
+
+    <nav class="dash-nav">
+      <button class="dash-tab active" onclick="switchDashTab('overview',this)">📊 Overview</button>
+      <button class="dash-tab" onclick="switchDashTab('deals',this)">🤝 Log Deal</button>
+      <button class="dash-tab" onclick="switchDashTab('history',this)">📋 History</button>
+      <button class="dash-tab" onclick="switchDashTab('payout',this)">💸 Payouts</button>
+      <button class="dash-tab" onclick="switchDashTab('calc',this)">🧮 Calculator</button>
+      <button class="dash-tab" onclick="switchDashTab('admin',this)" id="admin-tab" style="display:none;">⚙️ Admin</button>
+    </nav>
+
+    <div class="dash-content">
+
+      <!-- OVERVIEW TAB -->
+      <div class="dash-section active" id="dash-overview">
+        <div class="stats-row" id="stats-row">
+          <div class="stat-card"><div class="stat-card-label">Total Deals</div><div class="stat-card-val val-gold" id="stat-deals">0</div><div class="stat-card-sub">All time</div></div>
+          <div class="stat-card"><div class="stat-card-label">Total Earned</div><div class="stat-card-val val-green" id="stat-earned">₹0</div><div class="stat-card-sub">Commission</div></div>
+          <div class="stat-card"><div class="stat-card-label">Pending Payout</div><div class="stat-card-val val-blue" id="stat-pending">₹0</div><div class="stat-card-sub">Not yet requested</div></div>
+          <div class="stat-card"><div class="stat-card-label">Partner Tier</div><div class="stat-card-val val-purple" id="stat-tier">—</div><div class="stat-card-sub" id="stat-tier-sub">—</div></div>
+        </div>
+
+        <!-- TIER PROGRESS -->
+        <div class="tier-progress-card" id="tier-progress-card">
+          <div class="tier-ring-wrap">
+            <svg class="tier-ring-svg" viewBox="0 0 110 110">
+              <circle class="tier-ring-bg" cx="55" cy="55" r="45"/>
+              <circle class="tier-ring-fill" id="tier-ring" cx="55" cy="55" r="45" stroke="#C8890A" stroke-dasharray="283" stroke-dashoffset="283"/>
+              <text x="55" y="50" text-anchor="middle" dominant-baseline="middle" class="tier-ring-text-val" id="ring-deals">0</text>
+              <text x="55" y="68" text-anchor="middle" class="tier-ring-text-label">DEALS</text>
+            </svg>
+          </div>
+          <div class="tier-info">
+            <div class="tier-info-name" id="tier-name-display">🥉 Bronze</div>
+            <div class="tier-info-desc" id="tier-desc-display">3 deals close karo Bronze unlock karne ke liye — cash bonus + perks milenge!</div>
+            <div class="tier-next-info" id="tier-next-info"></div>
+            <div class="tier-steps" id="tier-steps"></div>
+          </div>
+        </div>
+
+        <!-- ANNOUNCEMENTS -->
+        <div class="card-head" style="margin-bottom:12px;">📣 Updates from DigiRise India</div>
+        <div id="announce-list"></div>
+      </div>
+
+      <!-- DEALS TAB -->
+      <div class="dash-section" id="dash-deals">
+        <div class="deal-logger">
+          <h3>➕ Log a New Deal</h3>
+          <div class="card-head">Select Package</div>
+          <div class="pkg-select-grid" id="pkg-grid">
+            <button class="pkg-sel-btn" onclick="selPkg(this,75000,15,'Elite')"><span class="pkg-sel-name">Elite</span><span class="pkg-sel-price">₹75,000</span><span class="pkg-sel-pct pct-gold">15% = ₹11,250</span></button>
+            <button class="pkg-sel-btn" onclick="selPkg(this,35000,15,'Pro')"><span class="pkg-sel-name">Pro</span><span class="pkg-sel-price">₹35,000</span><span class="pkg-sel-pct pct-gold">15% = ₹5,250</span></button>
+            <button class="pkg-sel-btn" onclick="selPkg(this,25000,10,'Growth')"><span class="pkg-sel-name">Growth</span><span class="pkg-sel-price">₹25,000</span><span class="pkg-sel-pct pct-blue">10% = ₹2,500</span></button>
+            <button class="pkg-sel-btn" onclick="selPkg(this,8000,10,'Starter')"><span class="pkg-sel-name">Starter</span><span class="pkg-sel-price">₹8,000</span><span class="pkg-sel-pct pct-blue">10% = ₹800</span></button>
+          </div>
+          <div class="deal-form-row">
+            <div class="form-group mb16">
+              <label class="form-label" for="deal-client">Client Business Name</label>
+              <input class="form-input" id="deal-client" placeholder="e.g. Sharma Electronics" type="text">
+            </div>
+            <div class="form-group mb16">
+              <label class="form-label" for="deal-industry">Client Industry</label>
+              <input class="form-input" id="deal-industry" placeholder="e.g. Retail, Restaurant" type="text">
+            </div>
+          </div>
+          <div class="form-group mb16">
+            <label class="form-label" for="deal-notes">Notes (optional)</label>
+            <input class="form-input" id="deal-notes" placeholder="Any extra details..." type="text">
+          </div>
+          <div class="deal-preview" id="deal-preview">
+            <div class="deal-preview-row"><span class="c-label">Package</span><span id="prev-pkg">—</span></div>
+            <div class="deal-preview-row"><span class="c-label">Package Value</span><span id="prev-price">—</span></div>
+            <div class="deal-preview-row"><span class="c-label">Commission Rate</span><span id="prev-pct">—</span></div>
+            <div class="deal-preview-row"><span class="c-label">Your Earning</span><span class="earn" id="prev-earn">—</span></div>
+          </div>
+          <button class="btn-add-deal" id="add-deal-btn" onclick="addDeal()" disabled>Select a Package to Continue</button>
+        </div>
+      </div>
+
+      <!-- HISTORY TAB -->
+      <div class="dash-section" id="dash-history">
+        <div class="card-head" style="margin-bottom:16px;">📋 All Deals History</div>
+        <div class="deal-history-list" id="deal-history-list">
+          <div class="deal-empty">Abhi koi deal nahi hai. Pehla deal log karo! 🚀</div>
+        </div>
+      </div>
+
+      <!-- PAYOUT TAB -->
+      <div class="dash-section" id="dash-payout">
+        <div class="payout-tracker">
+          <h3>💸 Payout Tracker</h3>
+          <div class="payout-summary">
+            <div class="payout-box"><div class="payout-box-val val-green" id="pt-total">₹0</div><div class="payout-box-label">Total Earned</div></div>
+            <div class="payout-box"><div class="payout-box-val" style="color:#FBB924;" id="pt-pending">₹0</div><div class="payout-box-label">Pending Request</div></div>
+            <div class="payout-box"><div class="payout-box-val val-blue" id="pt-paid">₹0</div><div class="payout-box-label">Total Received</div></div>
+          </div>
+          <hr class="sep">
+          <div class="card-head" style="margin-bottom:12px;">Request Payout</div>
+          <div class="payout-req-form">
+            <div class="form-group">
+              <label class="form-label" for="upi-input">Your UPI ID</label>
+              <input class="form-input" id="upi-input" placeholder="name@upi" type="text">
+            </div>
+            <button class="btn-payout-req" onclick="reqPayout()">Request Payout ⚡</button>
+          </div>
+          <div class="payout-history" id="payout-history">
+            <h4>Payout History</h4>
+            <div id="payout-entries"><div style="font-size:13px;color:var(--muted);padding:12px 0;">Koi payout request nahi abhi tak.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CALCULATOR TAB -->
+      <div class="dash-section" id="dash-calc">
+        <div class="calc-wrap">
+          <h3>🧮 Commission Calculator</h3>
+          <div class="card-head">Package Choose Karo</div>
+          <div class="pkg-select-grid" id="calc-pkg-grid">
+            <button class="pkg-sel-btn" onclick="calcSelPkg(this,75000,15,'Elite')"><span class="pkg-sel-name">Elite</span><span class="pkg-sel-price">₹75,000</span><span class="pkg-sel-pct pct-gold">15%</span></button>
+            <button class="pkg-sel-btn" onclick="calcSelPkg(this,35000,15,'Pro')"><span class="pkg-sel-name">Pro</span><span class="pkg-sel-price">₹35,000</span><span class="pkg-sel-pct pct-gold">15%</span></button>
+            <button class="pkg-sel-btn" onclick="calcSelPkg(this,25000,10,'Growth')"><span class="pkg-sel-name">Growth</span><span class="pkg-sel-price">₹25,000</span><span class="pkg-sel-pct pct-blue">10%</span></button>
+            <button class="pkg-sel-btn" onclick="calcSelPkg(this,8000,10,'Starter')"><span class="pkg-sel-name">Starter</span><span class="pkg-sel-price">₹8,000</span><span class="pkg-sel-pct pct-blue">10%</span></button>
+          </div>
+          <div class="sep"></div>
+          <div class="card-head">Kitne Deals?</div>
+          <div class="qty-row2">
+            <button class="qty-btn2" onclick="calcChangeQty(-1)">−</button>
+            <div class="qty-num" id="calc-qty">1</div>
+            <button class="qty-btn2" onclick="calcChangeQty(1)">+</button>
+          </div>
+          <div class="calc-result-dash" id="calc-result-dash">
+            <div style="text-align:center;color:var(--muted);font-size:13px;padding:8px;">Select a package above ↑</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN TAB -->
+      <div class="dash-section" id="dash-admin">
+        <div class="admin-wrap">
+          <h3>⚙️ Admin Panel — Satyam Only</h3>
+          <p class="sub">Partners ko announcements aur updates bhejo. Yeh sirf Admin access mein dikhta hai.</p>
+
+          <div class="card-head">Post New Announcement</div>
+          <div class="form-group mb16">
+            <label class="form-label" for="ann-title">Title</label>
+            <input class="form-input" id="ann-title" placeholder="e.g. New Package Launched!" type="text">
+          </div>
+          <div class="form-group mb16">
+            <label class="form-label" for="ann-body">Message</label>
+            <textarea class="textarea-field" id="ann-body" placeholder="Full announcement text yahan likho..."></textarea>
+          </div>
+          <label class="toggle-urgent">
+            <input type="checkbox" id="ann-urgent"> Mark as URGENT (red highlight)
+          </label>
+          <button class="btn-gold" style="width:100%;background:linear-gradient(135deg,var(--purple),#7c3aed);" onclick="postAnnouncement()">Post Announcement 📣</button>
+
+          <div class="sep"></div>
+          <div class="card-head">Existing Announcements</div>
+          <div class="announce-list-admin" id="admin-ann-list"></div>
+        </div>
+
+        <div class="admin-wrap">
+          <h3>👥 Register New Partner</h3>
+          <p class="sub">Naye partner ka naam aur unique code set karo — woh isse login karenge.</p>
+          <div class="g2">
+            <div class="form-group mb16">
+              <label class="form-label" for="new-partner-name">Partner Name</label>
+              <input class="form-input" id="new-partner-name" placeholder="Full name" type="text">
+            </div>
+            <div class="form-group mb16">
+              <label class="form-label" for="new-partner-code">Partner Code</label>
+              <input class="form-input" id="new-partner-code" placeholder="e.g. DR_RAHUL_01" type="text">
+            </div>
+          </div>
+          <button class="btn-gold" style="width:100%;" onclick="registerPartner()">Register Partner ✅</button>
+          <div class="sep"></div>
+          <div class="card-head">All Partners</div>
+          <div id="partners-list" style="margin-top:8px;"></div>
+        </div>
+      </div>
+
+    </div><!-- /dash-content -->
+  </div>
+</div><!-- /view-dashboard -->
+
+<script>
+// ══════════════════════════════════════
+// CONSTANTS & STATE
+// ══════════════════════════════════════
+const ADMIN_CODE = 'DR_SATYAM_2024';
+const HARDCODED_ANNOUNCEMENTS = [
+  {id:'hc1',title:'Welcome to DigiRise India Partner Program! 🎉',body:'Aap officially DigiRise India Growth Partner ban gaye hain. Apna dashboard explore karo — deals log karo, commission track karo, aur payout kab bhi request karo. Koi bhi confusion ho toh Satyam ko WhatsApp karo.',date:'27 Jun 2025',urgent:false},
+  {id:'hc2',title:'Commission Structure — Yaad Rakhein',body:'Starter & Growth packages pe 10%, Pro & Elite pe 15% flat commission milega. Deal confirm hone ke baad hi commission count hogi. Client ki full payment = aapka full commission.',date:'27 Jun 2025',urgent:false}
+];
+
+let currentPartner = null;
+let isAdmin = false;
+let calcPkg = null;
+let calcQty = 1;
+let dealPkg = null;
+
+// ══════════════════════════════════════
+// STORAGE HELPERS
+// ══════════════════════════════════════
+function ls(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function ss(k,v){localStorage.setItem(k,JSON.stringify(v));}
+
+function getPartners(){return ls('dr_partners')||{};}
+function savePartners(p){ss('dr_partners',p);}
+function getAnnouncements(){return ls('dr_announcements')||[];}
+function saveAnnouncements(a){ss('dr_announcements',a);}
+function getPartnerData(code){return ls('dr_pd_'+code)||{deals:[],payouts:[]};}
+function savePartnerData(code,d){ss('dr_pd_'+code,d);}
+
+// ══════════════════════════════════════
+// VIEWS
+// ══════════════════════════════════════
+function showView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+}
+
+// ══════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════
+function doLogin(){
+  const name = document.getElementById('login-name').value.trim();
+  const code = document.getElementById('login-code').value.trim().toUpperCase();
+  const partners = getPartners();
+  const err = document.getElementById('login-err');
+  if(partners[code] && partners[code].name.toLowerCase()===name.toLowerCase()){
+    currentPartner = {name:partners[code].name, code};
+    isAdmin = false;
+    err.style.display='none';
+    loadDashboard();
+    showView('dashboard');
+  } else {
+    err.style.display='block';
+  }
+}
+
+function doAdminLogin(){
+  const code = document.getElementById('admin-code-input').value.trim();
+  const err = document.getElementById('admin-err');
+  if(code===ADMIN_CODE){
+    currentPartner = {name:'Satyam Kumar',code:'ADMIN'};
+    isAdmin = true;
+    err.style.display='none';
+    document.getElementById('admin-tab').style.display='block';
+    loadDashboard();
+    showView('dashboard');
+    showAdminData();
+  } else {
+    err.style.display='block';
+  }
+}
+
+function doLogout(){
+  currentPartner=null; isAdmin=false;
+  document.getElementById('admin-tab').style.display='none';
+  document.getElementById('login-name').value='';
+  document.getElementById('login-code').value='';
+  document.getElementById('admin-code-input').value='';
+  showView('login');
+}
+
+// ══════════════════════════════════════
+// DASHBOARD LOAD
+// ══════════════════════════════════════
+function loadDashboard(){
+  if(!currentPartner) return;
+  // Header
+  document.getElementById('dash-username').textContent = currentPartner.name;
+  document.getElementById('dash-avatar').textContent = currentPartner.name[0].toUpperCase();
+  renderOverview();
+  renderHistory();
+  renderPayouts();
+  renderAnnouncements();
+}
+
+function renderOverview(){
+  const data = currentPartner.code==='ADMIN'?{deals:[],payouts:[]}:getPartnerData(currentPartner.code);
+  const deals = data.deals||[];
+  const payouts = data.payouts||[];
+  const totalEarned = deals.reduce((s,d)=>s+d.commission,0);
+  const totalPaid = payouts.filter(p=>p.status==='paid').reduce((s,p)=>s+p.amount,0);
+  const pending = totalEarned - totalPaid;
+  const numDeals = deals.length;
+
+  // Tier logic
+  const tier = getTier(numDeals);
+  document.getElementById('stat-deals').textContent = numDeals;
+  document.getElementById('stat-earned').textContent = '₹'+totalEarned.toLocaleString('en-IN');
+  document.getElementById('stat-pending').textContent = '₹'+Math.max(0,pending).toLocaleString('en-IN');
+  document.getElementById('stat-tier').textContent = tier.emoji+' '+tier.name;
+  document.getElementById('stat-tier-sub').textContent = tier.sub;
+  document.getElementById('dash-user-tier').textContent = tier.emoji+' '+tier.name+' Partner';
+
+  // Ring
+  const ringEl = document.getElementById('tier-ring');
+  const nextMilestone = tier.next;
+  const prevMilestone = tier.prev;
+  const progress = nextMilestone>0 ? Math.min(1,(numDeals-prevMilestone)/(nextMilestone-prevMilestone)) : 1;
+  const circ = 283;
+  ringEl.style.strokeDashoffset = circ - (circ*progress);
+  ringEl.style.stroke = tier.color;
+  document.getElementById('ring-deals').textContent = numDeals;
+  document.getElementById('tier-name-display').textContent = tier.emoji+' '+tier.name+' Partner';
+  document.getElementById('tier-desc-display').textContent = tier.desc;
+  if(nextMilestone>0){
+    document.getElementById('tier-next-info').innerHTML = `<strong>${nextMilestone - numDeals} more deals</strong> to unlock ${tier.nextName}`;
+  } else {
+    document.getElementById('tier-next-info').innerHTML = `🏆 <strong>Maximum tier achieved!</strong> You're a Gold Partner.`;
+  }
+  // Steps
+  const steps = document.getElementById('tier-steps');
+  steps.innerHTML='';
+  [3,7,15].forEach(m=>{
+    const d = document.createElement('div');
+    let stepClass = '';
+    if (numDeals >= m) {
+      stepClass = ' done';
+    } else {
+      let req = m === 3 ? 0 : m === 7 ? 3 : 7;
+      if (numDeals >= req && numDeals < m) {
+        stepClass = ' current';
+      }
+    }
+    d.className='tier-step' + stepClass;
+    steps.appendChild(d);
+  });
+}
+
+function getTier(n){
+  if(n>=15) return {name:'Gold',emoji:'🥇',color:'#C8890A',sub:'Maximum tier!',desc:'DigiRise India ke sabse valuable partner ho aap.',next:0,prev:15,nextName:'',bonus:5000};
+  if(n>=7)  return {name:'Silver',emoji:'🥈',color:'#C0C0C0',sub:`${15-n} deals to Gold`,desc:'Priority leads aur extra commission unlock ho gaya!',next:15,prev:7,nextName:'Gold Partner',bonus:1500};
+  if(n>=3)  return {name:'Bronze',emoji:'🥉',color:'#CD7F32',sub:`${7-n} deals to Silver`,desc:'Badhai ho! Perks aur cash bonus unlock ho gaya!',next:7,prev:3,nextName:'Silver Partner',bonus:500};
+  return {name:'Joining',emoji:'⭐',color:'#3B82F6',sub:`${3-n} deals to Bronze`,desc:`${3-n} aur deals close karo Bronze unlock karne ke liye!`,next:3,prev:0,nextName:'Bronze Partner',bonus:0};
+}
+
+// ══════════════════════════════════════
+// ANNOUNCEMENTS
+// ══════════════════════════════════════
+function renderAnnouncements(){
+  const list = document.getElementById('announce-list');
+  const stored = getAnnouncements();
+  const all = [...stored,...HARDCODED_ANNOUNCEMENTS];
+  if(!all.length){list.innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px 0;">Koi announcement nahi abhi.</div>';return;}
+  list.innerHTML = all.map(a=>`
+    <div class="announce-card${a.urgent?' urgent':''}">
+      <span class="announce-badge ${a.urgent?'badge-urgent':'badge-update'}">${a.urgent?'🔴 URGENT':'📢 UPDATE'}</span>
+      <div class="announce-title">${a.title}</div>
+      <div class="announce-body">${a.body}</div>
+      <div class="announce-date">${a.date}</div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════
+// DEAL LOGGER
+// ══════════════════════════════════════
+function selPkg(btn,price,pct,name){
+  document.querySelectorAll('#pkg-grid .pkg-sel-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  dealPkg={price,pct,name};
+  const earn = price*pct/100;
+  document.getElementById('prev-pkg').textContent=name;
+  document.getElementById('prev-price').textContent='₹'+price.toLocaleString('en-IN');
+  document.getElementById('prev-pct').textContent=pct+'%';
+  document.getElementById('prev-earn').textContent='₹'+earn.toLocaleString('en-IN');
+  document.getElementById('deal-preview').classList.add('show');
+  const btn2=document.getElementById('add-deal-btn');
+  btn2.disabled=false;btn2.textContent='Log This Deal ✅';
+}
+
+function addDeal(){
+  if(!dealPkg) return;
+  const client=document.getElementById('deal-client').value.trim();
+  const industry=document.getElementById('deal-industry').value.trim();
+  if(!client){toast('Client name zaroor daalo!','error');return;}
+  const earn=dealPkg.price*dealPkg.pct/100;
+  const data=getPartnerData(currentPartner.code);
+  const deal={id:Date.now(),client,industry:industry||'General',package:dealPkg.name,price:dealPkg.price,pct:dealPkg.pct,commission:earn,date:new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),notes:document.getElementById('deal-notes').value.trim()};
+  data.deals.unshift(deal);
+  savePartnerData(currentPartner.code,data);
+  // Check tier milestone
+  const tier=getTier(data.deals.length);
+  const prevTier=getTier(data.deals.length-1);
+  if(tier.name!==prevTier.name && tier.bonus>0){
+    toast(`🎉 ${tier.emoji} ${tier.name} Partner unlocked! ₹${tier.bonus} bonus earned!`,'info');
+  } else {
+    toast(`✅ Deal logged! ₹${earn.toLocaleString('en-IN')} commission added.`,'success');
+  }
+  // Reset
+  document.querySelectorAll('#pkg-grid .pkg-sel-btn').forEach(b=>b.classList.remove('sel'));
+  dealPkg=null;
+  document.getElementById('deal-client').value='';
+  document.getElementById('deal-industry').value='';
+  document.getElementById('deal-notes').value='';
+  document.getElementById('deal-preview').classList.remove('show');
+  document.getElementById('add-deal-btn').disabled=true;
+  document.getElementById('add-deal-btn').textContent='Select a Package to Continue';
+  renderOverview();renderHistory();renderPayouts();
+}
+
+// ══════════════════════════════════════
+// HISTORY
+// ══════════════════════════════════════
+function renderHistory(){
+  const data=getPartnerData(currentPartner.code);
+  const deals=data.deals||[];
+  const list=document.getElementById('deal-history-list');
+  if(!deals.length){list.innerHTML='<div class="deal-empty">Abhi koi deal nahi hai. Pehla deal log karo! 🚀</div>';return;}
+  list.innerHTML=deals.map((d,i)=>`
+    <div class="deal-item">
+      <div class="deal-item-left">
+        <div class="deal-item-client">${d.client}</div>
+        <div class="deal-item-meta">${d.industry} · ${d.package} · ${d.date}</div>
+        ${d.notes?`<div class="deal-item-meta" style="margin-top:3px;font-style:italic;">${d.notes}</div>`:''}
+      </div>
+      <div class="deal-item-right">
+        <div class="deal-item-earn">+₹${d.commission.toLocaleString('en-IN')}</div>
+        <div class="deal-item-meta">${d.pct}% of ₹${d.price.toLocaleString('en-IN')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════
+// PAYOUTS
+// ══════════════════════════════════════
+function renderPayouts(){
+  const data=getPartnerData(currentPartner.code);
+  const deals=data.deals||[];
+  const payouts=data.payouts||[];
+  const total=deals.reduce((s,d)=>s+d.commission,0);
+  const paid=payouts.filter(p=>p.status==='paid').reduce((s,p)=>s+p.amount,0);
+  const pend=payouts.filter(p=>p.status==='pending').reduce((s,p)=>s+p.amount,0);
+  document.getElementById('pt-total').textContent='₹'+total.toLocaleString('en-IN');
+  document.getElementById('pt-pending').textContent='₹'+pend.toLocaleString('en-IN');
+  document.getElementById('pt-paid').textContent='₹'+paid.toLocaleString('en-IN');
+  const entries=document.getElementById('payout-entries');
+  if(!payouts.length){entries.innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px 0;">Koi payout request nahi abhi tak.</div>';return;}
+  entries.innerHTML=payouts.map(p=>`
+    <div class="payout-entry">
+      <div>
+        <div style="font-weight:600;font-size:14px;">₹${p.amount.toLocaleString('en-IN')}</div>
+        <div style="font-size:12px;color:var(--muted);">${p.upi} · ${p.date}</div>
+      </div>
+      <span class="payout-status ${p.status==='paid'?'status-paid':'status-pending'}">${p.status==='paid'?'✓ PAID':'⏳ PENDING'}</span>
+    </div>
+  `).join('');
+}
+
+function reqPayout(){
+  const upi=document.getElementById('upi-input').value.trim();
+  if(!upi){toast('UPI ID enter karo pehle!','error');return;}
+  const data=getPartnerData(currentPartner.code);
+  const deals=data.deals||[];
+  const payouts=data.payouts||[];
+  const total=deals.reduce((s,d)=>s+d.commission,0);
+  const paid=payouts.filter(p=>p.status==='paid').reduce((s,p)=>s+p.amount,0);
+  const pending=total-paid;
+  if(pending<=0){toast('Koi pending amount nahi hai abhi.','error');return;}
+  payouts.unshift({id:Date.now(),amount:pending,upi,date:new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),status:'pending'});
+  data.payouts=payouts;
+  savePartnerData(currentPartner.code,data);
+  toast(`✅ ₹${pending.toLocaleString('en-IN')} ka payout request bheja gaya! Satyam ko WhatsApp karo.`,'success');
+  renderPayouts();
+}
+
+// ══════════════════════════════════════
+// CALCULATOR
+// ══════════════════════════════════════
+function calcSelPkg(btn,price,pct,name){
+  document.querySelectorAll('#calc-pkg-grid .pkg-sel-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  calcPkg={price,pct,name};updateCalc();
+}
+function calcChangeQty(d){calcQty=Math.max(1,Math.min(30,calcQty+d));document.getElementById('calc-qty').textContent=calcQty;updateCalc();}
+function updateCalc(){
+  const el=document.getElementById('calc-result-dash');
+  if(!calcPkg){el.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:8px;">Select a package above ↑</div>';return;}
+  const earn=calcPkg.price*calcPkg.pct/100;
+  const total=earn*calcQty;
+  const tier=getTier(calcQty);
+  let bonus = 0;
+  if (calcQty >= 15) bonus = 5000;
+  else if (calcQty >= 7) bonus = 1500;
+  else if (calcQty >= 3) bonus = 500;
+
+  let extra = 0;
+  if (calcQty >= 15) extra = 0.02;
+  else if (calcQty >= 7) extra = 0.01;
+
+  const extraEarn = calcPkg.price * extra * calcQty;
+  const grand=total+bonus+extraEarn;
+  el.innerHTML=`
+    <div class="c-row"><span class="c-label">Package</span><span>${calcPkg.name} — ₹${calcPkg.price.toLocaleString('en-IN')}</span></div>
+    <div class="c-row"><span class="c-label">Commission Rate</span><span>${calcPkg.pct}%</span></div>
+    <div class="c-row"><span class="c-label">Per Deal Earning</span><span style="color:var(--gold);">₹${earn.toLocaleString('en-IN')}</span></div>
+    <div class="c-row"><span class="c-label">Deals × ${calcQty}</span><span>₹${total.toLocaleString('en-IN')}</span></div>
+    ${bonus>0?`<div class="c-row"><span class="c-label">${tier.emoji} ${tier.name} Bonus</span><span style="color:var(--green);">+₹${bonus.toLocaleString('en-IN')}</span></div>`:''}
+    ${extraEarn>0?`<div class="c-row"><span class="c-label">Extra Commission (${extra*100}%)</span><span style="color:var(--green);">+₹${extraEarn.toLocaleString('en-IN')}</span></div>`:''}
+    <div class="c-row"><span class="c-label">Total Payout</span><span class="c-val">₹${grand.toLocaleString('en-IN')}</span></div>
+  `;
+}
+
+// ══════════════════════════════════════
+// ADMIN
+// ══════════════════════════════════════
+function showAdminData(){renderAdminAnn();renderPartnersList();}
+
+function postAnnouncement(){
+  const title=document.getElementById('ann-title').value.trim();
+  const body=document.getElementById('ann-body').value.trim();
+  const urgent=document.getElementById('ann-urgent').checked;
+  if(!title||!body){toast('Title aur message dono chahiye!','error');return;}
+  const anns=getAnnouncements();
+  anns.unshift({id:Date.now(),title,body,date:new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),urgent});
+  saveAnnouncements(anns);
+  document.getElementById('ann-title').value='';
+  document.getElementById('ann-body').value='';
+  document.getElementById('ann-urgent').checked=false;
+  toast('📣 Announcement posted! Sab partners ko dikh jayega.','success');
+  renderAdminAnn();renderAnnouncements();
+}
+
+function renderAdminAnn(){
+  const list=document.getElementById('admin-ann-list');
+  const anns=[...getAnnouncements(),...HARDCODED_ANNOUNCEMENTS];
+  if(!anns.length){list.innerHTML='<div style="font-size:13px;color:var(--muted);">Koi announcement nahi.</div>';return;}
+  list.innerHTML=anns.map(a=>`
+    <div class="announce-admin-item">
+      <div>
+        <div style="font-weight:600;font-size:13px;">${a.urgent?'🔴 ':'📢 '}${a.title}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">${a.date}</div>
+      </div>
+      ${a.id&&typeof a.id==='number'?`<button class="announce-del" onclick="delAnn(${a.id})">Delete</button>`:'<span style="font-size:11px;color:var(--muted);">Hardcoded</span>'}
+    </div>
+  `).join('');
+}
+
+function delAnn(id){
+  const anns=getAnnouncements().filter(a=>a.id!==id);
+  saveAnnouncements(anns);renderAdminAnn();renderAnnouncements();toast('Announcement deleted.','info');
+}
+
+function registerPartner(){
+  const name=document.getElementById('new-partner-name').value.trim();
+  const code=document.getElementById('new-partner-code').value.trim().toUpperCase();
+  if(!name||!code){toast('Name aur code dono chahiye!','error');return;}
+  const partners=getPartners();
+  if(partners[code]){toast('Yeh code already use ho raha hai!','error');return;}
+  partners[code]={name,code,joined:new Date().toLocaleDateString('en-IN')};
+  savePartners(partners);
+  document.getElementById('new-partner-name').value='';
+  document.getElementById('new-partner-code').value='';
+  toast(`✅ ${name} registered! Code: ${code}`,'success');
+  renderPartnersList();
+}
+
+function renderPartnersList(){
+  const partners=getPartners();
+  const el=document.getElementById('partners-list');
+  const keys=Object.keys(partners);
+  if(!keys.length){el.innerHTML='<div style="font-size:13px;color:var(--muted);">Koi partner registered nahi abhi.</div>';return;}
+  el.innerHTML=keys.map(k=>{
+    const p=partners[k];
+    const data=getPartnerData(k);
+    const deals=(data.deals||[]).length;
+    const earned=(data.deals||[]).reduce((s,d)=>s+d.commission,0);
+    const tier=getTier(deals);
+    return `
+      <div class="announce-admin-item" style="margin-bottom:8px;">
+        <div>
+          <div style="font-weight:600;font-size:13px;">${tier.emoji} ${p.name} <span style="font-size:11px;color:var(--muted);font-weight:400;">· ${p.code}</span></div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">${deals} deals · ₹${earned.toLocaleString('en-IN')} earned · Joined ${p.joined}</div>
+        </div>
+        <button class="announce-del" onclick="removePartner('${k}')">Remove</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function removePartner(code){
+  if(!confirm('Remove this partner?')) return;
+  const partners=getPartners();
+  delete partners[code];
+  savePartners(partners);
+  toast('Partner removed.','info');
+  renderPartnersList();
+}
+
+// ══════════════════════════════════════
+// DASH TABS
+// ══════════════════════════════════════
+function switchDashTab(id,btn){
+  document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('dash-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='admin'&&isAdmin) showAdminData();
+}
+
+// ══════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════
+function toast(msg,type='info'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show '+type;
+  setTimeout(()=>{t.className='toast';},3500);
+}
+
+// ══════════════════════════════════════
+// UTILITY
+// ══════════════════════════════════════
+function openWA(){window.open('https://wa.me/91XXXXXXXXXX?text=Hi%20Satyam%20bhai%2C%20DigiRise%20India%20Growth%20Partner%20Program%20mein%20interested%20hun!','_blank','noopener,noreferrer');}
+
+// INIT: seed demo partner for testing
+(function init(){
+  const partners=getPartners();
+  if(!partners['DR_DEMO']){
+    partners['DR_DEMO']={name:'Demo Partner',code:'DR_DEMO',joined:'27 Jun 2025'};
+    savePartners(partners);
+  }
+})();
+</script>
+</body>
+</html>

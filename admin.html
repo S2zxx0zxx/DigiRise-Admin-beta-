@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigiRise Admin Command Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="offline-banner" class="offline-banner hidden-initial">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline mr-1 align-middle"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+  No internet connection — changes may not save
+</div>
+  <!-- Header -->
+  <header class="top-header">
+    <div class="header-content flex-between">
+      <div class="logo-area flex gap-2 items-center">
+        <div class="admin-icon text-xl">⚙️</div>
+        <div>
+          <div class="logo-text font-bold text-lg line-height-1">ADMIN COMMAND CENTER</div>
+          <span class="admin-badge">ADMIN</span>
+        </div>
+      </div>
+      <div class="header-actions flex gap-4 items-center">
+        <span class="header-username" id="headerUsername">Satyam Kumar</span>
+        <button id="payoutBellBtn" class="bell-btn" title="Pending Payouts">
+          💸 <span id="pendingPayoutBadge" class="badge badgePulse hidden">0</span>
+        </button>
+        <button id="logoutBtn" class="logout-btn" title="Logout">🚪</button>
+      </div>
+    </div>
+    
+    <!-- Nav Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-target="dash-dashboard">Dashboard</button>
+      <button class="tab-btn" data-target="dash-partners">Partners</button>
+      <button class="tab-btn" data-target="dash-deals">All Deals</button>
+      <button class="tab-btn" data-target="dash-payouts">Payouts</button>
+      <button class="tab-btn" data-target="dash-announcements">Announcements</button>
+      <button class="tab-btn" data-target="dash-settings">Settings</button>
+    </nav>
+  </header>
+
+  <!-- Drawer Overlay & Drawer -->
+  <div id="drawerOverlay" class="drawer-overlay hidden"></div>
+  <div id="partnerDrawer" class="partner-drawer">
+    <div class="drawer-header flex-between p-4 border-b">
+      <h3 class="m-0">Partner Details</h3>
+      <button id="closeDrawerBtn" class="close-btn">✕</button>
+    </div>
+    <div class="drawer-content p-4" id="drawerContent">
+      <h2 id="drawerPartnerName" class="m-0 mb-2">...</h2>
+      <div class="flex gap-2 mb-4">
+        <span id="drawerPartnerCode" class="muted-text">...</span>
+        <span class="muted-text">•</span>
+        <span id="drawerJoined" class="muted-text">...</span>
+      </div>
+      
+      <div class="drawer-stats-grid mb-4">
+        <div class="drawer-stat glass-card-inner">
+          <div class="stat-label text-sm muted-text">Deals</div>
+          <div class="stat-value text-xl font-bold" id="drawerDealsCount">0</div>
+        </div>
+        <div class="drawer-stat glass-card-inner">
+          <div class="stat-label text-sm muted-text">Earned</div>
+          <div class="stat-value text-xl font-bold text-green" id="drawerEarned">₹0</div>
+        </div>
+        <div class="drawer-stat glass-card-inner">
+          <div class="stat-label text-sm muted-text">Tier</div>
+          <div class="stat-value text-xl font-bold" id="drawerTier">-</div>
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <h4 class="m-0 mb-1">Performance Score</h4>
+        <div class="flex items-center gap-2">
+          <span id="drawerScore" class="text-xl font-bold text-purple">0</span>
+          <span class="muted-text text-sm">/ 100</span>
+        </div>
+      </div>
+
+      <h3 class="m-0 mt-4 mb-2">Admin Notes (Private)</h3>
+      <textarea id="adminNotesArea" class="glass-input mt-2 w-full" rows="4" placeholder="Add notes here..."></textarea>
+      <button id="saveNotesBtn" class="purple-btn mt-2 w-full">Save Note</button>
+
+      <h3 class="m-0 mt-5 mb-2">Recent Deals (Last 10)</h3>
+      <div id="drawerDealsList" class="scrollable-list mt-2"></div>
+
+      <div class="drawer-section">
+        <div class="drawer-section-title">Payout History</div>
+        <div id="drawer-payout-history"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UTR Modal -->
+  <div id="utrModal" class="modal-overlay modalFade hidden">
+    <div class="modal-box glass-card">
+      <h2 class="m-0">Approve Payout ✅</h2>
+      <p id="utrModalSubtitle" class="muted-text mt-2 mb-4">Partner - ₹0</p>
+      
+      <div class="form-group">
+        <label for="utrInput">UTR Number <span class="req text-red">*</span></label>
+        <input type="text" id="utrInput" name="utrInput" class="glass-input" placeholder="Enter bank UTR or Ref number" required>
+      </div>
+      
+      <div class="form-group mt-4">
+        <label for="methodInput">Payment Method</label>
+        <input type="text" id="methodInput" name="methodInput" class="glass-input" value="UPI">
+      </div>
+      
+      <div class="modal-actions mt-4 flex gap-2">
+        <button id="cancelUtrBtn" class="outline-purple-btn flex-1">Cancel</button>
+        <button id="confirmUtrBtn" class="purple-btn flex-1">Confirm Payment ✅</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+    <!-- DASHBOARD TAB -->
+    <section id="dash-dashboard" class="tab-section active">
+      <div class="stats-grid-4" id="dashboardStats">
+        <div class="stat-card fadeInUp">
+          <div class="stat-label">Total Partners</div>
+          <div class="stat-value text-purple" id="statTotalPartners">0</div>
+        </div>
+        <div class="stat-card fadeInUp">
+          <div class="stat-label">Total Deals</div>
+          <div class="stat-value text-gold" id="statTotalDeals">0</div>
+        </div>
+        <div class="stat-card fadeInUp">
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-value text-green" id="statTotalRevenue">₹0</div>
+          <div class="stat-subtext mt-1 text-sm">
+            This Month: <span id="statMonthlyRevenue" class="text-green font-bold">₹0</span>
+            <span id="statRevenueChange" class="text-xs"></span>
+          </div>
+        </div>
+        <div class="stat-card fadeInUp">
+          <div class="stat-label">Total Pending Payout</div>
+          <div class="stat-value text-red" id="statTotalPending">₹0</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid mt-4">
+        <!-- Live Activity -->
+        <div class="glass-card">
+          <div class="flex-between mb-4">
+            <h3 class="m-0">Live Activity</h3>
+            <div class="live-indicator flex items-center gap-2 text-sm text-green font-bold">
+              <div class="live-dot pulse-dot"></div> Live
+            </div>
+          </div>
+          <div id="activityFeedList" class="activity-feed scrollable-list max-h-400">
+             <div class="empty-state">
+              <div class="empty-icon text-4xl mb-2 opacity-50">📡</div>
+              <p class="muted-text">Waiting for activity...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="glass-card">
+          <h3 class="m-0">Top Partners Leaderboard</h3>
+          <div id="leaderboardList" class="leaderboard-list mt-4">
+            <div class="empty-state">
+              <div class="empty-icon text-4xl mb-2 opacity-50">🏆</div>
+              <p class="muted-text">No partners yet</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTNERS TAB -->
+    <section id="dash-partners" class="tab-section hidden">
+      <div class="glass-card mb-4">
+        <h3 class="m-0">Register New Partner</h3>
+        <div class="flex-row-form mt-4 flex gap-4 flex-wrap">
+          <div class="form-group flex-1 min-w-200">
+            <label for="newPartnerName">Partner Name <span class="req text-red">*</span></label>
+            <input type="text" id="newPartnerName" name="newPartnerName" class="glass-input" placeholder="e.g. Rahul Sharma">
+          </div>
+          <div class="form-group flex-1 min-w-200">
+            <label for="newPartnerCode">Partner Code <span class="req text-red">*</span></label>
+            <input type="text" id="newPartnerCode" name="newPartnerCode" class="glass-input uppercase" placeholder="e.g. DR2024 (A-Z, 0-9, _ only)">
+          </div>
+          <div class="form-group justify-end pb-1 flex items-end">
+            <button id="registerPartnerBtn" class="purple-btn h-42">Register Partner</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="flex-between mb-4 flex-wrap gap-2">
+          <h3 class="m-0">All Partners</h3>
+          <input type="text" id="partnerFilter" class="glass-input search-input" placeholder="Search partners...">
+        </div>
+        
+        <div class="table-responsive">
+          <table class="admin-table w-full">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Tier</th>
+                <th>Deals</th>
+                <th>Earned</th>
+                <th>Pending</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="partnersTableBody">
+              <!-- JS rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEALS TAB -->
+    <section id="dash-deals" class="tab-section hidden">
+      <div class="glass-card">
+        <div class="flex-between mb-4 flex-wrap gap-2">
+          <h3 class="m-0">All Deals</h3>
+          <div class="filter-bar flex gap-2 flex-wrap items-center">
+            <select id="filterPartner" class="glass-input" title="Filter by Partner"><option value="All">All Partners</option></select>
+            <select id="filterPackage" class="glass-input" title="Filter by Package">
+              <option value="All">All Packages</option>
+              <option value="Elite">Elite</option>
+              <option value="Pro">Pro</option>
+              <option value="Growth">Growth</option>
+              <option value="Starter">Starter</option>
+            </select>
+            <select id="filterStage" class="glass-input" title="Filter by Stage">
+              <option value="All">All Stages</option>
+              <option value="Lead Found">Lead Found</option>
+              <option value="Pitched">Pitched</option>
+              <option value="Negotiating">Negotiating</option>
+              <option value="Closed">Closed</option>
+              <option value="Payment Received">Payment Received</option>
+            </select>
+            <select id="deals-sort" onchange="renderDealsTab()" class="glass-input" title="Sort Deals">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="highest">Highest Commission</option>
+              <option value="lowest">Lowest Commission</option>
+            </select>
+            <button id="exportCsvBtn" class="outline-green-btn">Export CSV</button>
+          </div>
+        </div>
+        <div id="deals-results-count" class="text-xs text-muted mb-2 mt-2"></div>
+
+        <div class="table-responsive">
+          <table class="admin-table w-full">
+            <thead>
+              <tr>
+                <th>Partner</th>
+                <th>Client</th>
+                <th>Phone</th>
+                <th>Package</th>
+                <th>Stage</th>
+                <th>City</th>
+                <th>Date</th>
+                <th>Commission</th>
+              </tr>
+            </thead>
+            <tbody id="dealsTableBody">
+              <!-- JS rendered -->
+            </tbody>
+          </table>
+        </div>
+        <div id="deals-total-footer" class="text-right font-bold text-green p-3 border-top"></div>
+      </div>
+    </section>
+
+    <!-- PAYOUTS TAB -->
+    <section id="dash-payouts" class="tab-section hidden">
+      <div class="glass-card mb-4 border-amber">
+        <h3 class="m-0">Pending Payout Requests ⏳</h3>
+        <div id="pendingPayoutsList" class="payout-queue-grid mt-4">
+           <div class="empty-state">
+              <div class="empty-icon text-4xl mb-2 opacity-50">✅</div>
+              <p class="muted-text">Queue is clear! All partners paid.</p>
+            </div>
+        </div>
+      </div>
+
+      <div class="glass-card border-green opacity-90">
+        <h3 class="m-0">Paid & Rejected History</h3>
+        <div class="table-responsive mt-4">
+          <table class="admin-table w-full">
+            <thead>
+              <tr>
+                <th>Partner</th>
+                <th>Amount</th>
+                <th>UPI</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>UTR</th>
+              </tr>
+            </thead>
+            <tbody id="historyPayoutsTableBody">
+              <!-- JS rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANNOUNCEMENTS TAB -->
+    <section id="dash-announcements" class="tab-section hidden">
+      <div class="dashboard-grid">
+        <div class="glass-card border-purple" id="annFormCard">
+          <h3 class="m-0">Post Announcement</h3>
+          <div class="form-group mt-4">
+            <label for="annTitle">Title <span class="req text-red">*</span></label>
+            <input type="text" id="annTitle" name="annTitle" class="glass-input" placeholder="Announcement title...">
+          </div>
+          <div class="form-group mt-4 relative">
+            <label for="annBody">Message <span class="req text-red">*</span></label>
+            <textarea id="annBody" name="annBody" class="glass-input" rows="4" placeholder="Full message..." maxlength="500"></textarea>
+            <div id="annBodyCount" class="text-xs muted-text text-right mt-1">0 / 500</div>
+          </div>
+          <div class="form-group checkbox-group mt-4 mb-4">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="annUrgent" class="accent-red size-16">
+              <span class="text-red font-bold">Mark as URGENT (Red highlight)</span>
+            </label>
+          </div>
+          <button id="postAnnBtn" class="purple-btn w-full mt-4">Post Announcement 📣</button>
+        </div>
+
+        <div class="glass-card">
+          <h3 class="m-0">Live Announcements</h3>
+          <div id="adminAnnouncementsList" class="announcements-list mt-4 scrollable-list max-h-500">
+            <!-- JS rendered -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS TAB -->
+    <section id="dash-settings" class="tab-section hidden">
+      <div class="dashboard-grid">
+        
+        <div class="glass-card border-purple">
+          <h3 class="m-0">WhatsApp Redirect Number</h3>
+          <p class="muted-text mb-4 mt-2">This number is used when partners click "Apply on WhatsApp" or request payouts.</p>
+          <div class="form-group">
+            <label for="waNumber">WhatsApp Number (with country code)</label>
+            <input type="text" id="waNumber" name="waNumber" class="glass-input" placeholder="e.g. 919999999999">
+          </div>
+          <button id="saveWaBtn" class="purple-btn mt-4 w-full">Save Number</button>
+        </div>
+
+        <div class="glass-card border-purple">
+          <h3 class="m-0">Change Admin Password</h3>
+          <p class="muted-text mb-4 mt-2">Update the master admin password.</p>
+          <div class="form-group">
+            <label for="newAdminPwd">New Password</label>
+            <input type="password" id="newAdminPwd" name="newAdminPwd" class="glass-input" placeholder="Enter new password">
+            <div id="pwdStrength" class="text-xs mt-1"></div>
+          </div>
+          <div class="form-group mt-4">
+            <label for="confirmAdminPwd">Confirm Password</label>
+            <input type="password" id="confirmAdminPwd" name="confirmAdminPwd" class="glass-input" placeholder="Confirm new password">
+          </div>
+          <button id="savePwdBtn" class="purple-btn mt-4 w-full">Change Password</button>
+        </div>
+        
+        <div class="glass-card border-purple">
+          <h3 class="m-0">Data Backup</h3>
+          <p class="muted-text mb-4 mt-2">Download a complete snapshot of all database nodes as a JSON file.</p>
+          <button id="exportBackupBtn" class="purple-btn w-full">Download Backup (.json)</button>
+        </div>
+
+        <div class="glass-card border-red">
+          <h3 class="m-0">Danger Zone</h3>
+          <p class="muted-text mb-4 mt-2">Clear all live activity feed items. This cannot be undone.</p>
+          <button id="clearActivityBtn" class="outline-red-btn w-full">Clear Activity Feed</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

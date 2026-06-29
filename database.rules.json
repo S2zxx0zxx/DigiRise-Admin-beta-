@@ -1,0 +1,55 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "partners": {
+      ".read": true,
+      "$code": {
+        ".write": true
+      }
+    },
+    "deals": {
+      "$code": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "payouts": {
+      "$code": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "announcements": {
+      ".read": true,
+      ".write": true
+    },
+    "activity": {
+      ".read": true,
+      ".write": true
+    },
+    "notifications": {
+      "$code": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "adminNotes": {
+      ".read": true,
+      ".write": true
+    },
+    "settings": {
+      ".read": true,
+      ".write": true
+    },
+    "seeded": {
+      ".read": true,
+      ".write": true
+    },
+    "test_wiring": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}
