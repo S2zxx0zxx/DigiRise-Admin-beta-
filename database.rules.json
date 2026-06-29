@@ -1,23 +1,21 @@
 {
   "rules": {
-    ".read": false,
-    ".write": false,
-
+    ".read": true,
     "partners": {
-      ".read": true,
+      ".write": true,
       "$code": {
         ".write": true
       }
     },
     "deals": {
+      ".write": true,
       "$code": {
-        ".read": true,
         ".write": true
       }
     },
     "payouts": {
+      ".write": true,
       "$code": {
-        ".read": true,
         ".write": true
       }
     },
@@ -27,9 +25,11 @@
     },
     "activity": {
       ".read": true,
-      ".write": true
+      ".write": true,
+      ".indexOn": ["time"]
     },
     "notifications": {
+      ".write": true,
       "$code": {
         ".read": true,
         ".write": true

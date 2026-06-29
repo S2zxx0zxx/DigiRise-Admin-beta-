@@ -197,17 +197,28 @@ async function seedDemoData() {
       return;
     }
     console.log('Seeding/Re-seeding with v2 data...');
+    // Test write access first
+    try {
+      await database.ref('test_wiring').set({ ping: Date.now() });
+      console.log('Write access confirmed ✅');
+    } catch(e) {
+      console.error('❌ No write access! Check Firebase rules:', e.message);
+      return;
+    }
 
     console.log('Seeding demo data...');
     const now = Date.now();
     const day = 86400000;
 
-    // 1. Partners
-    await database.ref('partners').set({
+    // 1. Partners — write individually (rules require per-code write access)
+    const partnersList = {
       'DR_DEMO':  { name: 'Demo Partner',  code: 'DR_DEMO',  joined: '28 Jun 2025' },
       'DR_RAHUL': { name: 'Rahul Sharma',  code: 'DR_RAHUL', joined: '15 Jun 2025' },
       'DR_PRIYA': { name: 'Priya Singh',   code: 'DR_PRIYA', joined: '20 Jun 2025' }
-    });
+    };
+    for (const [code, data] of Object.entries(partnersList)) {
+      await database.ref('partners/' + code).set(data);
+    }
 
     // 2. Deals — DR_DEMO (3 deals = Bronze tier)
     await database.ref('deals/DR_DEMO').set({

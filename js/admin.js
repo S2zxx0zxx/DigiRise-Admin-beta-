@@ -132,7 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPayoutsTab();
   });
 
-  document.getElementById('payoutBellBtn').addEventListener('click', () => {
+  const payoutBellBtn = document.getElementById('payoutBellBtn');
+  if (payoutBellBtn) payoutBellBtn.addEventListener('click', () => {
     document.querySelector('.tab-btn[data-target="dash-payouts"]').click();
   });
 
@@ -376,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  document.getElementById('partnerFilter').addEventListener('input', renderPartnersTab);
+  const _pf = document.getElementById('partnerFilter'); if(_pf) _pf.addEventListener('input', renderPartnersTab);
 
   globalThis.removePartner = function(code, name) {
     if (!confirm(`Remove ${name} and all their data? Cannot undo.`)) return;
@@ -518,7 +519,8 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.addEventListener('click', closeDrawer)
   }
 
-  document.getElementById('saveNotesBtn').addEventListener('click', () => {
+  const saveNotesBtn = document.getElementById('saveNotesBtn');
+  if (saveNotesBtn) saveNotesBtn.addEventListener('click', () => {
     if (!currentDrawerCode) return;
     const notes = document.getElementById('adminNotesArea').value;
     database.ref(`adminNotes/${currentDrawerCode}`).set(notes).then(() => {
@@ -531,7 +533,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const fPartner = document.getElementById('filterPartner').value;
     const fPackage = document.getElementById('filterPackage').value;
     const fStage = document.getElementById('filterStage').value;
-    const fSort = (document.getElementById('sortDeals') || document.getElementById('deals-sort') || {value:'newest'}).value || 'newest';
+    const _sortEl = document.getElementById('deals-sort') || document.getElementById('sortDeals');
+    const fSort = _sortEl ? _sortEl.value : 'newest';
     
     let filtered = [...allDealsArray];
     
@@ -594,12 +597,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  document.getElementById('filterPartner').addEventListener('change', renderDealsTab);
-  document.getElementById('filterPackage').addEventListener('change', renderDealsTab);
-  document.getElementById('filterStage').addEventListener('change', renderDealsTab);
-  document.getElementById('sortDeals').addEventListener('change', renderDealsTab);
+  // Safe element listeners with null checks
+  const _fp = document.getElementById('filterPartner');
+  const _fpkg = document.getElementById('filterPackage');
+  const _fs = document.getElementById('filterStage');
+  const _sd = document.getElementById('sortDeals') || document.getElementById('deals-sort');
+  if(_fp) _fp.addEventListener('change', renderDealsTab);
+  if(_fpkg) _fpkg.addEventListener('change', renderDealsTab);
+  if(_fs) _fs.addEventListener('change', renderDealsTab);
+  if(_sd) _sd.addEventListener('change', renderDealsTab);
 
-  document.getElementById('exportCsvBtn').addEventListener('click', () => {
+  const _csv = document.getElementById('exportCsvBtn'); if(_csv) _csv.addEventListener('click', () => {
     const fPartner = document.getElementById('filterPartner').value;
     const fPackage = document.getElementById('filterPackage').value;
     const fStage = document.getElementById('filterStage').value;
@@ -766,12 +774,14 @@ document.addEventListener('DOMContentLoaded', () => {
     currentPayout = null;
   }
 
-  document.getElementById('cancelUtrBtn').addEventListener('click', closeModal);
+  const cancelUtrBtn = document.getElementById('cancelUtrBtn');
+  if (cancelUtrBtn) cancelUtrBtn.addEventListener('click', closeModal);
   utrModal.addEventListener('click', (e) => {
     if (e.target === utrModal) closeModal();
   });
 
-  document.getElementById('confirmUtrBtn').addEventListener('click', () => {
+  const confirmUtrBtn = document.getElementById('confirmUtrBtn');
+  if (confirmUtrBtn) confirmUtrBtn.addEventListener('click', () => {
     if (!currentPayout) return;
     const utr = document.getElementById('utrInput').value.trim();
     const method = document.getElementById('methodInput').value.trim() || 'UPI';
@@ -797,13 +807,15 @@ document.addEventListener('DOMContentLoaded', () => {
     annCount.textContent = `${len} / 500`;
   });
 
-  document.getElementById('annUrgent').addEventListener('change', (e) => {
+  const annUrgent = document.getElementById('annUrgent');
+  if (annUrgent) annUrgent.addEventListener('change', (e) => {
     const card = document.getElementById('annFormCard');
     if (e.target.checked) card.style.borderColor = 'var(--admin-red)';
     else card.style.borderColor = 'var(--admin-purple)';
   });
 
-  document.getElementById('postAnnBtn').addEventListener('click', () => {
+  const postAnnBtn = document.getElementById('postAnnBtn');
+  if (postAnnBtn) postAnnBtn.addEventListener('click', () => {
     const title = document.getElementById('annTitle').value.trim();
     const body = document.getElementById('annBody').value.trim();
     const urgent = document.getElementById('annUrgent').checked;
@@ -867,13 +879,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   loadSettingsData();
 
-  document.getElementById('saveWaBtn').addEventListener('click', () => {
+  const saveWaBtn = document.getElementById('saveWaBtn');
+  if (saveWaBtn) saveWaBtn.addEventListener('click', () => {
     const num = document.getElementById('waNumber').value.trim();
     if (!num) return showToast('Please enter a number.', 'error');
     database.ref('settings/whatsappNumber').set(num).then(() => showToast('WhatsApp number updated.', 'success')).catch(err => showToast(err.message, 'error'));
   });
 
-  document.getElementById('savePwdBtn').addEventListener('click', () => {
+  const savePwdBtn = document.getElementById('savePwdBtn');
+  if (savePwdBtn) savePwdBtn.addEventListener('click', () => {
     const newPwd = document.getElementById('newAdminPwd')?.value.trim()
     const confPwd = document.getElementById('confirmAdminPwd')?.value.trim()
 
@@ -900,7 +914,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).catch(err => showToast(err.message, 'error'));
   });
 
-  document.getElementById('newAdminPwd').addEventListener('input', (e) => {
+  const newAdminPwd = document.getElementById('newAdminPwd');
+  if (newAdminPwd) newAdminPwd.addEventListener('input', (e) => {
     const val = e.target.value;
     const strengthEl = document.getElementById('pwdStrength');
     if (val.length === 0) { strengthEl.textContent = ''; return; }
@@ -909,12 +924,14 @@ document.addEventListener('DOMContentLoaded', () => {
     else { strengthEl.textContent = 'Strong'; strengthEl.className = 'text-xs mt-1 text-green'; }
   });
 
-  document.getElementById('clearActivityBtn').addEventListener('click', () => {
+  const clearActivityBtn = document.getElementById('clearActivityBtn');
+  if (clearActivityBtn) clearActivityBtn.addEventListener('click', () => {
     if (!confirm('Clear all activity? Cannot undo.')) return;
     database.ref('activity').remove().then(() => showToast('Activity feed cleared.', 'success')).catch(err => showToast(err.message, 'error'));
   });
 
-  document.getElementById('exportBackupBtn').addEventListener('click', () => {
+  const exportBackupBtn = document.getElementById('exportBackupBtn');
+  if (exportBackupBtn) exportBackupBtn.addEventListener('click', () => {
     const paths = [
       'partners', 'deals', 'payouts', 
       'announcements', 'activity', 

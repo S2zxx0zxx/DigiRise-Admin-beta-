@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   const notifPanel = document.getElementById('notificationPanel');
-  document.getElementById('notificationBtn').addEventListener('click', () => {
+  (function(){ const _el=document.getElementById('notificationBtn'); if(_el) _el.addEventListener('click', (); })();
     notifPanel.classList.add('open');
     // Mark all as read
     database.ref('notifications/' + code).once('value', snap => {
@@ -392,10 +392,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-  document.getElementById('closeNotifBtn').addEventListener('click', () => {
+  (function(){ const _el=document.getElementById('closeNotifBtn'); if(_el) _el.addEventListener('click', (); })();
     notifPanel.classList.remove('open');
   });
-  document.getElementById('clearNotifBtn').addEventListener('click', () => {
+  (function(){ const _el=document.getElementById('clearNotifBtn'); if(_el) _el.addEventListener('click', (); })();
     database.ref('notifications/' + code).remove();
   });
 
@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  document.getElementById('submitDealBtn').addEventListener('click', () => {
+  (function(){ const _el=document.getElementById('submitDealBtn'); if(_el) _el.addEventListener('click', (); })();
     const clientName = clientInput.value.trim();
     const industry = document.getElementById('dealIndustry').value.trim();
     const followupDate = document.getElementById('dealFollowup').value;
@@ -750,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  document.getElementById('copyMsgBtn').addEventListener('click', () => {
+  (function(){ const _el=document.getElementById('copyMsgBtn'); if(_el) _el.addEventListener('click', (); })();
     const text = document.getElementById('payoutMsg').value;
     if (text) {
       navigator.clipboard.writeText(text).then(() => {
@@ -842,11 +842,11 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   
   const calcQtyInput = document.getElementById('calcQty');
-  document.getElementById('calcMinus').addEventListener('click', () => {
+  (function(){ const _el=document.getElementById('calcMinus'); if(_el) _el.addEventListener('click', (); })();
     let val = Number.parseInt(calcQtyInput.value);
     if (val > 1) { calcQtyInput.value = val - 1; updateCalculator(); }
   });
-  document.getElementById('calcPlus').addEventListener('click', () => {
+  (function(){ const _el=document.getElementById('calcPlus'); if(_el) _el.addEventListener('click', (); })();
     let val = Number.parseInt(calcQtyInput.value);
     if (val < 30) { calcQtyInput.value = val + 1; updateCalculator(); }
   });
