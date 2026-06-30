@@ -197,6 +197,8 @@ button {
   padding: 1rem;
   max-width: 1200px;
   margin: 0 auto;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .logo-area {
   font-size: 1.25rem;
@@ -256,6 +258,9 @@ button {
 .nav-tabs {
   display: flex;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  white-space: nowrap;
   gap: 1.5rem;
   padding: 0 1rem;
   max-width: 1200px;
@@ -309,7 +314,7 @@ button {
 
 /* Glass Cards */
 .glass-card {
-  background: var(--glass-bg);
+  background: var(--bg-surface-1);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
@@ -321,7 +326,7 @@ button {
   box-shadow: var(--glass-glow);
 }
 .glass-card-inner {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-surface-1);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   padding: 1rem;
@@ -334,7 +339,7 @@ button {
   gap: 1rem;
 }
 .stat-card {
-  background: var(--glass-bg);
+  background: var(--bg-surface-1);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
@@ -702,6 +707,13 @@ button {
   }
 }
 
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+}
+
 /* === PHASE 6 ANIMATIONS === */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(12px); }
@@ -778,7 +790,7 @@ button {
 .pipeline-notes{background:#0f0f0f;border-radius:8px;padding:10px;font-size:12px;color:#666;margin-top:8px;border-left:2px solid #2a2a2a;}
 
 /* ══ LOG DEAL UPGRADES ══ */
-.pkg-card{background:#1a1a1a;border:2px solid #2a2a2a;border-radius:14px;padding:16px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.pkg-card{background:var(--bg-surface-1);border:2px solid #2a2a2a;border-radius:14px;padding:16px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
 .pkg-card:hover{border-color:rgba(200,137,10,0.35);transform:translateY(-2px);}
 .pkg-card.active{border-color:#C8890A;background:rgba(200,137,10,0.08);}
 .pkg-card.active::after{content:'✓';position:absolute;top:10px;right:12px;color:#C8890A;font-weight:700;font-size:14px;}

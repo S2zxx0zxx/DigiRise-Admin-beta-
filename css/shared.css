@@ -9,6 +9,22 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+html[data-theme="light"] body {
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+html[data-theme="dark"] body {
+  -webkit-font-smoothing: antialiased;
+}
+
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] .hero-h1 {
+  font-weight: 700;
 }
 
 /* GLOBAL THEME VARIABLES */
@@ -26,32 +42,34 @@ html[data-theme="dark"] {
   --chip-bg: #1c1e23;
   --chip-border: rgba(255,255,255,0.85);
   --shadow-hard: rgba(0,0,0,0.9);
+  --gold-glow: rgba(200,137,10,0.35);
+  --purple-glow: rgba(168,85,247,0.35);
 }
 
 html[data-theme="light"] {
-  --bg-base: #F5F1E8;
-  --bg-surface-1: #FBFAF6;
-  --bg-surface-2: #F0EBE0;
-  --bg-surface-3: #E8E2D4;
+  --bg-base: #FAF8F4;
+  --bg-surface-1: #FFFFFF;
+  --bg-surface-2: #F5F2EC;
+  --bg-surface-3: #EDE8DE;
   --border-subtle: rgba(17,17,17,0.08);
   --border-default: rgba(17,17,17,0.14);
   --border-strong: rgba(17,17,17,0.85);
   --text-primary: #15171b;
   --text-secondary: #4A4D54;
   --text-tertiary: #7A7D85;
-  --chip-bg: #FBFAF6;
+  --chip-bg: #FFFFFF;
   --chip-border: #111111;
   --shadow-hard: rgba(0,0,0,0.85);
+  --gold-glow: rgba(200,137,10,0.08);
+  --purple-glow: rgba(168,85,247,0.06);
 }
 
 :root {
   /* New Tokens */
   --gold: #C8890A;
   --gold-bright: #E8A020;
-  --gold-glow: rgba(200,137,10,0.35);
   --purple: #A855F7;
   --purple-bright: #C084FC;
-  --purple-glow: rgba(168,85,247,0.35);
   --purple-d: rgba(168,85,247,0.15);
   --success: #22C55E;
   --blue-d: rgba(59,130,246,0.15);
@@ -925,11 +943,19 @@ a:focus-visible {
   background-image:
     radial-gradient(ellipse 600px 600px at 0% 0%, var(--gold-glow) 0%, transparent 60%),
     radial-gradient(ellipse 500px 500px at 100% 100%, var(--purple-glow) 0%, transparent 60%),
-    radial-gradient(ellipse 800px 800px at 50% 50%, rgba(255,255,255,0.015) 0%, transparent 70%);
-  background-size: 150% 150%, 150% 150%, 150% 150%;
+    radial-gradient(ellipse 400px 400px at 50% 120%, var(--gold-glow) 0%, transparent 60%);
   opacity: 0.5;
-  animation: meshBreathe 24s ease-in-out infinite;
-  will-change: background-position;
+  background-size: 200% 200%;
+  animation: bgBreathing 24s infinite ease-in-out alternate;
+}
+
+html[data-theme="light"] .mesh-breathing-bg {
+  opacity: 0.25;
+}
+
+@keyframes bgBreathing {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

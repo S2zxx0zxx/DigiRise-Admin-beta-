@@ -183,7 +183,7 @@ p, span, a, button, input, label {
 }
 
 .comm-card {
-  background: var(--bg2);
+  background: var(--bg-surface-1);
   border: 1px solid var(--bg4);
   border-radius: var(--r16);
   padding: 24px;
@@ -281,7 +281,7 @@ p, span, a, button, input, label {
 }
 
 .tier-pub-card {
-  background: var(--bg2);
+  background: var(--bg-surface-1);
   border-radius: var(--r16);
   padding: 24px;
   border: 1px solid var(--bg4);
@@ -423,11 +423,9 @@ p, span, a, button, input, label {
 }
 
 .cult-box {
+  background: var(--bg-surface-1);
   border-radius: var(--r12);
   padding: 20px;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-}
 
 .cult-do {
   background: var(--green-d);

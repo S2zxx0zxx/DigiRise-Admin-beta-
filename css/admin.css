@@ -76,6 +76,8 @@ body {
 
 .header-content {
   padding: 1rem 1.5rem;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .admin-badge {
@@ -92,6 +94,9 @@ body {
 .nav-tabs {
   display: flex;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  white-space: nowrap;
   padding: 0 1.5rem;
   gap: 1rem;
 }
@@ -124,7 +129,9 @@ body {
 
 /* Cards & Glassmorphism */
 .glass-card {
-  background: var(--admin-glass);
+  background: var(--bg-surface-1);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border: 1px solid rgba(168, 85, 247, 0.1);
   border-radius: 12px;
   padding: 1.25rem;
@@ -276,7 +283,7 @@ body {
 }
 
 .stat-card {
-  background: var(--admin-glass);
+  background: var(--bg-surface-1);
   border: 1px solid rgba(168, 85, 247, 0.15);
   border-radius: 12px;
   padding: 1.5rem;
