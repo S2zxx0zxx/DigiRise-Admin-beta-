@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
-
 html {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -681,8 +679,17 @@ p, span, a, button, input, label {
   border-color: rgba(200, 137, 10, .5);
 }
 
+.login-field-input:focus-visible {
+  outline: 2px solid rgba(200, 137, 10, .6);
+  outline-offset: 1px;
+}
+
 .login-box.admin-active-theme .login-field-input:focus {
   border-color: rgba(168, 85, 247, .5);
+}
+
+.login-box.admin-active-theme .login-field-input:focus-visible {
+  outline-color: rgba(168, 85, 247, .6);
 }
 
 .login-field-input::placeholder {
