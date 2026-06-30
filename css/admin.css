@@ -1,6 +1,6 @@
 /* FONT FAIL-SAFE */
 html, body {
-  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-family: 'Inter', sans-serif;
 }
 
 /* admin.css - Admin Portal Styles */
@@ -101,24 +101,25 @@ body {
 .tab-btn {
   background: none;
   border: none;
-  color: var(--admin-muted);
-  padding: 0.75rem 0.25rem;
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
+  border-radius: var(--radius-full);
   transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .tab-btn:hover {
-  color: var(--admin-text);
+  color: var(--text-primary);
 }
 
 .tab-btn.active {
-  color: var(--admin-purple);
-  border-bottom-color: var(--admin-purple);
-  text-shadow: 0 0 10px var(--admin-purple-glow);
+  color: var(--purple);
+  background: var(--bg-surface-3);
+  box-shadow: 0 2px 8px var(--shadow-hard);
+  text-shadow: 0 0 10px var(--purple-glow);
 }
 
 /* Cards & Glassmorphism */
@@ -162,11 +163,11 @@ body {
 }
 
 .glass-input {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--admin-text);
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
+  background: var(--bg-surface-2);
+  border: 2px solid var(--border-default);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-family: 'Inter', sans-serif;
   transition: all 0.2s ease;
@@ -174,9 +175,8 @@ body {
 
 .glass-input:focus {
   outline: none;
-  border-color: var(--admin-purple);
-  box-shadow: 0 0 0 2px var(--admin-purple-glow);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--purple);
+  background: var(--bg-surface-2);
 }
 
 /* Buttons */

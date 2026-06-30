@@ -6,7 +6,7 @@
   <title>DigiRise Admin Command Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/admin.css">
   <!-- Firebase CDN -->
@@ -32,6 +32,22 @@
         <span class="header-username" id="headerUsername">Satyam Kumar</span>
         <button id="payoutBellBtn" class="bell-btn" title="Pending Payouts">
           💸 <span id="pendingPayoutBadge" class="badge badgePulse hidden">0</span>
+        </button>
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle dark/light mode" type="button">
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
         </button>
         <button id="logoutBtn" class="logout-btn" title="Logout">🚪</button>
       </div>
@@ -94,7 +110,7 @@
 
       <h3 class="m-0 mt-4 mb-2">Admin Notes (Private)</h3>
       <textarea id="adminNotesArea" class="glass-input mt-2 w-full" rows="4" placeholder="Add notes here..."></textarea>
-      <button id="saveNotesBtn" class="purple-btn mt-2 w-full">Save Note</button>
+      <button id="saveNotesBtn" class="purple-btn offset-btn mt-2 w-full">Save Note</button>
 
       <h3 class="m-0 mt-5 mb-2">Recent Deals (Last 10)</h3>
       <div id="drawerDealsList" class="scrollable-list mt-2"></div>
@@ -124,7 +140,7 @@
       
       <div class="modal-actions mt-4 flex gap-2">
         <button id="cancelUtrBtn" class="outline-purple-btn flex-1">Cancel</button>
-        <button id="confirmUtrBtn" class="purple-btn flex-1">Confirm Payment ✅</button>
+        <button id="confirmUtrBtn" class="purple-btn offset-btn flex-1">Confirm Payment ✅</button>
       </div>
     </div>
   </div>
@@ -134,19 +150,19 @@
     <!-- DASHBOARD TAB -->
     <section id="dash-dashboard" class="tab-section active">
       <div class="stats-grid-4" id="dashboardStats">
-        <div class="stat-card gradient-border-card-purple fadeInUp">
+        <div class="stat-card offset-card-purple gradient-border-card-purple fadeInUp">
           <div class="gradient-border-card-inner">
             <div class="stat-label">Total Partners</div>
             <div class="stat-value text-purple" id="statTotalPartners">0</div>
           </div>
         </div>
-        <div class="stat-card gradient-border-card-purple fadeInUp">
+        <div class="stat-card offset-card-purple gradient-border-card-purple fadeInUp">
           <div class="gradient-border-card-inner">
             <div class="stat-label">Total Deals</div>
             <div class="stat-value text-gold" id="statTotalDeals">0</div>
           </div>
         </div>
-        <div class="stat-card gradient-border-card-purple fadeInUp">
+        <div class="stat-card offset-card-purple gradient-border-card-purple fadeInUp">
           <div class="gradient-border-card-inner">
             <div class="stat-label">Total Revenue</div>
             <div class="stat-value text-green" id="statTotalRevenue">₹0</div>
@@ -156,7 +172,7 @@
             </div>
           </div>
         </div>
-        <div class="stat-card gradient-border-card-purple fadeInUp">
+        <div class="stat-card offset-card-purple gradient-border-card-purple fadeInUp">
           <div class="gradient-border-card-inner">
             <div class="stat-label">Total Pending Payout</div>
             <div class="stat-value text-red" id="statTotalPending">₹0</div>
@@ -208,7 +224,7 @@
             <input type="text" id="newPartnerCode" name="newPartnerCode" class="glass-input uppercase" placeholder="e.g. DR2024 (A-Z, 0-9, _ only)">
           </div>
           <div class="form-group justify-end pb-1 flex items-end">
-            <button id="registerPartnerBtn" class="purple-btn h-42">Register Partner</button>
+            <button id="registerPartnerBtn" class="purple-btn offset-btn h-42">Register Partner</button>
           </div>
         </div>
       </div>
@@ -349,7 +365,7 @@
               <span class="text-red font-bold">Mark as URGENT (Red highlight)</span>
             </label>
           </div>
-          <button id="postAnnBtn" class="purple-btn w-full mt-4">Post Announcement 📣</button>
+          <button id="postAnnBtn" class="purple-btn offset-btn w-full mt-4">Post Announcement 📣</button>
         </div>
 
         <div class="glass-card">
@@ -372,7 +388,7 @@
             <label for="waNumber">WhatsApp Number (with country code)</label>
             <input type="text" id="waNumber" name="waNumber" class="glass-input" placeholder="e.g. 919999999999">
           </div>
-          <button id="saveWaBtn" class="purple-btn mt-4 w-full">Save Number</button>
+          <button id="saveWaBtn" class="purple-btn offset-btn mt-4 w-full">Save Number</button>
         </div>
 
         <div class="glass-card border-purple">
@@ -387,13 +403,13 @@
             <label for="confirmAdminPwd">Confirm Password</label>
             <input type="password" id="confirmAdminPwd" name="confirmAdminPwd" class="glass-input" placeholder="Confirm new password">
           </div>
-          <button id="savePwdBtn" class="purple-btn mt-4 w-full">Change Password</button>
+          <button id="savePwdBtn" class="purple-btn offset-btn mt-4 w-full">Change Password</button>
         </div>
         
         <div class="glass-card border-purple">
           <h3 class="m-0">Data Backup</h3>
           <p class="muted-text mb-4 mt-2">Download a complete snapshot of all database nodes as a JSON file.</p>
-          <button id="exportBackupBtn" class="purple-btn w-full">Download Backup (.json)</button>
+          <button id="exportBackupBtn" class="purple-btn offset-btn w-full">Download Backup (.json)</button>
         </div>
 
         <div class="glass-card border-red">

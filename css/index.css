@@ -1,6 +1,6 @@
 /* FONT FAIL-SAFE: ensures premium typography even if Google Fonts is slow/blocked */
 html, body {
-  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-family: 'Inter', sans-serif;
 }
 
 html {
@@ -19,7 +19,7 @@ h1, h2, h3, h4, h5, h6,
 .hero-h1, .sec-h, .stat-val,
 .hero-stat-val, .comm-earn,
 h1, h2, h3 {
-  font-family: 'Syne', 'Poppins', 'Segoe UI', Arial, sans-serif !important;
+  font-family: 'Syne', 'Inter', sans-serif;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
@@ -93,7 +93,7 @@ p, span, a, button, input, label {
 }
 
 .hero-h1 {
-  font-family: 'Syne', 'Poppins', 'Segoe UI', Arial, sans-serif !important;
+  font-family: 'Syne', 'Inter', sans-serif;
   font-size: clamp(32px, 6vw, 64px);
   font-weight: 700;
   line-height: 1.1;
@@ -627,33 +627,31 @@ p, span, a, button, input, label {
 
 .login-tab-btn {
   background: transparent;
-  color: var(--muted);
+  color: var(--text-secondary);
   font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 13px;
   padding: 10px 14px;
-  border-radius: var(--r8);
-  border: 1px solid var(--bg4);
+  border-radius: var(--radius-full);
+  border: none;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .login-tab-btn:hover {
-  color: var(--white);
-  border-color: var(--bg5);
+  color: var(--text-primary);
 }
 
 .login-tab-btn.active {
-  color: #000;
-  background: var(--white);
-  border-color: var(--white);
+  color: var(--text-primary);
+  background: var(--bg-surface-3);
+  box-shadow: 0 2px 8px var(--shadow-hard);
 }
 
 .login-tab-btn.active.admin-active-theme {
-  color: var(--white);
-  background: var(--purple);
-  border-color: var(--purple);
-  box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+  color: var(--purple-bright);
+  background: var(--bg-surface-3);
+  box-shadow: 0 2px 8px var(--shadow-hard);
 }
 
 /* FORM FIELDS */
@@ -674,21 +672,24 @@ p, span, a, button, input, label {
 
 .login-field-input {
   width: 100%;
-  background: var(--bg3);
-  border: 1px solid var(--bg5);
-  border-radius: var(--r8);
-  padding: 13px 16px;
-  color: var(--white);
+  background: var(--bg-surface-2);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  color: var(--text-primary);
   font-family: 'Inter', sans-serif;
   font-size: 14px;
-  outline: none;
-  transition: border-color .2s;
+  transition: all 0.2s ease;
 }
 
 .login-field-input:focus, .login-field-input:focus-visible {
   outline: none;
-  border-color: var(--gold-core);
-  box-shadow: 0 0 0 4px var(--gold-mesh-1), var(--shadow-inset-top);
+  border-color: var(--gold);
+  background: var(--bg-surface-2);
+}
+
+.login-form-active.admin-active-theme .login-field-input:focus {
+  border-color: var(--purple);
 }
 
 .login-box.admin-active-theme .login-field-input:focus,
@@ -726,4 +727,11 @@ p, span, a, button, input, label {
 .login-submit-btn {
   width: 100%;
   margin-top: 8px;
+}
+
+.theme-toggle-wrapper {
+  position: absolute; 
+  top: 20px; 
+  right: 20px; 
+  z-index: 1000;
 }

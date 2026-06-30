@@ -1,3 +1,14 @@
+(function initTheme() {
+  try {
+    const saved = localStorage.getItem('digirise-theme');
+    const theme = saved === 'light' || saved === 'dark' 
+      ? saved : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+})();
+
 // Shared utilities, constants, and Firebase initialization
 
 // Initialize Firebase (will run after firebase-config.js and Firebase CDN scripts are loaded)
@@ -393,3 +404,37 @@ function handleLogout() {
   }, 500);
 }
 
+function setupThemeToggle() {
+  const btn = document.getElementById('themeToggleBtn');
+  if (!btn) return;
+
+  const moonIcon = btn.querySelector('.icon-moon');
+  const sunIcon = btn.querySelector('.icon-sun');
+
+  function updateIcons() {
+    const current = document.documentElement.getAttribute('data-theme');
+    if (current === 'light') {
+      if (moonIcon) moonIcon.style.display = 'block';
+      if (sunIcon) sunIcon.style.display = 'none';
+    } else {
+      if (moonIcon) moonIcon.style.display = 'none';
+      if (sunIcon) sunIcon.style.display = 'block';
+    }
+  }
+
+  updateIcons();
+
+  btn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem('digirise-theme', next);
+    } catch (e) {
+      console.warn('Could not persist theme preference:', e);
+    }
+    updateIcons();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', setupThemeToggle);

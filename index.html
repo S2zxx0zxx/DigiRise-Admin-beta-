@@ -7,13 +7,31 @@
   <meta name="description" content="DigiRise India Growth Partner Program - Earn 10-15% commission per deal. Work from home with instant payouts and zero targets.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
   <!-- VIEW 1: PUBLIC LANDING PAGE -->
+  <div class="theme-toggle-wrapper">
+    <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle dark/light mode" type="button">
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+  </div>
   <div id="view-public" class="view active">
     
     <!-- HERO SECTION -->
@@ -28,7 +46,7 @@
         Commission-based. Work from anywhere. Your timing, your freedom. No targets. No salary. Pure performance — the way it should be.
       </p>
       <div class="hero-btns">
-        <button class="btn-gold" onclick="openWhatsAppApply()">Apply on WhatsApp 🚀</button>
+        <button class="btn-gold offset-btn" onclick="openWhatsAppApply()">Apply on WhatsApp 🚀</button>
         <a href="#login"><button class="btn-ghost">Partner Login →</button></a>
       </div>
       
@@ -222,7 +240,7 @@
     <div class="pub-cta">
       <h2>Ready to Grow With DigiRise India? 🚀</h2>
       <p>WhatsApp pe message karo — Satyam khud baat karega. Professional onboarding, same day.</p>
-      <button class="btn-gold" onclick="openWhatsAppApply()">Apply Now — WhatsApp Me 👋</button>
+      <button class="btn-gold offset-btn" onclick="openWhatsAppApply()">Apply Now — WhatsApp Me 👋</button>
     </div>
 
   </div><!-- /view-public -->
@@ -256,7 +274,7 @@
             <input type="text" id="partner-code" class="login-field-input" placeholder="e.g. DR_DEMO" autocomplete="off">
           </div>
           <p id="partner-login-err" class="login-err"></p>
-          <button id="btn-login-partner" class="btn-gold login-submit-btn" onclick="doPartnerLogin()">
+          <button id="btn-login-partner" class="btn-gold offset-btn login-submit-btn" onclick="doPartnerLogin()">
             <span>Login to Dashboard →</span>
           </button>
         </div>
@@ -268,7 +286,7 @@
             <input type="password" id="admin-password" class="login-field-input" placeholder="Enter admin code">
           </div>
           <p id="admin-login-err" class="login-err"></p>
-          <button id="btn-login-admin" class="btn-gold login-submit-btn" onclick="doAdminLogin()">
+          <button id="btn-login-admin" class="btn-gold offset-btn login-submit-btn" onclick="doAdminLogin()">
             <span>Enter Admin Panel →</span>
           </button>
         </div>
