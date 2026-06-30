@@ -52,9 +52,14 @@ html[data-theme="light"] {
   --purple: #A855F7;
   --purple-bright: #C084FC;
   --purple-glow: rgba(168,85,247,0.35);
+  --purple-d: rgba(168,85,247,0.15);
   --success: #22C55E;
+  --blue-d: rgba(59,130,246,0.15);
   --warning: #F59E0B;
   --danger: #EF4444;
+  --bronze: #CD7F32;
+  --silver: #C0C0C0;
+  --gold-text: #F5C842;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -111,6 +116,7 @@ html[data-theme="light"] {
   --r16: 16px;
   --r20: 20px;
   --r50: 50px;
+  --radius-full: 9999px;
 }
 
 html:not([data-theme]) {
