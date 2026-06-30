@@ -830,6 +830,158 @@ button {
   transform: scale(1) translateY(0);
 }
 
-/* ══ HISTORY DEAL CARDS ══ */
 .deal-card { transition: box-shadow 0.2s ease; }
 .deal-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+
+/* ══ EXTRACTED INLINE STYLE CLASSES ══ */
+
+/* SVG icon margin helpers */
+.icon-mr-4 { margin-right: 4px; }
+.icon-mr-6 { display: inline; margin-right: 6px; }
+.icon-mr-8 { margin-right: 8px; }
+.icon-mb-12 { margin-bottom: 12px; }
+
+/* Section header layouts */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.section-header-lg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Announcement unread badge */
+.ann-unread-badge {
+  background: #EF4444;
+  color: #fff;
+}
+
+/* Form grid 2-column layouts */
+.form-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.form-grid-2col-gap12 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Label helpers */
+.label-optional {
+  color: #444;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Preview box label */
+.preview-box-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Pipeline header */
+.pipeline-header-card {
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+.pipeline-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pipeline-title {
+  margin: 0;
+  font-size: 18px;
+}
+.pipeline-subtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+.pipeline-filter-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* History section */
+.history-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.history-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.history-search-input {
+  width: 160px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+.history-filter-select {
+  padding: 8px;
+  font-size: 13px;
+}
+
+/* Payout section */
+.payout-whatsapp-label {
+  font-size: 12px;
+  color: #666;
+  display: block;
+  margin-bottom: 6px;
+}
+.payout-msg-textarea {
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* Muted description text */
+.muted-desc {
+  font-size: 13px;
+}
+
+/* Calculator */
+.calc-deal-label {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Spacing helpers not in shared */
+.mb-14 { margin-bottom: 14px; }
+.mb-20 { margin-bottom: 20px; }
+.m-0 { margin: 0; }
+
+/* Edit deal modal — using shared modal classes + extras */
+.edit-stage-display {
+  color: #C8890A;
+  font-weight: 600;
+}
+.modal-field-group {
+  margin-bottom: 14px;
+}
+.modal-field-group-lg {
+  margin-bottom: 20px;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
