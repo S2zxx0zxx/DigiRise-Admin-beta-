@@ -1,113 +1,533 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DigiRise Growth Partner OS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/partner.css">
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js" crossorigin="anonymous"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js" crossorigin="anonymous"></script>
   <style>
-  /* ── PARTNER UPGRADES ── */
-  .pkg-card{background:#1a1a1a;border:2px solid #2a2a2a;border-radius:14px;padding:16px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
-  .pkg-card:hover{border-color:#C8890A44;transform:translateY(-2px);}
-  .pkg-card.active{border-color:#C8890A;background:rgba(200,137,10,0.08);}
-  .pkg-card.active::before{content:'✓';position:absolute;top:10px;right:12px;color:#C8890A;font-weight:700;font-size:14px;}
-  .pkg-card-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:2px;}
-  .pkg-card-price{font-size:13px;color:#888;margin-bottom:8px;}
-  .pkg-card-earn{font-size:13px;font-weight:600;color:#22C55E;}
-  .pkg-card-pct{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;margin-top:6px;}
-  .pct-15{background:rgba(168,85,247,0.15);color:#A855F7;border:1px solid rgba(168,85,247,0.3);}
-  .pct-10{background:rgba(59,130,246,0.15);color:#3B82F6;border:1px solid rgba(59,130,246,0.3);}
+    /* ── PARTNER UPGRADES ── */
+    .pkg-card {
+      background: #1a1a1a;
+      border: 2px solid #2a2a2a;
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all .25s;
+      position: relative;
+      overflow: hidden;
+    }
 
-  .stage-pill{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:50px;border:1.5px solid #2a2a2a;background:#161616;cursor:pointer;font-size:12px;font-weight:600;color:#666;transition:all .2s;white-space:nowrap;}
-  .stage-pill.active{border-color:#C8890A;background:rgba(200,137,10,0.1);color:#C8890A;}
-  .stage-pill svg{width:14px;height:14px;flex-shrink:0;}
-  .stage-pills-row{display:flex;flex-wrap:wrap;gap:8px;}
+    .pkg-card:hover {
+      border-color: #C8890A44;
+      transform: translateY(-2px);
+    }
 
-  .form-field{margin-bottom:16px;}
-  .form-field label{display:block;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
-  .form-field .req{color:#EF4444;}
-  .input-with-icon{position:relative;}
-  .input-with-icon svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#666;}
-  .input-with-icon input,.input-with-icon textarea{padding-left:38px!important;}
-  .char-count{font-size:11px;color:#555;text-align:right;margin-top:4px;}
+    .pkg-card.active {
+      border-color: #C8890A;
+      background: rgba(200, 137, 10, 0.08);
+    }
 
-  /* Pipeline upgrades */
-  .pipeline-card{background:#141414;border:1px solid #222;border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;transition:border-color .2s;}
-  .pipeline-card:hover{border-color:#2a2a2a;}
-  .pipeline-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;}
-  .pipeline-card.stage-lead::before{background:#3B82F6;}
-  .pipeline-card.stage-pitched::before{background:#A855F7;}
-  .pipeline-card.stage-negotiating::before{background:#F59E0B;}
-  .pipeline-card.stage-closed::before{background:#22C55E;}
-  .pipeline-card.stage-payment::before{background:#C8890A;}
-  .pipeline-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
-  .pipeline-client{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
-  .pipeline-meta{font-size:12px;color:#555;margin-top:3px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-  .pipeline-commission{text-align:right;}
-  .pipeline-commission-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#22C55E;}
-  .pipeline-commission-pkg{font-size:11px;color:#555;margin-top:2px;}
-  .pipeline-progress{display:flex;gap:4px;margin:12px 0;align-items:center;}
-  .prog-step{flex:1;height:4px;border-radius:2px;background:#1f1f1f;transition:background .3s;}
-  .prog-step.done{background:#22C55E;}
-  .prog-step.current{background:#C8890A;}
-  .prog-labels{display:flex;justify-content:space-between;font-size:9px;color:#444;margin-bottom:10px;}
-  .pipeline-stage-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-  .mini-stage-btn{padding:5px 10px;border-radius:6px;border:1px solid #2a2a2a;background:#1a1a1a;color:#666;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;}
-  .mini-stage-btn.active{border-color:#C8890A;background:rgba(200,137,10,0.1);color:#C8890A;}
-  .mini-stage-btn:hover:not(.active){border-color:#333;color:#aaa;}
-  .followup-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);color:#F59E0B;font-size:11px;font-weight:600;margin-top:6px;}
-  .followup-badge svg{width:12px;height:12px;}
-  .followup-overdue{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2);color:#EF4444;}
-  .pipeline-notes{background:#0f0f0f;border-radius:8px;padding:10px;font-size:12px;color:#666;margin-top:8px;border-left:2px solid #2a2a2a;}
-  .phone-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#3B82F6;}
-  .phone-badge svg{width:11px;height:11px;}
+    .pkg-card.active::before {
+      content: '✓';
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      color: #C8890A;
+      font-weight: 700;
+      font-size: 14px;
+    }
 
-  /* Announcement upgrades */
-  .ann-item{background:#141414;border:1px solid #222;border-radius:12px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;transition:all .3s;}
-  .ann-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
-  .ann-item.normal::before{background:#C8890A;}
-  .ann-item.urgent{border-color:rgba(239,68,68,0.25);background:linear-gradient(135deg,rgba(239,68,68,0.04),#141414);}
-  .ann-item.urgent::before{background:#EF4444;animation:urgentPulse 1.5s infinite;}
-  @keyframes urgentPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-  .ann-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-  .ann-badge-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
-  .ann-badge-update{background:rgba(200,137,10,0.12);color:#C8890A;border:1px solid rgba(200,137,10,0.2);}
-  .ann-badge-urgent{background:rgba(239,68,68,0.12);color:#EF4444;border:1px solid rgba(239,68,68,0.2);}
-  .ann-title{font-weight:700;font-size:15px;margin-bottom:5px;}
-  .ann-body{font-size:13px;color:#aaa;line-height:1.6;}
-  .ann-date{font-size:11px;color:#444;margin-top:8px;}
-  .ann-new-badge{position:absolute;top:12px;right:12px;background:#22C55E;color:#000;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:1px;}
+    .pkg-card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
 
-  /* SVG Icon styles */
-  .svg-icon{display:inline-flex;align-items:center;justify-content:center;}
-  .tab-icon{width:16px;height:16px;margin-right:4px;opacity:.7;}
-  .tab-btn.active .tab-icon{opacity:1;}
+    .pkg-card-price {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
 
-  /* Phone field */
-  .phone-input-row{display:grid;grid-template-columns:90px 1fr;gap:8px;}
-  .country-code-badge{display:flex;align-items:center;justify-content:center;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;font-size:13px;font-weight:600;color:#C8890A;padding:0 12px;}
+    .pkg-card-earn {
+      font-size: 13px;
+      font-weight: 600;
+      color: #22C55E;
+    }
+
+    .pkg-card-pct {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .pct-15 {
+      background: rgba(168, 85, 247, 0.15);
+      color: #A855F7;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .pct-10 {
+      background: rgba(59, 130, 246, 0.15);
+      color: #3B82F6;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .stage-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 50px;
+      border: 1.5px solid #2a2a2a;
+      background: #161616;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .stage-pill.active {
+      border-color: #C8890A;
+      background: rgba(200, 137, 10, 0.1);
+      color: #C8890A;
+    }
+
+    .stage-pill svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .stage-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .form-field {
+      margin-bottom: 16px;
+    }
+
+    .form-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .form-field .req {
+      color: #EF4444;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-with-icon svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: #666;
+    }
+
+    .input-with-icon input,
+    .input-with-icon textarea {
+      padding-left: 38px !important;
+    }
+
+    .char-count {
+      font-size: 11px;
+      color: #555;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    /* Pipeline upgrades */
+    .pipeline-card {
+      background: #141414;
+      border: 1px solid #222;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+
+    .pipeline-card:hover {
+      border-color: #2a2a2a;
+    }
+
+    .pipeline-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 3px 0 0 3px;
+    }
+
+    .pipeline-card.stage-lead::before {
+      background: #3B82F6;
+    }
+
+    .pipeline-card.stage-pitched::before {
+      background: #A855F7;
+    }
+
+    .pipeline-card.stage-negotiating::before {
+      background: #F59E0B;
+    }
+
+    .pipeline-card.stage-closed::before {
+      background: #22C55E;
+    }
+
+    .pipeline-card.stage-payment::before {
+      background: #C8890A;
+    }
+
+    .pipeline-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .pipeline-client {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .pipeline-meta {
+      font-size: 12px;
+      color: #555;
+      margin-top: 3px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .pipeline-commission {
+      text-align: right;
+    }
+
+    .pipeline-commission-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: #22C55E;
+    }
+
+    .pipeline-commission-pkg {
+      font-size: 11px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    .pipeline-progress {
+      display: flex;
+      gap: 4px;
+      margin: 12px 0;
+      align-items: center;
+    }
+
+    .prog-step {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: #1f1f1f;
+      transition: background .3s;
+    }
+
+    .prog-step.done {
+      background: #22C55E;
+    }
+
+    .prog-step.current {
+      background: #C8890A;
+    }
+
+    .prog-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: #444;
+      margin-bottom: 10px;
+    }
+
+    .pipeline-stage-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .mini-stage-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid #2a2a2a;
+      background: #1a1a1a;
+      color: #666;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .mini-stage-btn.active {
+      border-color: #C8890A;
+      background: rgba(200, 137, 10, 0.1);
+      color: #C8890A;
+    }
+
+    .mini-stage-btn:hover:not(.active) {
+      border-color: #333;
+      color: #aaa;
+    }
+
+    .followup-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      color: #F59E0B;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .followup-badge svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .followup-overdue {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.2);
+      color: #EF4444;
+    }
+
+    .pipeline-notes {
+      background: #0f0f0f;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 12px;
+      color: #666;
+      margin-top: 8px;
+      border-left: 2px solid #2a2a2a;
+    }
+
+    .phone-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #3B82F6;
+    }
+
+    .phone-badge svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    /* Announcement upgrades */
+    .ann-item {
+      background: #141414;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+      transition: all .3s;
+    }
+
+    .ann-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+    }
+
+    .ann-item.normal::before {
+      background: #C8890A;
+    }
+
+    .ann-item.urgent {
+      border-color: rgba(239, 68, 68, 0.25);
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.04), #141414);
+    }
+
+    .ann-item.urgent::before {
+      background: #EF4444;
+      animation: urgentPulse 1.5s infinite;
+    }
+
+    @keyframes urgentPulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .4;
+      }
+    }
+
+    .ann-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .ann-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .ann-badge-update {
+      background: rgba(200, 137, 10, 0.12);
+      color: #C8890A;
+      border: 1px solid rgba(200, 137, 10, 0.2);
+    }
+
+    .ann-badge-urgent {
+      background: rgba(239, 68, 68, 0.12);
+      color: #EF4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .ann-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .ann-body {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    .ann-date {
+      font-size: 11px;
+      color: #444;
+      margin-top: 8px;
+    }
+
+    .ann-new-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #22C55E;
+      color: #000;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+    }
+
+    /* SVG Icon styles */
+    .svg-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tab-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+      opacity: .7;
+    }
+
+    .tab-btn.active .tab-icon {
+      opacity: 1;
+    }
+
+    /* Phone field */
+    .phone-input-row {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 8px;
+    }
+
+    .country-code-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #C8890A;
+      padding: 0 12px;
+    }
   </style>
 </head>
+
 <body>
-<div id="offline-banner" class="offline-banner" style="display:none;">
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;margin-right:6px;"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
-  No internet connection — changes may not save
-</div>
+  <div id="offline-banner" class="offline-banner" style="display:none;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      style="display:inline;margin-right:6px;">
+      <path
+        d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" />
+    </svg>
+    No internet connection — changes may not save
+  </div>
 
   <header class="top-header">
     <div class="header-content">
       <div class="logo-area">
         <svg width="28" height="28" viewBox="0 0 40 40" fill="none" style="margin-right:8px;">
-          <rect width="40" height="40" rx="10" fill="#C8890A"/>
-          <path d="M10 28L20 12L30 28" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M14 22H26" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+          <rect width="40" height="40" rx="10" fill="#C8890A" />
+          <path d="M10 28L20 12L30 28" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M14 22H26" stroke="#000" stroke-width="3" stroke-linecap="round" />
         </svg>
         <span class="logo-text">DigiRise <span class="gold-text">OS</span></span>
       </div>
@@ -117,11 +537,18 @@
           <span id="headerTierBadge" class="tier-badge">⭐ Joining</span>
         </div>
         <button id="notificationBtn" class="bell-btn" title="Notifications">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
           <span id="notificationBadge" class="badge hidden">0</span>
         </button>
         <button id="logoutBtn" class="logout-btn" title="Logout">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
         </button>
       </div>
     </div>
@@ -138,7 +565,11 @@
   <div id="notificationPanel" class="notification-panel">
     <div class="panel-header">
       <h3>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          style="margin-right:6px;">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
         Notifications
       </h3>
       <div>
@@ -156,28 +587,47 @@
       <div class="stats-grid">
         <div class="stat-card fadeInUp delay-1">
           <div class="stat-label">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Total Deals
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right:4px;">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>Total Deals
           </div>
           <div class="stat-value" id="statTotalDeals">0</div>
         </div>
         <div class="stat-card fadeInUp delay-2">
           <div class="stat-label">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Total Earned
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right:4px;">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>Total Earned
           </div>
           <div class="stat-value text-green" id="statTotalEarned">₹0</div>
         </div>
         <div class="stat-card fadeInUp delay-3">
           <div class="stat-label">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Pending Payout
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right:4px;">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>Pending Payout
           </div>
           <div class="stat-value text-amber" id="statPendingPayout">₹0</div>
         </div>
         <div class="stat-card fadeInUp delay-4">
           <div class="stat-label">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Performance
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right:4px;">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>Performance
           </div>
           <div class="stat-value text-gold" id="statPerfScore">0<span class="score-max">/100</span></div>
-          <div class="progress-bar-bg mt-2"><div class="progress-bar-fill" id="perfScoreFill"></div></div>
+          <div class="progress-bar-bg mt-2">
+            <div class="progress-bar-fill" id="perfScoreFill"></div>
+          </div>
         </div>
       </div>
 
@@ -186,7 +636,8 @@
           <div class="ring-container">
             <svg viewBox="0 0 100 100" class="tier-ring">
               <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
-              <circle class="ring-progress" id="tierRingProgress" cx="50" cy="50" r="40" stroke-dasharray="251" stroke-dashoffset="251"></circle>
+              <circle class="ring-progress" id="tierRingProgress" cx="50" cy="50" r="40" stroke-dasharray="251"
+                stroke-dashoffset="251"></circle>
             </svg>
             <div class="ring-center-text" id="tierRingText">0</div>
           </div>
@@ -199,19 +650,27 @@
 
         <div class="glass-card">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8890A" stroke-width="2"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8890A" stroke-width="2">
+              <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0" />
+            </svg>
             <h3 style="margin:0;">Announcements</h3>
             <span id="annUnreadBadge" class="badge hidden" style="background:#EF4444;color:#fff;">0</span>
           </div>
           <div id="announcementsList" class="scrollable-list" style="max-height:280px;">
-            <div class="empty-state"><p>No announcements</p></div>
+            <div class="empty-state">
+              <p>No announcements</p>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="glass-card mt-4">
         <h3>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            style="margin-right:6px;">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+            <polyline points="16 7 22 7 22 13" />
+          </svg>
           Earnings — Last 6 Months
         </h3>
         <div class="chart-container" id="earningsChart"></div>
@@ -222,7 +681,11 @@
     <section id="logDeal" class="tab-section">
       <div class="glass-card">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8890A" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8890A" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
           <h2 style="margin:0;">Log a New Deal</h2>
         </div>
 
@@ -234,8 +697,12 @@
         <div class="form-field">
           <label for="dealClientName">Client Business Name <span class="req">*</span></label>
           <div class="input-with-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            <input type="text" id="dealClientName" class="glass-input" placeholder="e.g. Sharma Electronics Pvt Ltd" required>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <input type="text" id="dealClientName" class="glass-input" placeholder="e.g. Sharma Electronics Pvt Ltd"
+              required>
           </div>
         </div>
 
@@ -243,14 +710,20 @@
           <div class="form-field">
             <label for="dealIndustry">Industry</label>
             <div class="input-with-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
               <input type="text" id="dealIndustry" class="glass-input" placeholder="e.g. Retail, IT, Food">
             </div>
           </div>
           <div class="form-field">
             <label for="dealClientPhone">Client Phone</label>
             <div class="input-with-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
               <input type="tel" id="dealClientPhone" class="glass-input" placeholder="e.g. 9876543210">
             </div>
           </div>
@@ -260,23 +733,35 @@
           <label>Current Stage</label>
           <div class="stage-pills-row" id="stageSelectGrid">
             <button class="stage-pill active" data-stage="Lead Found">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
               Lead Found
             </button>
             <button class="stage-pill" data-stage="Pitched">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
               Pitched
             </button>
             <button class="stage-pill" data-stage="Negotiating">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
               Negotiating
             </button>
             <button class="stage-pill" data-stage="Closed">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
               Closed
             </button>
             <button class="stage-pill" data-stage="Payment Received">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
               Payment Received
             </button>
           </div>
@@ -286,27 +771,40 @@
           <div class="form-field">
             <label for="dealFollowup">Follow-up Date</label>
             <div class="input-with-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
               <input type="date" id="dealFollowup" class="glass-input">
             </div>
           </div>
           <div class="form-field">
             <label for="dealCityArea">City / Area</label>
             <div class="input-with-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
               <input type="text" id="dealCityArea" class="glass-input" placeholder="e.g. Kolkata, Delhi">
             </div>
           </div>
         </div>
 
         <div class="form-field">
-          <label for="dealNotes">Notes <span style="color:#444;font-weight:400;text-transform:none;letter-spacing:0;">(Optional)</span></label>
-          <textarea id="dealNotes" class="glass-input" rows="3" placeholder="Key points from conversation, client requirements, pricing discussed..." maxlength="300"></textarea>
+          <label for="dealNotes">Notes <span
+              style="color:#444;font-weight:400;text-transform:none;letter-spacing:0;">(Optional)</span></label>
+          <textarea id="dealNotes" class="glass-input" rows="3"
+            placeholder="Key points from conversation, client requirements, pricing discussed..."
+            maxlength="300"></textarea>
           <div class="char-count"><span id="dealNotesCount">0</span>/300</div>
         </div>
 
         <div class="preview-box mt-4" id="dealPreviewBox" style="display:none;">
-          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#555;margin-bottom:10px;">Commission Preview</div>
+          <div
+            style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#555;margin-bottom:10px;">
+            Commission Preview</div>
           <div class="flex-between">
             <span class="muted-text">Package</span>
             <span id="previewPkg" class="gold-text font-bold">-</span>
@@ -322,7 +820,10 @@
         </div>
 
         <button id="submitDealBtn" class="gold-btn mt-4 w-full" disabled>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            style="margin-right:6px;">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
           Submit Deal
         </button>
       </div>
@@ -338,17 +839,24 @@
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;" id="pipelineStageFilter">
             <button class="mini-stage-btn active" data-filter="all" onclick="filterPipeline('all',this)">All</button>
-            <button class="mini-stage-btn" data-filter="Lead Found" onclick="filterPipeline('Lead Found',this)" style="border-left:3px solid #3B82F6;">Lead</button>
-            <button class="mini-stage-btn" data-filter="Pitched" onclick="filterPipeline('Pitched',this)" style="border-left:3px solid #A855F7;">Pitched</button>
-            <button class="mini-stage-btn" data-filter="Negotiating" onclick="filterPipeline('Negotiating',this)" style="border-left:3px solid #F59E0B;">Negotiating</button>
-            <button class="mini-stage-btn" data-filter="Closed" onclick="filterPipeline('Closed',this)" style="border-left:3px solid #22C55E;">Closed</button>
+            <button class="mini-stage-btn" data-filter="Lead Found" onclick="filterPipeline('Lead Found',this)"
+              style="border-left:3px solid #3B82F6;">Lead</button>
+            <button class="mini-stage-btn" data-filter="Pitched" onclick="filterPipeline('Pitched',this)"
+              style="border-left:3px solid #A855F7;">Pitched</button>
+            <button class="mini-stage-btn" data-filter="Negotiating" onclick="filterPipeline('Negotiating',this)"
+              style="border-left:3px solid #F59E0B;">Negotiating</button>
+            <button class="mini-stage-btn" data-filter="Closed" onclick="filterPipeline('Closed',this)"
+              style="border-left:3px solid #22C55E;">Closed</button>
           </div>
         </div>
       </div>
 
       <div id="pipelineList">
         <div class="empty-state glass-card">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5" style="margin-bottom:12px;"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"
+            style="margin-bottom:12px;">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>
           <p class="muted-text">No active deals. Log your first deal!</p>
         </div>
       </div>
@@ -357,11 +865,14 @@
     <!-- HISTORY -->
     <section id="history" class="tab-section">
       <div class="glass-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div
+          style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
           <h2 style="margin:0;">Deal History</h2>
           <div style="display:flex;gap:8px;align-items:center;">
-            <input type="text" id="historySearch" class="glass-input" placeholder="Search client..." style="width:160px;padding:8px 12px;font-size:13px;">
-            <select id="historyFilter" class="glass-input" style="padding:8px;font-size:13px;" title="History Filter" aria-label="History Filter">
+            <input type="text" id="historySearch" class="glass-input" placeholder="Search client..."
+              style="width:160px;padding:8px 12px;font-size:13px;">
+            <select id="historyFilter" class="glass-input" style="padding:8px;font-size:13px;" title="History Filter"
+              aria-label="History Filter">
               <option value="all">All Stages</option>
               <option value="Lead Found">Lead Found</option>
               <option value="Pitched">Pitched</option>
@@ -398,19 +909,33 @@
           <div class="form-field">
             <label for="payoutUpi">UPI ID <span class="req">*</span></label>
             <div class="input-with-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
               <input type="text" id="payoutUpi" class="glass-input" placeholder="yourname@upi">
             </div>
           </div>
           <button id="requestPayoutBtn" class="gold-btn mt-4 w-full" disabled>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right:6px;">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
             Request Payout
           </button>
           <div class="mt-4 pt-4 border-top">
-            <label for="payoutMsg" style="font-size:12px;color:#666;display:block;margin-bottom:6px;">WhatsApp Message (tap to copy)</label>
-            <textarea id="payoutMsg" class="glass-input" rows="5" readonly onclick="copyPayoutMsg()" style="cursor:pointer;font-size:12px;" title="Payout Message" placeholder="Your payout message"></textarea>
+            <label for="payoutMsg" style="font-size:12px;color:#666;display:block;margin-bottom:6px;">WhatsApp Message
+              (tap to copy)</label>
+            <textarea id="payoutMsg" class="glass-input" rows="5" readonly onclick="copyPayoutMsg()"
+              style="cursor:pointer;font-size:12px;" title="Payout Message"
+              placeholder="Your payout message"></textarea>
             <button id="copyMsgBtn" class="outline-gold-btn mt-2 w-full">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right:4px;">
+                <rect x="9" y="9" width="13" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
               Copy Message
             </button>
           </div>
@@ -428,12 +953,14 @@
         <h2>Earnings Calculator</h2>
         <p class="muted-text mb-4" style="font-size:13px;">Calculate potential earnings including tier bonuses.</p>
         <div class="calc-grid">
-          <div class="pkg-calc-grid" id="calcPkgGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+          <div class="pkg-calc-grid" id="calcPkgGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          </div>
           <div class="calc-controls glass-card-inner">
             <label class="text-center block mb-2" style="font-size:12px;color:#888;">Number of Deals</label>
             <div class="qty-control">
               <button id="calcMinus" class="qty-btn">−</button>
-              <input type="number" id="calcQty" value="1" min="1" max="30" class="qty-input" readonly title="Quantity" placeholder="1" aria-label="Number of Deals">
+              <input type="number" id="calcQty" value="1" min="1" max="30" class="qty-input" readonly title="Quantity"
+                placeholder="1" aria-label="Number of Deals">
               <button id="calcPlus" class="qty-btn">+</button>
             </div>
           </div>
@@ -444,7 +971,8 @@
           <div class="flex-between mb-2"><span>Per Deal Earning</span><span id="calcPerDeal">-</span></div>
           <div class="flex-between mb-2"><span>× Quantity</span><span id="calcTotalQty">-</span></div>
           <div class="flex-between mb-2 text-gold"><span>Tier Bonus</span><span id="calcTierBonus">+₹0</span></div>
-          <div class="flex-between mb-2 text-gold"><span>Extra Commission</span><span id="calcExtraComm">+₹0</span></div>
+          <div class="flex-between mb-2 text-gold"><span>Extra Commission</span><span id="calcExtraComm">+₹0</span>
+          </div>
           <div class="flex-between mt-4 pt-4 border-top">
             <strong>TOTAL EARNINGS</strong>
             <span id="calcGrandTotal" class="text-green text-xl"><strong>₹0</strong></span>
@@ -457,43 +985,62 @@
 
 
   <!-- EDIT DEAL MODAL -->
-  <div id="editDealModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:500;align-items:center;justify-content:center;padding:20px;">
-    <div style="background:#141414;border:1px solid #2a2a2a;border-radius:20px;padding:28px;width:100%;max-width:480px;position:relative;max-height:90vh;overflow-y:auto;">
-      <div style="position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,#C8890A,transparent);border-radius:20px 20px 0 0;"></div>
-      <button onclick="closeEditModal()" style="position:absolute;top:14px;right:14px;background:#1f1f1f;border:1px solid #2a2a2a;color:#666;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;">✕</button>
+  <div id="editDealModal"
+    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:500;align-items:center;justify-content:center;padding:20px;">
+    <div
+      style="background:#141414;border:1px solid #2a2a2a;border-radius:20px;padding:28px;width:100%;max-width:480px;position:relative;max-height:90vh;overflow-y:auto;">
+      <div
+        style="position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,#C8890A,transparent);border-radius:20px 20px 0 0;">
+      </div>
+      <button onclick="closeEditModal()"
+        style="position:absolute;top:14px;right:14px;background:#1f1f1f;border:1px solid #2a2a2a;color:#666;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;">✕</button>
       <h3 style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Edit Deal</h3>
-      <p style="font-size:12px;color:#555;margin-bottom:20px;">Current Stage: <span id="editStageDisplay" style="color:#C8890A;font-weight:600;"></span></p>
+      <p style="font-size:12px;color:#555;margin-bottom:20px;">Current Stage: <span id="editStageDisplay"
+          style="color:#C8890A;font-weight:600;"></span></p>
       <div style="margin-bottom:14px;">
-        <label style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Client Name *</label>
+        <label
+          style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Client
+          Name *</label>
         <input id="editClientName" type="text" class="glass-input" placeholder="Client business name">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
         <div>
-          <label style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Industry</label>
+          <label
+            style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Industry</label>
           <input id="editIndustry" type="text" class="glass-input" placeholder="e.g. Retail">
         </div>
         <div>
-          <label style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Client Phone</label>
+          <label
+            style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Client
+            Phone</label>
           <input id="editClientPhone" type="tel" class="glass-input" placeholder="9876543210">
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
         <div>
-          <label style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">City / Area</label>
+          <label
+            style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">City
+            / Area</label>
           <input id="editCityArea" type="text" class="glass-input" placeholder="e.g. Delhi">
         </div>
         <div>
-          <label style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Follow-up Date</label>
+          <label
+            style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Follow-up
+            Date</label>
           <input id="editFollowup" type="date" class="glass-input">
         </div>
       </div>
       <div style="margin-bottom:20px;">
-        <label style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Notes</label>
+        <label
+          style="display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Notes</label>
         <textarea id="editNotes" class="glass-input" rows="3" placeholder="Key details..."></textarea>
       </div>
       <div style="display:flex;gap:10px;">
-        <button onclick="closeEditModal()" style="flex:1;padding:12px;border-radius:8px;background:transparent;border:1px solid #2a2a2a;color:#666;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Cancel</button>
-        <button onclick="saveEditDeal()" style="flex:1;padding:12px;border-radius:8px;background:linear-gradient(135deg,#C8890A,#E8A020);color:#000;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;">Save Changes ✅</button>
+        <button onclick="closeEditModal()"
+          style="flex:1;padding:12px;border-radius:8px;background:transparent;border:1px solid #2a2a2a;color:#666;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Cancel</button>
+        <button onclick="saveEditDeal()"
+          style="flex:1;padding:12px;border-radius:8px;background:linear-gradient(135deg,#C8890A,#E8A020);color:#000;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;">Save
+          Changes ✅</button>
       </div>
     </div>
   </div>
@@ -502,4 +1049,5 @@
   <script src="js/shared.js"></script>
   <script src="js/partner.js"></script>
 </body>
+
 </html>

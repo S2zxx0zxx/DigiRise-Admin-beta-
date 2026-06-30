@@ -1,3 +1,8 @@
+/* FONT FAIL-SAFE */
+html, body {
+  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
 /* admin.css - Admin Portal Styles */
 
 :root {

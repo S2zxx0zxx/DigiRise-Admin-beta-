@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+/* FONT FAIL-SAFE: ensures premium typography even if Google Fonts is slow/blocked */
+html, body {
+  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
 
 html {
   font-family: 'Inter', sans-serif;
@@ -14,9 +17,11 @@ html, body {
 
 h1, h2, h3, h4, h5, h6,
 .hero-h1, .sec-h, .stat-val,
-.hero-stat-val, .comm-earn {
-  font-family: 'Syne', sans-serif;
+.hero-stat-val, .comm-earn,
+h1, h2, h3 {
+  font-family: 'Syne', 'Poppins', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 p, span, a, button, input, label {
@@ -88,7 +93,7 @@ p, span, a, button, input, label {
 }
 
 .hero-h1 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Syne', 'Poppins', 'Segoe UI', Arial, sans-serif !important;
   font-size: clamp(32px, 6vw, 64px);
   font-weight: 700;
   line-height: 1.1;
@@ -681,8 +686,17 @@ p, span, a, button, input, label {
   border-color: rgba(200, 137, 10, .5);
 }
 
+.login-field-input:focus-visible {
+  outline: 2px solid rgba(200, 137, 10, .6);
+  outline-offset: 1px;
+}
+
 .login-box.admin-active-theme .login-field-input:focus {
   border-color: rgba(168, 85, 247, .5);
+}
+
+.login-box.admin-active-theme .login-field-input:focus-visible {
+  outline-color: rgba(168, 85, 247, .6);
 }
 
 .login-field-input::placeholder {
