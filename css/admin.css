@@ -551,7 +551,7 @@ body {
   border-bottom: none;
 }
 .drawer-pay-amount {
-  font-family: 'Syne', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: #FFFFFF;
@@ -572,7 +572,7 @@ body {
   margin-bottom: 20px;
 }
 .drawer-section-title {
-  font-family: 'Syne', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 12px;
   font-weight: 700;
   color: var(--admin-purple);
@@ -619,7 +619,7 @@ body {
   text-align: right;
   padding: 12px 16px;
   border-top: 1px solid var(--admin-purple-border);
-  font-family: 'Syne', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* === PHASE 6 ANIMATIONS === */

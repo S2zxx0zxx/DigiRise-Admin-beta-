@@ -194,11 +194,14 @@ html:not([data-theme]) {
               box-shadow 0.2s var(--ease-out);
 }
 
-html {
-  scroll-behavior: smooth;
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -208,7 +211,6 @@ body {
     radial-gradient(at 0% 100%, rgba(168,85,247,0.15) 0px, transparent 50%);
   background-attachment: fixed;
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
   line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;
@@ -217,16 +219,15 @@ body {
               color 0.3s var(--ease-out);
 }
 
-/* TYPOGRAPHY — display font for headings, Inter for body/UI text */
+/* TYPOGRAPHY — unified font stack */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Syne', 'Inter', sans-serif;
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 p, span, a, button, input, textarea, select, label {
-  font-family: 'Inter', sans-serif;
+  font-family: inherit;
 }
 
 /* SCROLLBAR */
@@ -593,7 +594,7 @@ a:focus-visible {
 .modal-box-custom { background:rgba(255,255,255,0.02);border:1px solid #2a2a2a;border-radius:20px;padding:28px;width:100%;max-width:480px;position:relative;max-height:90vh;overflow-y:auto; -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%); box-shadow: var(--shadow-3), var(--shadow-inset-top); }
 .modal-top-line { position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:20px 20px 0 0; }
 .modal-close-custom { position:absolute;top:14px;right:14px;background:#1f1f1f;border:1px solid #2a2a2a;color:#aaa;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center; }
-.modal-title-custom { font-family: 'Syne', 'Inter', sans-serif;font-size:18px;font-weight:800;margin-bottom:6px; }
+.modal-title-custom { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;font-size:18px;font-weight:800;margin-bottom:6px; }
 .modal-subtitle-custom { font-size:12px;color:#555;margin-bottom:20px; }
 .modal-label-custom { display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px; }
 .modal-btn-cancel { flex:1;padding:12px;border-radius:8px;background:transparent;border:1px solid #2a2a2a;color:#666;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit; }
@@ -1104,7 +1105,7 @@ html[data-theme="light"] .mesh-breathing-bg {
   animation: fadeSlideUp 0.25s var(--ease-out);
 }
 .shortcut-help-title {
-  font-family: 'Syne', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--text-primary);
@@ -1184,6 +1185,72 @@ html[data-theme="light"] .mesh-breathing-bg {
   transition: all 0.2s var(--ease-out);
 }
 .install-app-btn:hover {
-  background: var(--gold-bright);
-  transform: translateY(-1px);
+}
+
+/* Header UI Reorganization */
+.header-content, .p-header, .a-header {
+  padding: 12px 16px;
+  gap: 10px;
+  align-items: center;
+  display: flex;
+}
+.header-primary-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-secondary-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.header-secondary-group button {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logout-btn, #logoutBtn {
+  flex-shrink: 0;
+  order: 99;
+}
+
+@media (max-width: 480px) {
+  /* Prevent any flex container from forcing overflow */
+  .header-content, .p-header, .a-header,
+  .nav-tabs, .stats-grid {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Header: stack badge below logo cleanly instead of wrapping mid-row */
+  .header-content, .p-header, .a-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+  }
+  
+  /* Stat card text must not wrap awkwardly */
+  .stat-card, .sc {
+    min-width: 0;
+  }
+  .stat-card .stat-label, .sc .sc-label {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11px;
+  }
+  .stat-card .stat-value, .sc .sc-val {
+    font-size: 20px;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 380px) {
+  .header-secondary-group {
+    display: none; /* simple fallback for very narrow screens */
+  }
 }

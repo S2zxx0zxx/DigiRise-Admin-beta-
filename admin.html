@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-title" content="DigiRise OS">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/admin.css">
   <link rel="manifest" href="manifest.json">
@@ -30,16 +30,20 @@
 </div>
   <!-- Header -->
   <header class="top-header">
-    <div class="header-content flex-between">
-      <div class="logo-area flex gap-2 items-center">
-        <div class="admin-icon text-xl">⚙️</div>
-        <div>
-          <div class="logo-text font-bold text-lg line-height-1">ADMIN COMMAND CENTER</div>
-          <span class="admin-badge">ADMIN</span>
+    <div class="header-content">
+      <div class="header-primary-group">
+        <div class="logo-area flex gap-2 items-center">
+          <div class="admin-icon text-xl">⚙️</div>
+          <div>
+            <div class="logo-text font-bold text-lg line-height-1">ADMIN COMMAND CENTER</div>
+            <span class="admin-badge">ADMIN</span>
+          </div>
+        </div>
+        <div class="partner-info">
+          <span class="header-username" id="headerUsername">Satyam Kumar</span>
         </div>
       </div>
-      <div class="header-actions flex gap-4 items-center">
-        <span class="header-username" id="headerUsername">Satyam Kumar</span>
+      <div class="header-secondary-group">
         <button id="payoutBellBtn" class="bell-btn" title="Pending Payouts">
           💸 <span id="pendingPayoutBadge" class="badge badgePulse hidden">0</span>
         </button>
@@ -70,8 +74,8 @@
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
           </svg>
         </button>
-        <button id="logoutBtn" class="logout-btn" title="Logout">🚪</button>
       </div>
+      <button id="logoutBtn" class="logout-btn" title="Logout">🚪</button>
     </div>
     
     <!-- Nav Tabs -->

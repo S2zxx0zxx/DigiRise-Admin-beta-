@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-title" content="DigiRise OS">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/partner.css">
   <link rel="manifest" href="manifest.json">
@@ -529,19 +529,21 @@
 
   <header class="top-header">
     <div class="header-content">
-      <div class="logo-area">
-        <svg width="28" height="28" viewBox="0 0 40 40" fill="none" class="icon-mr-8">
-          <rect width="40" height="40" rx="10" fill="#C8890A" />
-          <path d="M10 28L20 12L30 28" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M14 22H26" stroke="#000" stroke-width="3" stroke-linecap="round" />
-        </svg>
-        <span class="logo-text">DigiRise <span class="gold-text">OS</span></span>
-      </div>
-      <div class="header-actions">
+      <div class="header-primary-group">
+        <div class="logo-area">
+          <svg width="28" height="28" viewBox="0 0 40 40" fill="none" class="icon-mr-8">
+            <rect width="40" height="40" rx="10" fill="#C8890A" />
+            <path d="M10 28L20 12L30 28" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M14 22H26" stroke="#000" stroke-width="3" stroke-linecap="round" />
+          </svg>
+          <span class="logo-text">DigiRise <span class="gold-text">OS</span></span>
+        </div>
         <div class="partner-info">
           <span id="headerPartnerName">Partner</span>
           <span id="headerTierBadge" class="tier-badge">⭐ Joining</span>
         </div>
+      </div>
+      <div class="header-secondary-group">
         <button id="notificationBtn" class="bell-btn" title="Notifications">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />

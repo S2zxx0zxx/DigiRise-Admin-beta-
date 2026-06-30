@@ -297,3 +297,15 @@ function openWhatsAppApply() {
       });
   }
 }
+
+// FAQ Toggle Logic
+globalThis.toggleFaq = function(btn) {
+  const item = btn.closest('.faq-item');
+  if (item) {
+    item.classList.toggle('active');
+    const icon = btn.querySelector('.faq-icon');
+    if (icon) {
+      icon.textContent = item.classList.contains('active') ? '−' : '+';
+    }
+  }
+};

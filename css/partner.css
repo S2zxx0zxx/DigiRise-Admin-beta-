@@ -470,16 +470,16 @@ button {
   gap: 0.75rem;
 }
 .package-btn {
-  background: #1c1c1c;
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-default);
   padding: 1rem;
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-primary);
   transition: all 0.2s;
   text-align: left;
 }
 .package-btn:hover {
-  background: rgba(255,255,255,0.08);
+  background: var(--bg-surface-3);
 }
 .package-btn.active {
   border-color: var(--gold-accent);
@@ -495,8 +495,8 @@ button {
   gap: 0.5rem;
 }
 .stage-btn {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-default);
   padding: 0.5rem 1rem;
   border-radius: 20px;
   color: var(--text-muted);
@@ -519,8 +519,8 @@ button {
 
 /* Pipeline & History Items */
 .deal-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.05);
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-default);
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;
@@ -533,7 +533,7 @@ button {
 }
 .deal-client { font-weight: 600; font-size: 1.1rem;}
 .deal-chip {
-  background: rgba(255,255,255,0.1);
+  background: var(--bg-surface-3);
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   font-size: 0.75rem;
@@ -647,8 +647,8 @@ button {
   gap: 1rem;
 }
 .qty-btn {
-  background: #2a2a2a;
-  color: #fff;
+  background: var(--bg-surface-3);
+  color: var(--text-primary);
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -657,13 +657,13 @@ button {
   align-items: center;
   justify-content: center;
 }
-.qty-btn:hover { background: rgba(255,255,255,0.2); }
+.qty-btn:hover { background: var(--border-subtle); }
 .qty-input {
   width: 50px;
   text-align: center;
   background: transparent;
   border: none;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 1.25rem;
   font-weight: 600;
 }
@@ -767,35 +767,35 @@ button {
 }
 
 /* ══ PIPELINE UPGRADES ══ */
-.pipeline-card{background:#141414;border:1px solid #222;border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;transition:border-color .2s;}
-.pipeline-card:hover{border-color:#2a2a2a;}
+.pipeline-card{background:var(--bg-surface-2);border:1px solid var(--border-default);border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;transition:border-color .2s;}
+.pipeline-card:hover{border-color:var(--border-strong);}
 .pipeline-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;}
 .stage-lead::before{background:#3B82F6;}.stage-pitched::before{background:#A855F7;}.stage-negotiating::before{background:#F59E0B;}.stage-closed::before{background:#22C55E;}.stage-payment::before{background:#C8890A;}
 .pipeline-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:12px;}
 .pipeline-client{font-size:16px;font-weight:700;margin-bottom:3px;}
-.pipeline-meta{font-size:12px;color:#555;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.pipeline-meta{font-size:12px;color:var(--text-secondary);display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .pipeline-commission{text-align:right;flex-shrink:0;}
 .pipeline-commission-val{font-size:18px;font-weight:800;color:#22C55E;}
-.pipeline-commission-pkg{font-size:11px;color:#555;margin-top:2px;}
+.pipeline-commission-pkg{font-size:11px;color:var(--text-secondary);margin-top:2px;}
 .pipeline-progress{display:flex;gap:4px;margin:10px 0 4px;}
-.prog-step{flex:1;height:4px;border-radius:2px;background:#1f1f1f;transition:background .3s;}
+.prog-step{flex:1;height:4px;border-radius:2px;background:var(--bg-surface-3);transition:background .3s;}
 .prog-step.done{background:#22C55E;}.prog-step.current{background:#C8890A;}
-.prog-labels{display:flex;justify-content:space-between;font-size:9px;color:#444;margin-bottom:10px;}
+.prog-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--text-secondary);margin-bottom:10px;}
 .pipeline-stage-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-.mini-stage-btn{padding:6px 12px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:#666;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;}
+.mini-stage-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border-default);background:var(--bg-surface-1);color:var(--text-secondary);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;}
 .mini-stage-btn.active{border-color:#C8890A;background:rgba(200,137,10,0.1);color:#C8890A;}
-.mini-stage-btn:hover:not(.active){border-color:#333;color:#aaa;}
+.mini-stage-btn:hover:not(.active){border-color:var(--border-strong);color:var(--text-primary);}
 .followup-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);color:#F59E0B;font-size:11px;font-weight:600;margin-top:6px;}
 .followup-overdue{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2);color:#EF4444;}
-.pipeline-notes{background:#0f0f0f;border-radius:8px;padding:10px;font-size:12px;color:#666;margin-top:8px;border-left:2px solid #2a2a2a;}
+.pipeline-notes{background:var(--bg-surface-3);border-radius:8px;padding:10px;font-size:12px;color:var(--text-secondary);margin-top:8px;border-left:2px solid var(--border-default);}
 
 /* ══ LOG DEAL UPGRADES ══ */
-.pkg-card{background:var(--bg-surface-1);border:2px solid #2a2a2a;border-radius:14px;padding:16px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.pkg-card{background:var(--bg-surface-1);border:2px solid var(--border-default);border-radius:14px;padding:16px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
 .pkg-card:hover{border-color:rgba(200,137,10,0.35);transform:translateY(-2px);}
 .pkg-card.active{border-color:#C8890A;background:rgba(200,137,10,0.08);}
 .pkg-card.active::after{content:'✓';position:absolute;top:10px;right:12px;color:#C8890A;font-weight:700;font-size:14px;}
 .pkg-card-name{font-size:16px;font-weight:800;margin-bottom:2px;}
-.pkg-card-price{font-size:12px;color:#666;margin-bottom:8px;}
+.pkg-card-price{font-size:12px;color:var(--text-secondary);margin-bottom:8px;}
 .pkg-card-earn{font-size:13px;font-weight:700;color:#22C55E;}
 .pct-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;margin-top:6px;}
 .pct-15{background:rgba(168,85,247,0.15);color:#A855F7;border:1px solid rgba(168,85,247,0.3);}
@@ -803,22 +803,22 @@ button {
 
 /* ══ STAGE PILLS ══ */
 .stage-pills-row{display:flex;flex-wrap:wrap;gap:8px;}
-.stage-pill{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:50px;border:1.5px solid #2a2a2a;background:#161616;cursor:pointer;font-size:12px;font-weight:600;color:#666;transition:all .2s;font-family:inherit;white-space:nowrap;}
+.stage-pill{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:50px;border:1.5px solid var(--border-default);background:var(--bg-surface-1);cursor:pointer;font-size:12px;font-weight:600;color:var(--text-secondary);transition:all .2s;font-family:inherit;white-space:nowrap;}
 .stage-pill.active{border-color:#C8890A;background:rgba(200,137,10,0.1);color:#C8890A;}
 .stage-pill svg{width:13px;height:13px;flex-shrink:0;}
-.stage-pill:hover:not(.active){border-color:#333;color:#aaa;}
+.stage-pill:hover:not(.active){border-color:var(--border-strong);color:var(--text-primary);}
 
 /* ══ FORM FIELDS ══ */
 .form-field{margin-bottom:16px;}
-.form-field label{display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;}
+.form-field label{display:block;font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;}
 .form-field .req{color:#EF4444;}
-.char-count{font-size:11px;color:#444;text-align:right;margin-top:4px;}
+.char-count{font-size:11px;color:var(--text-tertiary);text-align:right;margin-top:4px;}
 .input-with-icon{position:relative;}
-.input-with-icon svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#555;pointer-events:none;}
+.input-with-icon svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--text-tertiary);pointer-events:none;}
 .input-with-icon input,.input-with-icon textarea{padding-left:38px!important;}
 
 /* ══ ANNOUNCEMENTS (PARTNER) ══ */
-.ann-item{background:#141414;border:1px solid #222;border-radius:12px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;}
+.ann-item{background:var(--bg-surface-2);border:1px solid var(--border-default);border-radius:12px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;}
 .ann-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
 .ann-item.normal::before{background:#C8890A;}
 .ann-item.urgent{border-color:rgba(239,68,68,0.25);background:linear-gradient(135deg,rgba(239,68,68,0.04),#141414);}
@@ -829,8 +829,8 @@ button {
 .ann-badge-update{background:rgba(200,137,10,0.12);color:#C8890A;border:1px solid rgba(200,137,10,0.2);}
 .ann-badge-urgent{background:rgba(239,68,68,0.12);color:#EF4444;border:1px solid rgba(239,68,68,0.2);}
 .ann-title{font-weight:700;font-size:15px;margin-bottom:5px;}
-.ann-body{font-size:13px;color:#aaa;line-height:1.6;}
-.ann-date{font-size:11px;color:#444;margin-top:8px;}
+.ann-body{font-size:13px;color:var(--text-secondary);line-height:1.6;}
+.ann-date{font-size:11px;color:var(--text-tertiary);margin-top:8px;}
 .ann-new-badge{position:absolute;top:12px;right:12px;background:#22C55E;color:#000;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:1px;}
 
 /* ══ CHART BAR ANIMATION ══ */
@@ -862,11 +862,11 @@ button {
 /* ══ EDIT MODAL GLASS INPUT ══ */
 #editDealModal .glass-input {
   width: 100%;
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   padding: 11px 14px;
-  color: #fff;
+  color: var(--text-primary);
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   outline: none;
@@ -946,7 +946,7 @@ button {
 
 /* Label helpers */
 .label-optional {
-  color: #444;
+  color: var(--text-tertiary);
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0;
@@ -1105,7 +1105,7 @@ body.tier-gold {
   margin-bottom: 8px;
 }
 .empty-state-pro-title {
-  font-family: 'Syne', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: var(--text-primary);
