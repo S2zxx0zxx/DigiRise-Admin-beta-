@@ -11,12 +11,6 @@ html, body {
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Syne', 'Inter', sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
 /* GLOBAL THEME VARIABLES */
 html[data-theme="dark"] {
   --bg-base: #08090b;
@@ -373,7 +367,6 @@ a:focus-visible {
   background: var(--bg-surface-1);
   border-radius: 16px;
   padding: 1px;
-  background-clip: padding-box;
   border: 1px solid transparent;
   background-image: 
     linear-gradient(var(--bg-surface-1), var(--bg-surface-1)),
@@ -575,7 +568,7 @@ a:focus-visible {
 .modal-overlay-custom:not(.hidden) { display: flex !important; }
 .modal-box-custom { background:rgba(255,255,255,0.02);border:1px solid #2a2a2a;border-radius:20px;padding:28px;width:100%;max-width:480px;position:relative;max-height:90vh;overflow-y:auto; -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%); box-shadow: var(--shadow-3), var(--shadow-inset-top); }
 .modal-top-line { position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:20px 20px 0 0; }
-.modal-close-custom { position:absolute;top:14px;right:14px;background:#1f1f1f;border:1px solid #2a2a2a;color:#666;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center; }
+.modal-close-custom { position:absolute;top:14px;right:14px;background:#1f1f1f;border:1px solid #2a2a2a;color:#aaa;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center; }
 .modal-title-custom { font-family: 'Syne', 'Inter', sans-serif;font-size:18px;font-weight:800;margin-bottom:6px; }
 .modal-subtitle-custom { font-size:12px;color:#555;margin-bottom:20px; }
 .modal-label-custom { display:block;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px; }
@@ -633,18 +626,6 @@ a:focus-visible {
 }
 .admin-active-theme .tab-slider {
   background: var(--purple-core);
-}
-
-/* SKELETON LOADER (Phase 7.13) */
-.skeleton {
-  background: linear-gradient(90deg, var(--bg-surface-2) 25%, var(--bg-surface-3) 50%, var(--bg-surface-2) 75%);
-  background-size: 400% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 4px;
-}
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
 }
 
 .theme-toggle-btn {
@@ -821,9 +802,299 @@ a:focus-visible {
   border-radius: var(--radius-sm);
   color: transparent !important;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .skeleton { animation: none; }
+}
+
+/* =====================================================
+   SESSION 3: PHASE F3 — TOAST WITH UNDO
+   ===================================================== */
+
+/* The existing #toast element is a singleton used by showToast().
+   The new toast-undo items are children appended inside it.
+   We need it to be a flex column so multiple toasts stack. */
+#toast {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+/* When showToast() sets className directly it overrides display:flex —
+   we only apply flex layout when the toast container has children (.toast-item)
+   so legacy single-toast behaviour is unchanged. */
+#toast:not(:has(.toast-item)) {
+  display: block;
+}
+
+.toast-undo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 4px 4px 0px 0px var(--shadow-hard);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.25s var(--ease-out),
+              transform 0.25s var(--ease-out);
+  min-width: 260px;
+  max-width: 340px;
+}
+.toast-undo.toast-enter {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast-undo.toast-exit {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+.toast-undo-msg {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+.toast-undo-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s var(--ease-out);
+  font-family: 'Inter', sans-serif;
+}
+.toast-undo-btn:hover {
+  background: var(--gold-glow);
+}
+.toast-undo-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--gold);
+  animation: toastProgressShrink linear forwards;
+  width: 100%;
+}
+@keyframes toastProgressShrink {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-undo { transition: none; }
+  .toast-undo-progress { animation: none; width: 0%; }
+}
+
+/* =====================================================
+   SESSION 3: PHASE F4 — BREATHING GRADIENT MESH BG
+   ===================================================== */
+
+@keyframes meshBreathe {
+  0%, 100% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+  }
+  50% {
+    background-position: 10% 10%, 90% 90%, 55% 45%;
+  }
+}
+
+.mesh-breathing-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 600px 600px at 0% 0%, var(--gold-glow) 0%, transparent 60%),
+    radial-gradient(ellipse 500px 500px at 100% 100%, var(--purple-glow) 0%, transparent 60%),
+    radial-gradient(ellipse 800px 800px at 50% 50%, rgba(255,255,255,0.015) 0%, transparent 70%);
+  background-size: 150% 150%, 150% 150%, 150% 150%;
+  opacity: 0.5;
+  animation: meshBreathe 24s ease-in-out infinite;
+  will-change: background-position;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh-breathing-bg { animation: none; }
+}
+
+/* =====================================================
+   SESSION 3: PHASE E5 — CURSOR SEMANTICS
+   ===================================================== */
+
+/* Genuinely clickable cards/chips get pointer cursor */
+.offset-card,
+.offset-card-gold,
+.offset-card-purple,
+.tool-chip {
+  cursor: pointer;
+}
+
+/* Cards that are NOT a link or button are purely informational */
+.offset-card:not(a):not(button),
+.offset-card-gold:not(a):not(button),
+.offset-card-purple:not(a):not(button) {
+  cursor: default;
+}
+
+/* =====================================================
+   SESSION 4: PHASE G1 — COMMAND PALETTE
+   ===================================================== */
+
+.cmd-palette-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 99998;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+}
+.cmd-palette-overlay.cmd-open {
+  display: flex;
+}
+.cmd-palette-box {
+  width: 90%;
+  max-width: 560px;
+  background: var(--bg-surface-1);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 6px 6px 0px 0px var(--shadow-hard);
+  overflow: hidden;
+  animation: cmdPaletteIn 0.2s var(--ease-out);
+}
+@keyframes cmdPaletteIn {
+  from { opacity: 0; transform: translateY(-12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.cmd-palette-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-default);
+  color: var(--text-tertiary);
+}
+.cmd-palette-header input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+}
+.cmd-palette-header input::placeholder {
+  color: var(--text-tertiary);
+}
+.cmd-palette-esc {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--bg-surface-3);
+  border: 1px solid var(--border-default);
+  color: var(--text-tertiary);
+}
+.cmd-palette-results {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 6px;
+}
+.cmd-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: background 0.1s var(--ease-out);
+}
+.cmd-result-item:hover,
+.cmd-result-item.cmd-selected {
+  background: var(--bg-surface-2);
+  color: var(--text-primary);
+}
+.cmd-result-icon {
+  font-size: 14px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.cmd-result-label {
+  flex: 1;
+  font-size: 14px;
+}
+.cmd-result-hint {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.cmd-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cmd-palette-box { animation: none; }
+}
+
+/* =====================================================
+   SESSION 4: PHASE G2 — SHORTCUT HELP HINT
+   ===================================================== */
+
+.shortcut-help-hint {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--bg-surface-1);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 4px 4px 0px 0px var(--shadow-hard);
+  padding: 14px 18px;
+  z-index: 99997;
+  animation: fadeSlideUp 0.25s var(--ease-out);
+}
+.shortcut-help-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.shortcut-help-row {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.shortcut-help-row kbd {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--bg-surface-3);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shortcut-help-hint { animation: none; }
 }

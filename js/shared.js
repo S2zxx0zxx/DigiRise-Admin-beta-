@@ -102,6 +102,136 @@ function showToast(message, type = 'info') {
   }, 4000);
 }
 
+// SESSION 3 — PHASE F3: Toast with Undo
+function showToastWithUndo(message, onUndo, durationMs) {
+  const duration = durationMs || 5000;
+
+  let wrap = document.getElementById('toast');
+  if (!wrap) {
+    wrap = document.createElement('div');
+    wrap.id = 'toast';
+    wrap.className = 'toast';
+    document.body.appendChild(wrap);
+  }
+
+  const toastEl = document.createElement('div');
+  toastEl.className = 'toast-item toast-undo';
+  toastEl.innerHTML = [
+    '<span class="toast-undo-msg"></span>',
+    '<button class="toast-undo-btn" type="button">Undo</button>',
+    '<div class="toast-undo-progress"></div>'
+  ].join('');
+  toastEl.querySelector('.toast-undo-msg').textContent = message;
+
+  let undone = false;
+  let dismissTimer = null;
+
+  const undoBtn = toastEl.querySelector('.toast-undo-btn');
+  undoBtn.addEventListener('click', () => {
+    if (undone) return;
+    undone = true;
+    clearTimeout(dismissTimer);
+    if (typeof onUndo === 'function') {
+      try { onUndo(); } catch (e) { console.error('Undo action failed:', e); }
+    }
+    toastEl.classList.add('toast-exit');
+    setTimeout(() => toastEl.remove(), 300);
+  });
+
+  const progressBar = toastEl.querySelector('.toast-undo-progress');
+  progressBar.style.animationDuration = duration + 'ms';
+
+  wrap.appendChild(toastEl);
+
+  requestAnimationFrame(() => {
+    toastEl.classList.add('toast-enter');
+  });
+
+  dismissTimer = setTimeout(() => {
+    if (undone) return;
+    toastEl.classList.add('toast-exit');
+    setTimeout(() => toastEl.remove(), 300);
+  }, duration);
+}
+
+// SESSION 3 — PHASE F4: Breathing Gradient Mesh Background
+function injectMeshBackground() {
+  if (document.querySelector('.mesh-breathing-bg')) return;
+  const meshEl = document.createElement('div');
+  meshEl.className = 'mesh-breathing-bg';
+  meshEl.setAttribute('aria-hidden', 'true');
+  document.body.insertBefore(meshEl, document.body.firstChild);
+}
+
+document.addEventListener('DOMContentLoaded', injectMeshBackground);
+
+// SESSION 3 — PHASE E4: Milestone Confetti Celebration
+function celebrateMilestone() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;inset:0;z-index:99999;pointer-events:none;';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  const colors = ['#C8890A', '#E8A020', '#A855F7', '#22C55E', '#F5F5F7'];
+  const particleCount = 80;
+  const particles = [];
+
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: canvas.width / 2,
+      y: canvas.height / 3,
+      vx: (Math.random() - 0.5) * 14,
+      vy: (Math.random() - 1.2) * 14,
+      size: Math.random() * 6 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 10,
+      gravity: 0.35,
+      opacity: 1
+    });
+  }
+
+  let frame = 0;
+  const maxFrames = 90;
+
+  function animate() {
+    frame++;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      p.vy += p.gravity;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rotation += p.rotationSpeed;
+      if (frame > maxFrames * 0.6) {
+        p.opacity = Math.max(0, p.opacity - 0.04);
+      }
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.globalAlpha = p.opacity;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      ctx.restore();
+    });
+
+    if (frame < maxFrames) {
+      requestAnimationFrame(animate);
+    } else {
+      canvas.remove();
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
 // Helper for SHA-256 fallback
 const rightRotate = (value, amount) => (value >>> amount) | (value << (32 - amount));
 
@@ -438,3 +568,182 @@ function setupThemeToggle() {
 }
 
 document.addEventListener('DOMContentLoaded', setupThemeToggle);
+
+// =====================================================
+// SESSION 4 — PHASE G1: COMMAND PALETTE (Ctrl+K)
+// =====================================================
+function initCommandPalette(config) {
+  const overlay = document.getElementById('cmdPaletteOverlay');
+  const input = document.getElementById('cmdPaletteInput');
+  const resultsEl = document.getElementById('cmdPaletteResults');
+  if (!overlay || !input || !resultsEl) return;
+
+  const actions = config && config.actions ? config.actions : [];
+  let filteredActions = actions;
+  let selectedIndex = 0;
+
+  function renderResults() {
+    if (filteredActions.length === 0) {
+      resultsEl.innerHTML = '<div class="cmd-empty">No matching actions</div>';
+      return;
+    }
+    resultsEl.innerHTML = filteredActions.map((a, i) => `
+      <div class="cmd-result-item ${i === selectedIndex ? 'cmd-selected' : ''}"
+        data-index="${i}">
+        <span class="cmd-result-icon">${a.icon || '→'}</span>
+        <span class="cmd-result-label">${a.label}</span>
+        <span class="cmd-result-hint">${a.hint || ''}</span>
+      </div>
+    `).join('');
+  }
+
+  function openPalette() {
+    overlay.classList.add('cmd-open');
+    input.value = '';
+    filteredActions = actions;
+    selectedIndex = 0;
+    renderResults();
+    setTimeout(() => input.focus(), 50);
+  }
+
+  function closePalette() {
+    overlay.classList.remove('cmd-open');
+  }
+
+  function executeAction(action) {
+    closePalette();
+    if (action && typeof action.run === 'function') {
+      try { action.run(); } catch (e) {
+        console.error('Command palette action failed:', e);
+      }
+    }
+  }
+
+  input.addEventListener('input', () => {
+    const query = input.value.toLowerCase().trim();
+    filteredActions = query
+      ? actions.filter(a => a.label.toLowerCase().includes(query))
+      : actions;
+    selectedIndex = 0;
+    renderResults();
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIndex = Math.min(selectedIndex + 1, filteredActions.length - 1);
+      renderResults();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIndex = Math.max(selectedIndex - 1, 0);
+      renderResults();
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (filteredActions[selectedIndex]) {
+        executeAction(filteredActions[selectedIndex]);
+      }
+    } else if (e.key === 'Escape') {
+      closePalette();
+    }
+  });
+
+  resultsEl.addEventListener('click', (e) => {
+    const item = e.target.closest('.cmd-result-item');
+    if (!item) return;
+    const idx = parseInt(item.dataset.index, 10);
+    executeAction(filteredActions[idx]);
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closePalette();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    const isEditable = tag === 'input' || tag === 'textarea'
+      || e.target.isContentEditable;
+
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (overlay.classList.contains('cmd-open')) {
+        closePalette();
+      } else {
+        if (!isEditable) openPalette();
+      }
+      return;
+    }
+
+    if (e.key === 'Escape' && overlay.classList.contains('cmd-open')) {
+      closePalette();
+    }
+  });
+
+  return { open: openPalette, close: closePalette };
+}
+
+// =====================================================
+// SESSION 4 — PHASE G2: SEQUENTIAL KEY SHORTCUTS
+// =====================================================
+function initSequentialShortcuts(shortcutMap) {
+  let lastKey = null;
+  let lastKeyTime = 0;
+  const sequenceWindowMs = 800;
+
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    const isEditable = tag === 'input' || tag === 'textarea'
+      || e.target.isContentEditable;
+    if (isEditable) return;
+
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    const overlay = document.getElementById('cmdPaletteOverlay');
+    if (overlay && overlay.classList.contains('cmd-open')) return;
+
+    const key = e.key.toLowerCase();
+    const now = Date.now();
+
+    if (lastKey && (now - lastKeyTime) < sequenceWindowMs) {
+      const combo = lastKey + key;
+      if (shortcutMap[combo]) {
+        e.preventDefault();
+        shortcutMap[combo]();
+        lastKey = null;
+        return;
+      }
+    }
+
+    lastKey = key;
+    lastKeyTime = now;
+  });
+}
+
+// =====================================================
+// SESSION 4 — PHASE G2: SHORTCUT HELP HINT ("?")
+// =====================================================
+function initShortcutHelpHint() {
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    const isEditable = tag === 'input' || tag === 'textarea'
+      || e.target.isContentEditable;
+    if (isEditable) return;
+    if (e.key !== '?') return;
+
+    const existing = document.getElementById('shortcutHelpToast');
+    if (existing) { existing.remove(); return; }
+
+    const hint = document.createElement('div');
+    hint.id = 'shortcutHelpToast';
+    hint.className = 'shortcut-help-hint';
+    hint.innerHTML = `
+      <div class="shortcut-help-title">Keyboard Shortcuts</div>
+      <div class="shortcut-help-row"><kbd>Ctrl</kbd>+<kbd>K</kbd> Command palette</div>
+      <div class="shortcut-help-row"><kbd>G</kbd> then <kbd>O/L/P/H</kbd> Quick navigate</div>
+      <div class="shortcut-help-row"><kbd>?</kbd> Toggle this help</div>
+    `;
+    document.body.appendChild(hint);
+    setTimeout(() => hint.remove(), 6000);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initShortcutHelpHint);

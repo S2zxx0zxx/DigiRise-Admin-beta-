@@ -215,7 +215,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (newTier.name !== currentTierObj.name && totalDealsCount > 0) {
       // Tier upgraded! 
       if (newTier.minDeals > currentTierObj.minDeals) {
-         showToast(`🎉 Congratulations! You upgraded to ${newTier.name} Tier! Bonus: ₹${newTier.bonus}`, 'success');
+        showToast(`🎉 Congratulations! You upgraded to ${newTier.name} Tier! Bonus: ₹${newTier.bonus}`, 'success');
+        // SESSION 3 — PHASE E4: Confetti on tier-up (reusing existing detection condition)
+        celebrateMilestone();
       }
     }
     currentTierObj = newTier;
@@ -1082,16 +1084,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   globalThis.deleteDeal = function(dealId, clientName) {
     if(!confirm('Delete deal with ' + clientName + '? This cannot be undone.')) return;
-    database.ref('deals/' + code + '/' + dealId).remove()
-      .then(() => {
-        database.ref('activity').push({
-          icon: '🗑️',
-          text: username + ' deleted deal: ' + clientName,
-          time: Date.now()
-        });
-        showToast('Deal deleted.','info');
-      })
-      .catch(err => showToast('Delete failed: ' + err.message,'error'));
+
+    // SESSION 3 — PHASE F3: Undo-toast pattern
+    // Capture deal data for the toast label (data already in UI / cached list)
+    const dealDataBackup = { clientName: clientName, id: dealId };
+
+    // Delay actual Firebase deletion by 5 seconds — the undo window
+    const deletionTimer = setTimeout(() => {
+      // EXACT same original deletion logic, now deferred
+      database.ref('deals/' + code + '/' + dealId).remove()
+        .then(() => {
+          database.ref('activity').push({
+            icon: '🗑️',
+            text: username + ' deleted deal: ' + clientName,
+            time: Date.now()
+          });
+        })
+        .catch(err => showToast('Delete failed: ' + err.message, 'error'));
+    }, 5000);
+
+    showToastWithUndo(
+      'Deal "' + dealDataBackup.clientName + '" deleted',
+      function() {
+        // Undo: cancel the pending deletion — deal was never removed from Firebase
+        clearTimeout(deletionTimer);
+      },
+      5000
+    );
   };
 
   // Close modal on overlay click
@@ -1133,5 +1152,84 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+});
 
+// =====================================================
+// SESSION 4 — PHASE G1 + G2: PARTNER PAGE SHORTCUTS
+// =====================================================
+document.addEventListener('DOMContentLoaded', function() {
+  // G1: Command Palette — 7 actions (tab-target values verified in audit)
+  initCommandPalette({
+    actions: [
+      {
+        label: 'Go to Overview', icon: '📊', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="overview"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'Log a New Deal', icon: '➕', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="logDeal"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'View Pipeline', icon: '🔄', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="pipeline"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'View History', icon: '📋', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="history"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'Request Payout', icon: '💸', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="payouts"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'Open Calculator', icon: '🧮', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="calculator"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'Toggle Dark/Light Theme', icon: '🌓', hint: 'Theme',
+        run: function() {
+          var btn = document.getElementById('themeToggleBtn');
+          if (btn) btn.click();
+        }
+      }
+    ]
+  });
+
+  // G2: Sequential keyboard shortcuts — g→o, g→l, g→p, g→h
+  initSequentialShortcuts({
+    'go': function() {
+      var btn = document.querySelector('.tab-btn[data-target="overview"]');
+      if (btn) btn.click();
+    },
+    'gl': function() {
+      var btn = document.querySelector('.tab-btn[data-target="logDeal"]');
+      if (btn) btn.click();
+    },
+    'gp': function() {
+      var btn = document.querySelector('.tab-btn[data-target="pipeline"]');
+      if (btn) btn.click();
+    },
+    'gh': function() {
+      var btn = document.querySelector('.tab-btn[data-target="history"]');
+      if (btn) btn.click();
+    }
+  });
 });

@@ -508,7 +508,7 @@
 </head>
 
 <body>
-  <div id="offline-banner" class="offline-banner" style="display:none;">
+  <div id="offline-banner" class="offline-banner">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       class="icon-mr-6">
       <path
@@ -823,7 +823,7 @@
           <div class="char-count"><span id="dealNotesCount">0</span>/300</div>
         </div>
 
-        <div class="preview-box mt-4" id="dealPreviewBox" style="display:none;">
+        <div class="preview-box mt-4" id="dealPreviewBox">
           <div class="preview-box-label">
             Commission Preview</div>
           <div class="flex-between">
@@ -1056,6 +1056,24 @@
   <script src="js/firebase-config.js"></script>
   <script src="js/shared.js"></script>
   <script src="js/partner.js"></script>
+
+  <!-- SESSION 4: PHASE G1 — Command Palette Overlay -->
+  <div id="cmdPaletteOverlay" class="cmd-palette-overlay">
+    <div class="cmd-palette-box">
+      <div class="cmd-palette-header">
+        <svg width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input id="cmdPaletteInput" type="text"
+          placeholder="Type a command or search..."
+          autocomplete="off">
+        <kbd class="cmd-palette-esc">ESC</kbd>
+      </div>
+      <div id="cmdPaletteResults" class="cmd-palette-results"></div>
+    </div>
+  </div>
 </body>
 
 </html>

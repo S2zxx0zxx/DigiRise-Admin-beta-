@@ -1121,3 +1121,7 @@ body.tier-gold {
   background: var(--gold-bright);
   transform: translateY(-1px);
 }
+
+#dealPreviewBox {
+  display: none;
+}

@@ -983,3 +983,79 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
+
+// =====================================================
+// SESSION 4 — PHASE G1 + G2: ADMIN PAGE SHORTCUTS
+// =====================================================
+document.addEventListener('DOMContentLoaded', function() {
+  // G1: Command Palette — 7 actions (tab-target values verified in audit)
+  initCommandPalette({
+    actions: [
+      {
+        label: 'Go to Dashboard', icon: '📊', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="dash-dashboard"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'View Partners', icon: '👥', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="dash-partners"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'View All Deals', icon: '🤝', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="dash-deals"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'View Payouts', icon: '💸', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="dash-payouts"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'Post Announcement', icon: '📣', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="dash-announcements"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'Open Settings', icon: '⚙️', hint: 'Tab',
+        run: function() {
+          var btn = document.querySelector('.tab-btn[data-target="dash-settings"]');
+          if (btn) btn.click();
+        }
+      },
+      {
+        label: 'Toggle Dark/Light Theme', icon: '🌓', hint: 'Theme',
+        run: function() {
+          var btn = document.getElementById('themeToggleBtn');
+          if (btn) btn.click();
+        }
+      }
+    ]
+  });
+
+  // G2: Sequential keyboard shortcuts — g→d, g→p, n→a
+  initSequentialShortcuts({
+    'gd': function() {
+      var btn = document.querySelector('.tab-btn[data-target="dash-dashboard"]');
+      if (btn) btn.click();
+    },
+    'gp': function() {
+      var btn = document.querySelector('.tab-btn[data-target="dash-partners"]');
+      if (btn) btn.click();
+    },
+    'na': function() {
+      var btn = document.querySelector('.tab-btn[data-target="dash-announcements"]');
+      if (btn) btn.click();
+    }
+  });
+});
