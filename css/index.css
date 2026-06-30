@@ -426,6 +426,7 @@ p, span, a, button, input, label {
   background: var(--bg-surface-1);
   border-radius: var(--r12);
   padding: 20px;
+}
 
 .cult-do {
   background: var(--green-d);
