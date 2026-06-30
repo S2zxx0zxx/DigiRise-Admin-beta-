@@ -73,7 +73,25 @@ button {
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+.gold-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+.gold-btn:active {
+  transform: scale(0.97);
+}
+.gold-btn:active::after {
+  width: 300px; height: 300px;
 }
 .gold-btn:hover:not(:disabled) {
   background: var(--gold-accent-hover);
@@ -90,7 +108,25 @@ button {
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+.outline-gold-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  border-radius: 50%;
+  background: rgba(200,137,10,0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+.outline-gold-btn:active {
+  transform: scale(0.97);
+}
+.outline-gold-btn:active::after {
+  width: 300px; height: 300px;
 }
 .outline-gold-btn:hover {
   background: rgba(200, 137, 10, 0.1);
@@ -134,14 +170,11 @@ button {
   font-size: 1rem;
   transition: all 0.3s ease;
 }
-.glass-input:focus {
-  border-color: var(--gold-accent);
+.glass-input:focus, .glass-input:focus-visible {
   outline: none;
+  border-color: var(--gold-core);
+  box-shadow: 0 0 0 4px var(--gold-mesh-1), var(--shadow-inset-top);
   background: rgba(255, 255, 255, 0.08);
-}
-.glass-input:focus-visible {
-  outline: 2px solid var(--gold-accent);
-  outline-offset: 1px;
 }
 .glass-input::placeholder {
   color: rgba(255, 255, 255, 0.3);
@@ -365,10 +398,11 @@ button {
 }
 .ring-progress {
   fill: none;
-  stroke: var(--gold-accent);
+  stroke: var(--gold-core);
   stroke-width: 8;
   stroke-linecap: round;
-  transition: stroke-dashoffset 1s ease-out;
+  filter: drop-shadow(0 0 8px var(--gold-core));
+  transition: stroke-dashoffset 1.5s var(--ease-spring);
 }
 .ring-center-text {
   position: absolute;
@@ -394,6 +428,11 @@ button {
   padding: 3rem 1rem;
   color: var(--text-muted);
   text-align: center;
+  background: var(--bg-surface-2);
+  border: 1px dashed var(--gold-mesh-1);
+  border-radius: var(--r16);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 .empty-icon {
   font-size: 3rem;
@@ -781,14 +820,24 @@ button {
 
 /* ══ CHART BAR ANIMATION ══ */
 .chart-bar { 
-  background: #1f1f1f;
+  background: linear-gradient(to top, var(--bg-surface-2), var(--gold-mesh-1));
+  border-top: 2px solid var(--gold-core);
   border-radius: 4px 4px 0 0;
   min-height: 4px;
-  transition: height 0.8s cubic-bezier(0.4,0,0.2,1);
+  transition: height 1s var(--ease-spring);
 }
 .chart-bar.active { 
-  background: linear-gradient(to top, #C8890A, #E8A020); 
+  background: linear-gradient(to top, var(--gold-mesh-1), var(--gold-glow));
+  box-shadow: 0 0 20px var(--gold-mesh-1);
 }
+
+/* Staggered entrance for bars */
+.cbar-wrap:nth-child(1) .chart-bar { transition-delay: 0.05s; }
+.cbar-wrap:nth-child(2) .chart-bar { transition-delay: 0.10s; }
+.cbar-wrap:nth-child(3) .chart-bar { transition-delay: 0.15s; }
+.cbar-wrap:nth-child(4) .chart-bar { transition-delay: 0.20s; }
+.cbar-wrap:nth-child(5) .chart-bar { transition-delay: 0.25s; }
+.cbar-wrap:nth-child(6) .chart-bar { transition-delay: 0.30s; }
 
 /* ══ FOLLOW-UP ALERT ══ */
 #followup-alert {

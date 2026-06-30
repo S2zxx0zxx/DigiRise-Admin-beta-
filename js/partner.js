@@ -78,6 +78,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // Tab Switching
   function initTabs() {
     const tabBtns = document.querySelectorAll('.tab-btn[data-target]');
+    let slider = document.querySelector('.tab-slider');
+    if (!slider) {
+      slider = document.createElement('div');
+      slider.className = 'tab-slider';
+      const container = document.querySelector('.nav-tabs');
+      if (container) {
+        container.style.position = 'relative';
+        container.appendChild(slider);
+      }
+    }
+
+    function updateSlider(activeBtn) {
+      if (!slider) return;
+      slider.style.width = activeBtn.offsetWidth + 'px';
+      slider.style.left = activeBtn.offsetLeft + 'px';
+    }
+
     tabBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const target = btn.dataset.target;
@@ -86,6 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
         tabBtns.forEach(b => b.classList.remove('active'));
         // Add active to clicked button
         btn.classList.add('active');
+        
+        updateSlider(btn);
         
         // Hide all sections
         document.querySelectorAll('.tab-section').forEach(sec => {
@@ -99,6 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+
+    const activeBtn = document.querySelector('.tab-btn.active') || tabBtns[0];
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+      // Timeout ensures fonts/layout loaded
+      setTimeout(() => updateSlider(activeBtn), 100);
+    }
   }
 
   // Call initTabs inside DOMContentLoaded
@@ -116,10 +142,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Animate Count Up
   function animateValue(obj, start, end, duration, isCurrency = false) {
     let startTimestamp = null;
+    const easeOutSpring = (t) => {
+      const s = 1.70158;
+      return --t * t * ((s + 1) * t + s) + 1;
+    };
     const step = (timestamp) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const current = Math.floor(progress * (end - start) + start);
+      const current = Math.floor(easeOutSpring(progress) * (end - start) + start);
       obj.innerHTML = isCurrency ? formatCurrency(current) : current;
       if (progress < 1) {
         globalThis.requestAnimationFrame(step);

@@ -583,66 +583,76 @@
     <!-- OVERVIEW -->
     <section id="overview" class="tab-section active">
       <div class="stats-grid">
-        <div class="stat-card fadeInUp delay-1">
-          <div class="stat-label">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              class="icon-mr-4">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>Total Deals
+        <div class="stat-card gradient-border-card fadeInUp delay-1">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="icon-mr-4">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>Total Deals
+            </div>
+            <div class="stat-value" id="statTotalDeals">0</div>
           </div>
-          <div class="stat-value" id="statTotalDeals">0</div>
         </div>
-        <div class="stat-card fadeInUp delay-2">
-          <div class="stat-label">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              class="icon-mr-4">
-              <line x1="12" y1="1" x2="12" y2="23" />
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>Total Earned
+        <div class="stat-card gradient-border-card fadeInUp delay-2">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="icon-mr-4">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>Total Earned
+            </div>
+            <div class="stat-value text-green" id="statTotalEarned">₹0</div>
           </div>
-          <div class="stat-value text-green" id="statTotalEarned">₹0</div>
         </div>
-        <div class="stat-card fadeInUp delay-3">
-          <div class="stat-label">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              class="icon-mr-4">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>Pending Payout
+        <div class="stat-card gradient-border-card fadeInUp delay-3">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="icon-mr-4">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>Pending Payout
+            </div>
+            <div class="stat-value text-amber" id="statPendingPayout">₹0</div>
           </div>
-          <div class="stat-value text-amber" id="statPendingPayout">₹0</div>
         </div>
-        <div class="stat-card fadeInUp delay-4">
-          <div class="stat-label">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              class="icon-mr-4">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-            </svg>Performance
-          </div>
-          <div class="stat-value text-gold" id="statPerfScore">0<span class="score-max">/100</span></div>
-          <div class="progress-bar-bg mt-2">
-            <div class="progress-bar-fill" id="perfScoreFill"></div>
+        <div class="stat-card gradient-border-card fadeInUp delay-4">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="icon-mr-4">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>Performance
+            </div>
+            <div class="stat-value text-gold" id="statPerfScore">0<span class="score-max">/100</span></div>
+            <div class="progress-bar-bg mt-2">
+              <div class="progress-bar-fill" id="perfScoreFill"></div>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="dashboard-grid mt-4">
-        <div class="glass-card flex-row-card">
-          <div class="ring-container">
-            <svg viewBox="0 0 100 100" class="tier-ring">
-              <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
-              <circle class="ring-progress" id="tierRingProgress" cx="50" cy="50" r="40" stroke-dasharray="251"
-                stroke-dashoffset="251"></circle>
-            </svg>
-            <div class="ring-center-text" id="tierRingText">0</div>
-          </div>
-          <div class="tier-info">
-            <h3 id="currentTierName">Joining Tier</h3>
-            <p id="tierProgressText" class="muted-text">0 deals to next tier</p>
-            <div class="tier-perks" id="tierPerks">No bonus active</div>
+        <div class="glass-card gradient-border-card flex-row-card">
+          <div class="gradient-border-card-inner" style="display:flex; width:100%; align-items:center; gap:20px;">
+            <div class="ring-container">
+              <svg viewBox="0 0 100 100" class="tier-ring">
+                <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
+                <circle class="ring-progress" id="tierRingProgress" cx="50" cy="50" r="40" stroke-dasharray="251"
+                  stroke-dashoffset="251"></circle>
+              </svg>
+              <div class="ring-center-text" id="tierRingText">0</div>
+            </div>
+            <div class="tier-info">
+              <h3 id="currentTierName">Joining Tier</h3>
+              <p id="tierProgressText" class="muted-text">0 deals to next tier</p>
+              <div class="tier-perks" id="tierPerks">No bonus active</div>
+            </div>
           </div>
         </div>
 
@@ -880,17 +890,23 @@
     <!-- PAYOUTS -->
     <section id="payouts" class="tab-section">
       <div class="stats-grid mb-4 payout-stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">Total Earned</div>
-          <div class="stat-value text-green" id="payoutTotalEarned">₹0</div>
+        <div class="stat-card gradient-border-card">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">Total Earned</div>
+            <div class="stat-value text-green" id="payoutTotalEarned">₹0</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Pending Amount</div>
-          <div class="stat-value text-amber" id="payoutPending">₹0</div>
+        <div class="stat-card gradient-border-card">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">Pending Amount</div>
+            <div class="stat-value text-amber" id="payoutPending">₹0</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Received</div>
-          <div class="stat-value text-blue" id="payoutReceived">₹0</div>
+        <div class="stat-card gradient-border-card">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">Received</div>
+            <div class="stat-value text-blue" id="payoutReceived">₹0</div>
+          </div>
         </div>
       </div>
       <div class="dashboard-grid">

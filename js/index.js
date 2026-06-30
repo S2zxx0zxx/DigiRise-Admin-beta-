@@ -119,6 +119,38 @@ function setFormLoading(role, isLoading) {
   });
 }
 
+// Phase 7.11 & 7.12: Scroll Reveal & Tier Card 3D Tilt
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.pub-section, .tier-pub-card, .payout-item, .cult-box').forEach(el => {
+    el.classList.add('scroll-reveal');
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('.tier-pub-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const tiltX = (y - centerY) / 10;
+      const tiltY = (centerX - x) / 10;
+      card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-5px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+});
+
 // Real Partner Login flow querying Firebase Realtime Database
 function doPartnerLogin() {
   const nameInput = document.getElementById('partner-name');

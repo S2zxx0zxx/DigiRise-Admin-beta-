@@ -303,6 +303,8 @@ p, span, a, button, input, label {
   overflow: hidden;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out;
 }
 
 .tier-pub-card::after {
@@ -545,15 +547,16 @@ p, span, a, button, input, label {
 }
 
 .login-box {
-  background: var(--bg2);
+  background: rgba(255,255,255,0.02);
   border: 1px solid var(--bg4);
   border-radius: var(--r20);
   padding: 40px;
   width: 100%;
   max-width: 400px;
   position: relative;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: var(--shadow-3), var(--shadow-inset-top);
 }
 
 .login-box::before {
@@ -682,21 +685,17 @@ p, span, a, button, input, label {
   transition: border-color .2s;
 }
 
-.login-field-input:focus {
-  border-color: rgba(200, 137, 10, .5);
+.login-field-input:focus, .login-field-input:focus-visible {
+  outline: none;
+  border-color: var(--gold-core);
+  box-shadow: 0 0 0 4px var(--gold-mesh-1), var(--shadow-inset-top);
 }
 
-.login-field-input:focus-visible {
-  outline: 2px solid rgba(200, 137, 10, .6);
-  outline-offset: 1px;
-}
-
-.login-box.admin-active-theme .login-field-input:focus {
-  border-color: rgba(168, 85, 247, .5);
-}
-
+.login-box.admin-active-theme .login-field-input:focus,
 .login-box.admin-active-theme .login-field-input:focus-visible {
-  outline-color: rgba(168, 85, 247, .6);
+  outline: none;
+  border-color: var(--purple-core);
+  box-shadow: 0 0 0 4px var(--purple-mesh-1), var(--shadow-inset-top);
 }
 
 .login-field-input::placeholder {

@@ -87,10 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       tabBtns.forEach(b => b.classList.remove('active'));
-      sections.forEach(s => s.classList.add('hidden'));
+      sections.forEach(s => { s.classList.add('hidden'); s.classList.remove('active'); });
       btn.classList.add('active');
-      document.getElementById(btn.dataset.target).classList.remove('hidden');
-      
+      const targetSec = document.getElementById(btn.dataset.target);
+      if (targetSec) {
+        targetSec.classList.remove('hidden');
+        targetSec.classList.add('active');
+      }
+
       if (btn.dataset.target === 'dash-settings') {
         loadSettingsData();
       }
