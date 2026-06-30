@@ -883,7 +883,14 @@ button {
 }
 
 .deal-card { transition: box-shadow 0.2s ease; }
-.deal-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+.deal-card:hover { box-shadow: 0 -4px 20px rgba(0,0,0,0.5); }
+
+.gradient-border-card-inner {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 20px;
+}
 
 /* ══ EXTRACTED INLINE STYLE CLASSES ══ */
 
@@ -1037,3 +1044,80 @@ button {
   gap: 10px;
 }
 
+/* SESSION 2: PHASE D1 - TIER CLASSES */
+body.tier-joining {
+}
+
+body.tier-bronze {
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(205,127,50,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(205,127,50,0.03) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+body.tier-silver {
+  background-image: 
+    linear-gradient(115deg, transparent 40%, rgba(192,192,192,0.025) 50%, transparent 60%),
+    radial-gradient(circle at 20% 30%, rgba(192,192,192,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(192,192,192,0.03) 0%, transparent 50%);
+  background-attachment: fixed;
+  background-size: 200% 200%, 100% 100%, 100% 100%;
+  animation: silverShimmer 8s ease-in-out infinite;
+}
+
+@keyframes silverShimmer {
+  0%, 100% { background-position: 0% 0%, 0 0, 0 0; }
+  50% { background-position: 100% 100%, 0 0, 0 0; }
+}
+
+body.tier-gold {
+  background-image: 
+    repeating-linear-gradient(135deg, transparent 0px, transparent 2px, rgba(200,137,10,0.025) 2px, rgba(200,137,10,0.025) 4px),
+    radial-gradient(circle at 20% 20%, rgba(200,137,10,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(200,137,10,0.05) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* SESSION 2: PHASE F1 - EMPTY STATES */
+.empty-state-pro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 8px;
+}
+.empty-state-pro svg {
+  color: var(--text-tertiary);
+  opacity: 0.4;
+  margin-bottom: 8px;
+}
+.empty-state-pro-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-primary);
+  margin: 0;
+}
+.empty-state-pro-sub {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin: 0;
+  max-width: 280px;
+}
+.empty-state-pro-cta {
+  margin-top: 16px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  background: var(--gold);
+  color: #08090b;
+  font-weight: 600;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+.empty-state-pro-cta:hover {
+  background: var(--gold-bright);
+  transform: translateY(-1px);
+}

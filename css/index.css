@@ -1,25 +1,11 @@
 /* FONT FAIL-SAFE: ensures premium typography even if Google Fonts is slow/blocked */
-html, body {
-  font-family: 'Inter', sans-serif;
-}
-
 html {
-  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body {
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-h1, h2, h3, h4, h5, h6,
 .hero-h1, .sec-h, .stat-val,
-.hero-stat-val, .comm-earn,
-h1, h2, h3 {
-  font-family: 'Syne', 'Inter', sans-serif;
+.hero-stat-val, .comm-earn {
   font-weight: 800;
   letter-spacing: -0.5px;
 }

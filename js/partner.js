@@ -22,6 +22,18 @@ function getTierEmoji(tierName) {
   return '⭐';
 }
 
+function applyTierBodyClass(tierName) {
+  const validTiers = ['joining', 'bronze', 'silver', 'gold'];
+  const normalized = (tierName || 'joining').toLowerCase();
+  const safeTier = validTiers.includes(normalized) 
+    ? normalized : 'joining';
+
+  validTiers.forEach(t => {
+    document.body.classList.remove('tier-' + t);
+  });
+  document.body.classList.add('tier-' + safeTier);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // 1. INIT
   const session = checkSession('partner');
@@ -39,6 +51,35 @@ document.addEventListener('DOMContentLoaded', () => {
   
   document.getElementById('headerPartnerName').textContent = username;
   
+  function showStatCardSkeletons() {
+    const statValueIds = ['statTotalDeals', 'statTotalEarned', 
+      'statPendingPayout', 'statPerfScore'];
+    statValueIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('skeleton');
+        el.style.minWidth = '60px';
+        el.style.minHeight = '28px';
+        el.style.display = 'inline-block';
+      }
+    });
+  }
+
+  function hideStatCardSkeletons() {
+    const statValueIds = ['statTotalDeals', 'statTotalEarned', 
+      'statPendingPayout', 'statPerfScore'];
+    statValueIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('skeleton');
+        el.style.minWidth = '';
+        el.style.minHeight = '';
+      }
+    });
+  }
+
+  showStatCardSkeletons();
+
   const listenerRefs = []
 
   function registerListener(ref, callback) {
@@ -163,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. OVERVIEW TAB
   
   registerListener(database.ref('deals/' + code), (snapshot) => {
+    hideStatCardSkeletons();
     const data = snapshot.val() || {};
     const dealsList = Object.keys(data).map(k => ({id: k, ...data[k]}));
     
@@ -177,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     currentTierObj = newTier;
+    applyTierBodyClass(currentTierObj.name);
     
     document.getElementById('headerTierBadge').textContent = getTierEmoji(currentTierObj.name) + ' ' + currentTierObj.name;
     document.getElementById('currentTierName').textContent = currentTierObj.name + ' Tier';
@@ -619,7 +662,23 @@ document.addEventListener('DOMContentLoaded', () => {
     activeDeals.sort((a,b) => (b.addedAt||0) - (a.addedAt||0));
 
     if (activeDeals.length === 0) {
-      pipelineList.innerHTML = `<div class="empty-state glass-card" style="padding:40px;text-align:center;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5" style="margin-bottom:12px;"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><p class="muted-text">${currentPipelineFilter==='all'?'No active deals. Log your first deal!':'No deals in this stage.'}</p></div>`;
+      pipelineList.innerHTML = `<div class="empty-state-pro">
+  <svg width="48" height="48" viewBox="0 0 24 24" 
+    fill="none" stroke="currentColor" stroke-width="1.5" 
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 7h-9m9 5h-9m9 5h-9M5 7h.01M5 12h.01M5 17h.01"/>
+    <rect x="3" y="4" width="3" height="3" rx="0.5"/>
+    <rect x="3" y="9" width="3" height="3" rx="0.5"/>
+    <rect x="3" y="14" width="3" height="3" rx="0.5"/>
+  </svg>
+  <p class="empty-state-pro-title">No active deals yet</p>
+  <p class="empty-state-pro-sub">Start tracking your 
+    pipeline by logging your first deal</p>
+  <button class="empty-state-pro-cta" 
+    onclick="document.querySelector('.tab-btn[data-target=\\'logDeal\\']').click()">
+    Log Your First Deal →
+  </button>
+</div>`;
       return;
     }
 
@@ -700,7 +759,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const list = document.getElementById('historyList');
     if (filtered.length === 0) {
-      list.innerHTML = `<div class="empty-state" style="padding:40px;text-align:center;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5" style="margin-bottom:10px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><p class="muted-text">No deals found</p></div>`;
+      list.innerHTML = `<div class="empty-state-pro">
+  <svg width="48" height="48" viewBox="0 0 24 24" 
+    fill="none" stroke="currentColor" stroke-width="1.5" 
+    stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M12 7v5l3 3"/>
+  </svg>
+  <p class="empty-state-pro-title">No deal history yet</p>
+  <p class="empty-state-pro-sub">Deals you log will 
+    appear here once you start closing</p>
+  <button class="empty-state-pro-cta" 
+    onclick="document.querySelector('.tab-btn[data-target=\\'logDeal\\']').click()">
+    Log Your First Deal →
+  </button>
+</div>`;
       return;
     }
 
@@ -747,7 +820,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const sorted = [...payoutsList].sort((a,b) => b.requestedAt - a.requestedAt);
     
     if (sorted.length === 0) {
-      list.innerHTML = `<div class="empty-state"><span class="empty-icon">💸</span><p>No payout requests yet</p></div>`;
+      list.innerHTML = `<div class="empty-state-pro">
+  <svg width="48" height="48" viewBox="0 0 24 24" 
+    fill="none" stroke="currentColor" stroke-width="1.5" 
+    stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="6" width="20" height="14" rx="2"/>
+    <path d="M2 10h20"/>
+  </svg>
+  <p class="empty-state-pro-title">No payouts requested yet</p>
+  <p class="empty-state-pro-sub">Once you have pending 
+    earnings, request your payout here</p>
+</div>`;
       return;
     }
     
