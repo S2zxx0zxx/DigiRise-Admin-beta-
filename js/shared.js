@@ -894,7 +894,7 @@ function createEditSession() {
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js')
+    navigator.serviceWorker.register('service-worker.js')
       .then(function(reg) {
         console.log('[DigiRise] Service worker registered:', reg.scope);
       })

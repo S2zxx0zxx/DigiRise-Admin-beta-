@@ -1,12 +1,15 @@
-const DIGIRISE_CACHE_VERSION = 'digirise-v1';
+const DIGIRISE_CACHE_VERSION = 'digirise-v2';
 const STATIC_ASSETS = [
-  '/index.html',
-  '/partner.html',
-  '/admin.html',
-  '/css/shared.css',
-  '/css/index.css',
-  '/css/partner.css',
-  '/css/admin.css'
+  'index.html',
+  'partner.html',
+  'admin.html',
+  'css/shared.css',
+  'css/index.css',
+  'css/partner.css',
+  'css/admin.css',
+  'favicon.svg',
+  'manifest.json',
+  'service-worker.js'
 ];
 
 self.addEventListener('install', function(event) {
@@ -57,10 +60,11 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
-  // For static HTML/CSS, cache-first with network fallback
-  event.respondWith(
-    caches.match(event.request).then(function(cached) {
-      return cached || fetch(event.request);
-    })
-  );
+// For static HTML/CSS, network-first with cache fallback
+   // (cache-first causes stale CSS during development)
+   event.respondWith(
+     fetch(event.request).catch(function() {
+       return caches.match(event.request);
+     })
+   );
 });
