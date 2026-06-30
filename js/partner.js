@@ -298,9 +298,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const maxVal = Math.max(...months.map(m => m.total), 1000); // min 1000 for scale
     
-    months.forEach(m => {
+    months.forEach((m, idx) => {
       const pct = (m.total / maxVal) * 100;
-      const isCurrentMonth = (i === months.length - 1);
+      const isCurrentMonth = (idx === months.length - 1);
       chart.innerHTML += `
         <div class="bar-wrapper">
           <div class="bar-value" style="font-size:10px;color:${m.total>0?'#C8890A':'#333'};">${m.total>0?formatCurrency(m.total):''}</div>
@@ -397,24 +397,33 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   const notifPanel = document.getElementById('notificationPanel');
-  (function(){ const _el=document.getElementById('notificationBtn'); if(_el) _el.addEventListener('click', (); })();
-    notifPanel.classList.add('open');
-    // Mark all as read
-    database.ref('notifications/' + code).once('value', snap => {
-      const d = snap.val();
-      if(d) {
-        Object.keys(d).forEach(id => {
-          if(!d[id].read) database.ref('notifications/' + code + '/' + id).update({read: true});
-        });
-      }
+  const notificationBtn = document.getElementById('notificationBtn');
+  if (notificationBtn) {
+    notificationBtn.addEventListener('click', () => {
+      notifPanel.classList.add('open');
+      // Mark all as read
+      database.ref('notifications/' + code).once('value', snap => {
+        const d = snap.val();
+        if(d) {
+          Object.keys(d).forEach(id => {
+            if(!d[id].read) database.ref('notifications/' + code + '/' + id).update({read: true});
+          });
+        }
+      });
     });
-  });
-  (function(){ const _el=document.getElementById('closeNotifBtn'); if(_el) _el.addEventListener('click', (); })();
-    notifPanel.classList.remove('open');
-  });
-  (function(){ const _el=document.getElementById('clearNotifBtn'); if(_el) _el.addEventListener('click', (); })();
-    database.ref('notifications/' + code).remove();
-  });
+  }
+  const closeNotifBtn = document.getElementById('closeNotifBtn');
+  if (closeNotifBtn) {
+    closeNotifBtn.addEventListener('click', () => {
+      notifPanel.classList.remove('open');
+    });
+  }
+  const clearNotifBtn = document.getElementById('clearNotifBtn');
+  if (clearNotifBtn) {
+    clearNotifBtn.addEventListener('click', () => {
+      database.ref('notifications/' + code).remove();
+    });
+  }
 
 
   // 3. LOG DEAL TAB
@@ -491,66 +500,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  (function(){ const _el=document.getElementById('submitDealBtn'); if(_el) _el.addEventListener('click', (); })();
-    const clientName = clientInput.value.trim();
-    const industry = document.getElementById('dealIndustry').value.trim();
-    const followupDate = document.getElementById('dealFollowup').value;
-    const notes = document.getElementById('dealNotes').value.trim();
-    const clientPhone = (document.getElementById('dealClientPhone') && document.getElementById('dealClientPhone').value.trim()) || '';
-    const cityArea = (document.getElementById('dealCityArea') && document.getElementById('dealCityArea').value.trim()) || '';
-    
-    const extraPct = getExtraCommissionPct(currentTierObj);
-    const totalPct = selectedPkg.commissionPct + extraPct;
-    const commission = (selectedPkg.price * totalPct) / 100;
-    
-    const now = Date.now();
-    const dealRef = database.ref('deals/' + code).push();
-    dealRef.set({
-      clientName,
-      industry,
-      package: selectedPkg.name,
-      price: selectedPkg.price,
-      pct: totalPct,
-      commission,
-      stage: selectedStage,
-      notes,
-      followupDate,
-      clientPhone,
-      cityArea,
-      addedAt: now,
-      partnerCode: code,
-      date: new Date().toLocaleDateString('en-IN')
-    }).then(() => {
-      database.ref('activity').push({
-        icon: '🤝',
-        text: `${username} logged a ${selectedPkg.name} deal — ₹${commission}`,
-        time: now
+  const submitDealBtn = document.getElementById('submitDealBtn');
+  if (submitDealBtn) {
+    submitDealBtn.addEventListener('click', () => {
+      const clientName = clientInput.value.trim();
+      const industry = document.getElementById('dealIndustry').value.trim();
+      const followupDate = document.getElementById('dealFollowup').value;
+      const notes = document.getElementById('dealNotes').value.trim();
+      const clientPhone = (document.getElementById('dealClientPhone') && document.getElementById('dealClientPhone').value.trim()) || '';
+      const cityArea = (document.getElementById('dealCityArea') && document.getElementById('dealCityArea').value.trim()) || '';
+
+      const extraPct = getExtraCommissionPct(currentTierObj);
+      const totalPct = selectedPkg.commissionPct + extraPct;
+      const commission = (selectedPkg.price * totalPct) / 100;
+
+      const now = Date.now();
+      const dealRef = database.ref('deals/' + code).push();
+      dealRef.set({
+        clientName,
+        industry,
+        package: selectedPkg.name,
+        price: selectedPkg.price,
+        pct: totalPct,
+        commission,
+        stage: selectedStage,
+        notes,
+        followupDate,
+        clientPhone,
+        cityArea,
+        addedAt: now,
+        partnerCode: code,
+        date: new Date().toLocaleDateString('en-IN')
+      }).then(() => {
+        database.ref('activity').push({
+          icon: '🤝',
+          text: `${username} logged a ${selectedPkg.name} deal — ₹${commission}`,
+          time: now
+        });
+        showToast('Deal logged successfully!', 'success');
+
+        // Reset form
+        clientInput.value = '';
+        document.getElementById('dealIndustry').value = '';
+        document.getElementById('dealFollowup').value = '';
+        document.getElementById('dealNotes').value = '';
+        document.querySelectorAll('#pkgSelectGrid .pkg-card').forEach(b => b.classList.remove('active'));
+        stageBtns.forEach(b => b.classList.remove('active'));
+        stageBtns[0].classList.add('active');
+        selectedPkg = null;
+        selectedStage = 'Lead Found';
+        document.getElementById('previewPkg').textContent = '-';
+        document.getElementById('previewRate').textContent = '-';
+        document.getElementById('previewEarning').textContent = '₹0';
+        if(document.getElementById('dealClientPhone')) document.getElementById('dealClientPhone').value = '';
+        if(document.getElementById('dealCityArea')) document.getElementById('dealCityArea').value = '';
+        if(document.getElementById('dealPreviewBox')) document.getElementById('dealPreviewBox').style.display = 'none';
+        if(document.getElementById('dealNotesCount')) document.getElementById('dealNotesCount').textContent = '0';
+        validateDealForm();
+
+        // Switch to pipeline tab
+        document.querySelector('.tab-btn[data-target="pipeline"]').click();
       });
-      showToast('Deal logged successfully!', 'success');
-      
-      // Reset form
-      clientInput.value = '';
-      document.getElementById('dealIndustry').value = '';
-      document.getElementById('dealFollowup').value = '';
-      document.getElementById('dealNotes').value = '';
-      document.querySelectorAll('#pkgSelectGrid .pkg-card').forEach(b => b.classList.remove('active'));
-      stageBtns.forEach(b => b.classList.remove('active'));
-      stageBtns[0].classList.add('active');
-      selectedPkg = null;
-      selectedStage = 'Lead Found';
-      document.getElementById('previewPkg').textContent = '-';
-      document.getElementById('previewRate').textContent = '-';
-      document.getElementById('previewEarning').textContent = '₹0';
-      if(document.getElementById('dealClientPhone')) document.getElementById('dealClientPhone').value = '';
-      if(document.getElementById('dealCityArea')) document.getElementById('dealCityArea').value = '';
-      if(document.getElementById('dealPreviewBox')) document.getElementById('dealPreviewBox').style.display = 'none';
-      if(document.getElementById('dealNotesCount')) document.getElementById('dealNotesCount').textContent = '0';
-      validateDealForm();
-      
-      // Switch to pipeline tab
-      document.querySelector('.tab-btn[data-target="pipeline"]').click();
     });
-  });
+  }
 
 
   // 4. PIPELINE TAB
@@ -767,18 +779,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  (function(){ const _el=document.getElementById('copyMsgBtn'); if(_el) _el.addEventListener('click', (); })();
-    const text = document.getElementById('payoutMsg').value;
-    if (text) {
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('Message copied to clipboard! 📋', 'success');
-      }).catch(() => {
-        const el = document.getElementById('payoutMsg');
-        el.select(); document.execCommand('copy');
-        showToast('Message copied! 📋', 'success');
-      });
-    }
-  });
+  const copyMsgBtn = document.getElementById('copyMsgBtn');
+  if (copyMsgBtn) {
+    copyMsgBtn.addEventListener('click', () => {
+      const text = document.getElementById('payoutMsg').value;
+      if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('Message copied to clipboard! 📋', 'success');
+        }).catch(() => {
+          const el = document.getElementById('payoutMsg');
+          el.select(); document.execCommand('copy');
+          showToast('Message copied! 📋', 'success');
+        });
+      }
+    });
+  }
   
   globalThis.copyPayoutMsg = function() {
     const text = document.getElementById('payoutMsg').value;
@@ -859,14 +874,20 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   
   const calcQtyInput = document.getElementById('calcQty');
-  (function(){ const _el=document.getElementById('calcMinus'); if(_el) _el.addEventListener('click', (); })();
-    let val = Number.parseInt(calcQtyInput.value);
-    if (val > 1) { calcQtyInput.value = val - 1; updateCalculator(); }
-  });
-  (function(){ const _el=document.getElementById('calcPlus'); if(_el) _el.addEventListener('click', (); })();
-    let val = Number.parseInt(calcQtyInput.value);
-    if (val < 30) { calcQtyInput.value = val + 1; updateCalculator(); }
-  });
+  const calcMinus = document.getElementById('calcMinus');
+  if (calcMinus) {
+    calcMinus.addEventListener('click', () => {
+      let val = Number.parseInt(calcQtyInput.value);
+      if (val > 1) { calcQtyInput.value = val - 1; updateCalculator(); }
+    });
+  }
+  const calcPlus = document.getElementById('calcPlus');
+  if (calcPlus) {
+    calcPlus.addEventListener('click', () => {
+      let val = Number.parseInt(calcQtyInput.value);
+      if (val < 30) { calcQtyInput.value = val + 1; updateCalculator(); }
+    });
+  }
   
   function updateCalculator() {
     if (!calcSelectedPkg) return;
@@ -919,11 +940,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('editNotes').value = deal.notes || '';
     document.getElementById('editStageDisplay').textContent = deal.stage || 'Lead Found';
 
-    document.getElementById('editDealModal').style.display = 'flex';
+    document.getElementById('editDealModal').classList.add('open');
   };
 
   globalThis.closeEditModal = function() {
-    document.getElementById('editDealModal').style.display = 'none';
+    document.getElementById('editDealModal').classList.remove('open');
     editingDealId = null;
   };
 
