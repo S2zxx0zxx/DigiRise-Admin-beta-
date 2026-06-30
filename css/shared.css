@@ -1098,3 +1098,60 @@ a:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .shortcut-help-hint { animation: none; }
 }
+
+/* =====================================================
+   SESSION 5: PHASE I1 — OFFLINE QUEUE & BANNER
+   ===================================================== */
+.connectivity-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99996;
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+.connectivity-banner.connectivity-offline {
+  background: var(--danger);
+}
+.connectivity-banner.connectivity-syncing {
+  background: var(--success);
+}
+.offline-queue-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--warning);
+  color: #08090b;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* =====================================================
+   SESSION 5: PHASE I3 — PWA INSTALL BUTTON
+   ===================================================== */
+.install-app-btn {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--gold);
+  color: #08090b;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+.install-app-btn:hover {
+  background: var(--gold-bright);
+  transform: translateY(-1px);
+}

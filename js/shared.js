@@ -747,3 +747,189 @@ function initShortcutHelpHint() {
 }
 
 document.addEventListener('DOMContentLoaded', initShortcutHelpHint);
+
+// =====================================================
+// SESSION 5 — PHASE I1: OFFLINE QUEUE MANAGEMENT
+// =====================================================
+var DIGIRISE_QUEUE_KEY = 'digirise-offline-queue';
+
+function getOfflineQueue() {
+  try {
+    var raw = localStorage.getItem(DIGIRISE_QUEUE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    console.error('Failed to read offline queue:', e);
+    return [];
+  }
+}
+
+function saveOfflineQueue(queue) {
+  try {
+    localStorage.setItem(DIGIRISE_QUEUE_KEY, JSON.stringify(queue));
+  } catch (e) {
+    console.error('Failed to save offline queue:', e);
+  }
+}
+
+function addToOfflineQueue(item) {
+  var queue = getOfflineQueue();
+  var queuedItem = {
+    id: 'queued_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+    queuedAt: Date.now(),
+    type: item.type,
+    payload: item.payload
+  };
+  queue.push(queuedItem);
+  saveOfflineQueue(queue);
+  updateOfflineQueueBadge();
+  return queuedItem.id;
+}
+
+function removeFromOfflineQueue(queueItemId) {
+  var queue = getOfflineQueue().filter(function(q) { return q.id !== queueItemId; });
+  saveOfflineQueue(queue);
+  updateOfflineQueueBadge();
+}
+
+function updateOfflineQueueBadge() {
+  var queue = getOfflineQueue();
+  var badge = document.getElementById('offlineQueueBadge');
+  if (!badge) return;
+  if (queue.length > 0) {
+    badge.textContent = queue.length;
+    badge.style.display = 'inline-flex';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function isOnline() {
+  return navigator.onLine;
+}
+
+function processOfflineQueue(processorFn) {
+  if (!isOnline()) return;
+  var queue = getOfflineQueue();
+  if (queue.length === 0) return;
+
+  console.log('[DigiRise] Processing offline queue:', queue.length, 'item(s)');
+
+  queue.forEach(function(item) {
+    try {
+      processorFn(item, function onSuccess() {
+        removeFromOfflineQueue(item.id);
+        console.log('[DigiRise] Synced queued item:', item.id);
+      }, function onError(err) {
+        console.error('[DigiRise] Failed to sync queued item:', item.id, err);
+      });
+    } catch (e) {
+      console.error('[DigiRise] Error processing queue item:', item.id, e);
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', updateOfflineQueueBadge);
+
+// SESSION 5 — PHASE I1: CONNECTIVITY BANNER
+// Note: #offline-banner already exists from prior sessions (a Session 1 visual element).
+// #connectivityBanner is a NEW element added in Session 5 for queue-aware messaging.
+// These are separate elements with separate purposes — no conflict.
+function setupConnectivityBanner() {
+  var banner = document.getElementById('connectivityBanner');
+  if (!banner) return;
+
+  function updateBannerState() {
+    if (navigator.onLine) {
+      var queue = getOfflineQueue();
+      if (queue.length > 0) {
+        banner.textContent = 'Back online — syncing ' + queue.length + ' queued item(s)...';
+        banner.className = 'connectivity-banner connectivity-syncing';
+        banner.style.display = 'block';
+        setTimeout(function() {
+          if (getOfflineQueue().length === 0) {
+            banner.style.display = 'none';
+          }
+        }, 3000);
+      } else {
+        banner.style.display = 'none';
+      }
+    } else {
+      banner.textContent = 'You are offline — changes will be saved and synced automatically';
+      banner.className = 'connectivity-banner connectivity-offline';
+      banner.style.display = 'block';
+    }
+  }
+
+  window.addEventListener('online', updateBannerState);
+  window.addEventListener('offline', updateBannerState);
+  updateBannerState();
+}
+
+document.addEventListener('DOMContentLoaded', setupConnectivityBanner);
+
+// =====================================================
+// SESSION 5 — PHASE I2: CONFLICT DETECTION HELPER
+// =====================================================
+function createEditSession() {
+  var loadedAt = Date.now();
+  var loadedValue = null;
+
+  return {
+    markLoaded: function(value) {
+      loadedAt = Date.now();
+      loadedValue = value;
+    },
+    checkConflict: function(currentRemoteValue) {
+      return currentRemoteValue !== null
+        && loadedValue !== null
+        && currentRemoteValue !== loadedValue
+        && (Date.now() - loadedAt) > 2000;
+    }
+  };
+}
+
+// =====================================================
+// SESSION 5 — PHASE I3: SERVICE WORKER & PWA
+// =====================================================
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(function(reg) {
+        console.log('[DigiRise] Service worker registered:', reg.scope);
+      })
+      .catch(function(err) {
+        console.warn('[DigiRise] Service worker registration failed:', err);
+      });
+  });
+}
+
+registerServiceWorker();
+
+var deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  var installBtn = document.getElementById('installAppBtn');
+  if (installBtn) installBtn.style.display = 'inline-flex';
+});
+
+function setupInstallPrompt() {
+  var installBtn = document.getElementById('installAppBtn');
+  if (!installBtn) return;
+
+  installBtn.addEventListener('click', function() {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(function(choice) {
+      if (choice.outcome === 'accepted') {
+        showToast('App installed! Find it on your home screen.', 'success');
+      }
+      deferredInstallPrompt = null;
+      installBtn.style.display = 'none';
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', setupInstallPrompt);

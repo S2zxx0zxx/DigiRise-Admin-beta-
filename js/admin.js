@@ -439,7 +439,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('adminNotesArea').value = 'Loading...';
     database.ref(`adminNotes/${code}`).once('value').then(snap => {
       if (currentDrawerCode === code) {
-        document.getElementById('adminNotesArea').value = snap.val() || '';
+        const loadedNotesValue = snap.val() || '';
+        document.getElementById('adminNotesArea').value = loadedNotesValue;
+        // SESSION 5 — PHASE I2: Track when notes were loaded for conflict detection
+        if (!window._digiriseNotesEditSession) {
+          window._digiriseNotesEditSession = createEditSession();
+        }
+        window._digiriseNotesEditSession.markLoaded(loadedNotesValue);
       }
     });
 
@@ -527,9 +533,29 @@ document.addEventListener('DOMContentLoaded', () => {
   if (saveNotesBtn) saveNotesBtn.addEventListener('click', () => {
     if (!currentDrawerCode) return;
     const notes = document.getElementById('adminNotesArea').value;
-    database.ref(`adminNotes/${currentDrawerCode}`).set(notes).then(() => {
-      showToast('Notes saved successfully', 'success');
-    }).catch(err => showToast(err.message, 'error'));
+    const adminNotesPath = `adminNotes/${currentDrawerCode}`;
+
+    // SESSION 5 — PHASE I2: Conflict check — do a fresh read before saving
+    database.ref(adminNotesPath).once('value').then(function(freshSnap) {
+      const freshValue = freshSnap.val();
+      if (window._digiriseNotesEditSession &&
+          window._digiriseNotesEditSession.checkConflict(freshValue)) {
+        const proceed = confirm(
+          'This note was updated elsewhere since you opened it. ' +
+          'Saving now will overwrite those changes. Continue?'
+        );
+        if (!proceed) return;
+      }
+      // Original save logic — completely unchanged, runs after conflict check passes
+      database.ref(adminNotesPath).set(notes).then(() => {
+        showToast('Notes saved successfully', 'success');
+      }).catch(err => showToast(err.message, 'error'));
+    }).catch(err => {
+      // If fresh read fails, fall back to saving directly (safety fallback)
+      database.ref(adminNotesPath).set(notes).then(() => {
+        showToast('Notes saved successfully', 'success');
+      }).catch(e => showToast(e.message, 'error'));
+    });
   });
 
   // 5. DEALS TAB

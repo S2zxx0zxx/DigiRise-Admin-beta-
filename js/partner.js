@@ -575,23 +575,91 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  const submitDealBtn = document.getElementById('submitDealBtn');
-  if (submitDealBtn) {
-    submitDealBtn.addEventListener('click', () => {
-      const clientName = clientInput.value.trim();
-      const industry = document.getElementById('dealIndustry').value.trim();
-      const followupDate = document.getElementById('dealFollowup').value;
-      const notes = document.getElementById('dealNotes').value.trim();
-      const clientPhone = (document.getElementById('dealClientPhone') && document.getElementById('dealClientPhone').value.trim()) || '';
-      const cityArea = (document.getElementById('dealCityArea') && document.getElementById('dealCityArea').value.trim()) || '';
+  // SESSION 5 — PHASE I1: OFFLINE-FIRST DEAL SUBMIT WRAPPER
+  // originalSubmitDealHandler contains 100% of the pre-existing logic, unchanged.
+  function originalSubmitDealHandler() {
+    const clientName = clientInput.value.trim();
+    const industry = document.getElementById('dealIndustry').value.trim();
+    const followupDate = document.getElementById('dealFollowup').value;
+    const notes = document.getElementById('dealNotes').value.trim();
+    const clientPhone = (document.getElementById('dealClientPhone') && document.getElementById('dealClientPhone').value.trim()) || '';
+    const cityArea = (document.getElementById('dealCityArea') && document.getElementById('dealCityArea').value.trim()) || '';
 
-      const extraPct = getExtraCommissionPct(currentTierObj);
-      const totalPct = selectedPkg.commissionPct + extraPct;
-      const commission = (selectedPkg.price * totalPct) / 100;
+    const extraPct = getExtraCommissionPct(currentTierObj);
+    const totalPct = selectedPkg.commissionPct + extraPct;
+    const commission = (selectedPkg.price * totalPct) / 100;
 
-      const now = Date.now();
-      const dealRef = database.ref('deals/' + code).push();
-      dealRef.set({
+    const now = Date.now();
+    const dealRef = database.ref('deals/' + code).push();
+    dealRef.set({
+      clientName,
+      industry,
+      package: selectedPkg.name,
+      price: selectedPkg.price,
+      pct: totalPct,
+      commission,
+      stage: selectedStage,
+      notes,
+      followupDate,
+      clientPhone,
+      cityArea,
+      addedAt: now,
+      partnerCode: code,
+      date: new Date().toLocaleDateString('en-IN')
+    }).then(() => {
+      database.ref('activity').push({
+        icon: '🤝',
+        text: `${username} logged a ${selectedPkg.name} deal — ₹${commission}`,
+        time: now
+      });
+      showToast('Deal logged successfully!', 'success');
+
+      // Reset form
+      clientInput.value = '';
+      document.getElementById('dealIndustry').value = '';
+      document.getElementById('dealFollowup').value = '';
+      document.getElementById('dealNotes').value = '';
+      document.querySelectorAll('#pkgSelectGrid .pkg-card').forEach(b => b.classList.remove('active'));
+      stageBtns.forEach(b => b.classList.remove('active'));
+      stageBtns[0].classList.add('active');
+      selectedPkg = null;
+      selectedStage = 'Lead Found';
+      document.getElementById('previewPkg').textContent = '-';
+      document.getElementById('previewRate').textContent = '-';
+      document.getElementById('previewEarning').textContent = '₹0';
+      if(document.getElementById('dealClientPhone')) document.getElementById('dealClientPhone').value = '';
+      if(document.getElementById('dealCityArea')) document.getElementById('dealCityArea').value = '';
+      if(document.getElementById('dealPreviewBox')) document.getElementById('dealPreviewBox').style.display = 'none';
+      if(document.getElementById('dealNotesCount')) document.getElementById('dealNotesCount').textContent = '0';
+      validateDealForm();
+
+      // Switch to pipeline tab
+      document.querySelector('.tab-btn[data-target="pipeline"]').click();
+    });
+  }
+
+  // Offline path wrapper — reads same form fields, queues payload, resets form identically
+  function submitDealWithOfflineSupport() {
+    if (isOnline()) {
+      originalSubmitDealHandler();
+      return;
+    }
+
+    // Offline: collect exact same fields as originalSubmitDealHandler
+    const clientName = clientInput.value.trim();
+    const industry = document.getElementById('dealIndustry').value.trim();
+    const followupDate = document.getElementById('dealFollowup').value;
+    const notes = document.getElementById('dealNotes').value.trim();
+    const clientPhone = (document.getElementById('dealClientPhone') && document.getElementById('dealClientPhone').value.trim()) || '';
+    const cityArea = (document.getElementById('dealCityArea') && document.getElementById('dealCityArea').value.trim()) || '';
+
+    const extraPct = getExtraCommissionPct(currentTierObj);
+    const totalPct = selectedPkg.commissionPct + extraPct;
+    const commission = (selectedPkg.price * totalPct) / 100;
+
+    addToOfflineQueue({
+      type: 'deal',
+      payload: {
         clientName,
         industry,
         package: selectedPkg.name,
@@ -603,40 +671,38 @@ document.addEventListener('DOMContentLoaded', () => {
         followupDate,
         clientPhone,
         cityArea,
-        addedAt: now,
+        addedAt: Date.now(),
         partnerCode: code,
-        date: new Date().toLocaleDateString('en-IN')
-      }).then(() => {
-        database.ref('activity').push({
-          icon: '🤝',
-          text: `${username} logged a ${selectedPkg.name} deal — ₹${commission}`,
-          time: now
-        });
-        showToast('Deal logged successfully!', 'success');
-
-        // Reset form
-        clientInput.value = '';
-        document.getElementById('dealIndustry').value = '';
-        document.getElementById('dealFollowup').value = '';
-        document.getElementById('dealNotes').value = '';
-        document.querySelectorAll('#pkgSelectGrid .pkg-card').forEach(b => b.classList.remove('active'));
-        stageBtns.forEach(b => b.classList.remove('active'));
-        stageBtns[0].classList.add('active');
-        selectedPkg = null;
-        selectedStage = 'Lead Found';
-        document.getElementById('previewPkg').textContent = '-';
-        document.getElementById('previewRate').textContent = '-';
-        document.getElementById('previewEarning').textContent = '₹0';
-        if(document.getElementById('dealClientPhone')) document.getElementById('dealClientPhone').value = '';
-        if(document.getElementById('dealCityArea')) document.getElementById('dealCityArea').value = '';
-        if(document.getElementById('dealPreviewBox')) document.getElementById('dealPreviewBox').style.display = 'none';
-        if(document.getElementById('dealNotesCount')) document.getElementById('dealNotesCount').textContent = '0';
-        validateDealForm();
-
-        // Switch to pipeline tab
-        document.querySelector('.tab-btn[data-target="pipeline"]').click();
-      });
+        date: new Date().toLocaleDateString('en-IN'),
+        _queuedUsername: username
+      }
     });
+
+    showToast('No internet — deal saved locally, will sync automatically when back online', 'info');
+
+    // Reset form — identical to originalSubmitDealHandler's reset block
+    clientInput.value = '';
+    document.getElementById('dealIndustry').value = '';
+    document.getElementById('dealFollowup').value = '';
+    document.getElementById('dealNotes').value = '';
+    document.querySelectorAll('#pkgSelectGrid .pkg-card').forEach(b => b.classList.remove('active'));
+    stageBtns.forEach(b => b.classList.remove('active'));
+    stageBtns[0].classList.add('active');
+    selectedPkg = null;
+    selectedStage = 'Lead Found';
+    document.getElementById('previewPkg').textContent = '-';
+    document.getElementById('previewRate').textContent = '-';
+    document.getElementById('previewEarning').textContent = '₹0';
+    if(document.getElementById('dealClientPhone')) document.getElementById('dealClientPhone').value = '';
+    if(document.getElementById('dealCityArea')) document.getElementById('dealCityArea').value = '';
+    if(document.getElementById('dealPreviewBox')) document.getElementById('dealPreviewBox').style.display = 'none';
+    if(document.getElementById('dealNotesCount')) document.getElementById('dealNotesCount').textContent = '0';
+    validateDealForm();
+  }
+
+  const submitDealBtn = document.getElementById('submitDealBtn');
+  if (submitDealBtn) {
+    submitDealBtn.addEventListener('click', submitDealWithOfflineSupport);
   }
 
 
@@ -1231,5 +1297,58 @@ document.addEventListener('DOMContentLoaded', function() {
       var btn = document.querySelector('.tab-btn[data-target="history"]');
       if (btn) btn.click();
     }
+  });
+});
+
+// =====================================================
+// SESSION 5 — PHASE I1: OFFLINE QUEUE PROCESSOR (PARTNER)
+// =====================================================
+document.addEventListener('DOMContentLoaded', function() {
+  // Build the queue processor function — reuses exact same Firebase path structure
+  // as originalSubmitDealHandler but reads from item.payload (not live form fields)
+  function dealQueueProcessor(item, onSuccess, onError) {
+    if (item.type !== 'deal') { onSuccess(); return; }
+    var p = item.payload;
+    var session = checkSession('partner');
+    if (!session) { onError(new Error('No session')); return; }
+    var partnerCode = p.partnerCode || session.partnerCode;
+    var username = p._queuedUsername || session.username;
+
+    database.ref('deals/' + partnerCode).push().set({
+      clientName:   p.clientName,
+      industry:     p.industry,
+      package:      p.package,
+      price:        p.price,
+      pct:          p.pct,
+      commission:   p.commission,
+      stage:        p.stage,
+      notes:        p.notes,
+      followupDate: p.followupDate,
+      clientPhone:  p.clientPhone,
+      cityArea:     p.cityArea,
+      addedAt:      p.addedAt,
+      partnerCode:  partnerCode,
+      date:         p.date
+    }).then(function() {
+      database.ref('activity').push({
+        icon: '🤝',
+        text: username + ' logged a ' + p.package + ' deal (synced offline) — ₹' + p.commission,
+        time: Date.now()
+      });
+      showToast('Queued deal synced to Firebase! ✅', 'success');
+      onSuccess();
+    }).catch(function(err) {
+      onError(err);
+    });
+  }
+
+  // Process any items queued while offline on page load
+  processOfflineQueue(dealQueueProcessor);
+
+  // Also process when connectivity is restored
+  window.addEventListener('online', function() {
+    setTimeout(function() {
+      processOfflineQueue(dealQueueProcessor);
+    }, 1000);
   });
 });
