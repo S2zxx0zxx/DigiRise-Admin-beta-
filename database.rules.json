@@ -1,55 +1,85 @@
 {
   "rules": {
-    ".read": true,
+
     "partners": {
-      ".write": true,
+      ".read": "auth != null",
+      ".write": "auth != null",
       "$code": {
-        ".write": true
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['name', 'code']) && newData.child('name').isString() && newData.child('code').isString()"
       }
     },
+
     "deals": {
-      ".write": true,
-      "$code": {
-        ".write": true
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$partnerCode": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "$dealId": {
+          ".validate": "newData.hasChildren(['clientName', 'package', 'commission', 'partnerCode']) && newData.child('clientName').isString() && newData.child('package').isString() && newData.child('commission').isNumber() && newData.child('partnerCode').isString()"
+        }
       }
     },
+
     "payouts": {
-      ".write": true,
-      "$code": {
-        ".write": true
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$partnerCode": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "$payoutId": {
+          ".validate": "newData.hasChildren(['amount', 'status']) && newData.child('amount').isNumber() && newData.child('status').isString()"
+        }
       }
     },
+
     "announcements": {
-      ".read": true,
-      ".write": true
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$annId": {
+        ".validate": "newData.hasChildren(['title', 'body']) && newData.child('title').isString() && newData.child('body').isString()"
+      }
     },
+
     "activity": {
-      ".read": true,
-      ".write": true,
+      ".read": "auth != null",
+      ".write": "auth != null",
       ".indexOn": ["time"]
     },
+
     "notifications": {
-      ".write": true,
+      ".read": "auth != null",
+      ".write": "auth != null",
       "$code": {
-        ".read": true,
-        ".write": true
+        ".read": "auth != null",
+        ".write": "auth != null"
       }
     },
+
     "adminNotes": {
-      ".read": true,
-      ".write": true
+      ".read": "auth != null && auth.token.admin === true",
+      ".write": "auth != null && auth.token.admin === true"
     },
+
     "settings": {
-      ".read": true,
-      ".write": true
+      ".read": "auth != null && auth.token.admin === true",
+      ".write": "auth != null && auth.token.admin === true",
+      "whatsappNumber": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.token.admin === true"
+      }
     },
+
     "seeded": {
-      ".read": true,
-      ".write": true
+      ".read": "auth != null",
+      ".write": "auth != null"
     },
+
     "test_wiring": {
-      ".read": true,
-      ".write": true
+      ".read": "auth != null",
+      ".write": "auth != null"
     }
   }
 }

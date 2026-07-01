@@ -22,29 +22,43 @@ try {
     database = firebase.database();
     console.log("Firebase initialized successfully.");
 
-    // Phase 0: Test connection / read-write wiring
-    const connectedRef = database.ref(".info/connected");
-    connectedRef.on("value", (snap) => {
-      if (snap.val() === true) {
-        console.log("Firebase Realtime DB: Connected.");
-        // Perform a test write to verify permissions/wiring
-        const testRef = database.ref("test_wiring");
-        testRef.set({
-          lastChecked: new Date().toISOString(),
-          status: "success"
-        }).then(() => {
-          console.log("Test write successful.");
-        }).catch(err => {
-          console.warn("Test write failed (expected if rules deny write):", err);
+    // Sign in anonymously so all subsequent database requests carry
+    // a valid Firebase auth token (required by the updated security rules).
+    firebase.auth().signInAnonymously()
+      .then(() => {
+        console.log("Firebase: Signed in anonymously — auth token is now active.");
+
+        // Phase 0: Test connection / read-write wiring
+        const connectedRef = database.ref(".info/connected");
+        connectedRef.on("value", (snap) => {
+          if (snap.val() === true) {
+            console.log("Firebase Realtime DB: Connected.");
+            // Perform a test write to verify permissions/wiring
+            const testRef = database.ref("test_wiring");
+            testRef.set({
+              lastChecked: new Date().toISOString(),
+              status: "success"
+            }).then(() => {
+              console.log("Test write successful.");
+            }).catch(err => {
+              console.warn("Test write failed (expected if rules deny write):", err);
+            });
+          } else {
+            console.log("Firebase Realtime DB: Disconnected.");
+          }
         });
-      } else {
-        console.log("Firebase Realtime DB: Disconnected.");
-      }
-    });
+
+        // Seed demo data only after auth is confirmed
+        setTimeout(seedDemoData, 1500);
+      })
+      .catch(err => {
+        console.error("Firebase anonymous sign-in failed:", err);
+      });
   }
 } catch (e) {
   console.error("Error initializing Firebase:", e);
 }
+
 
 // --- Shared Constants ---
 const PACKAGES = {
@@ -483,7 +497,6 @@ async function seedDemoData() {
   }
 }
 
-setTimeout(seedDemoData, 1500);
 
 // SHA-256 Cryptographic utility with native/pure-JS fallback
 async function hashSHA256(str) {
