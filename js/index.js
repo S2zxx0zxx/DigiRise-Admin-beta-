@@ -309,3 +309,31 @@ globalThis.toggleFaq = function(btn) {
     }
   }
 };
+
+// ═══════════════════════════════════════════════
+// SECTION 5 — Additive scroll reveal (Section 2/5 upgrade)
+// Observes .reveal-on-scroll elements and toggles .revealed.
+// Standalone, does not touch existing observers or logic.
+// ═══════════════════════════════════════════════
+function initScrollReveal() {
+  const els = document.querySelectorAll('.reveal-on-scroll');
+  if (!els.length) return;
+
+  if (globalThis.matchMedia &&
+      globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    els.forEach(el => el.classList.add('revealed'));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('revealed');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  els.forEach(el => io.observe(el));
+}
+document.addEventListener('DOMContentLoaded', initScrollReveal);

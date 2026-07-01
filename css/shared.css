@@ -135,6 +135,48 @@ html[data-theme="light"] {
   --r20: 20px;
   --r50: 50px;
   --radius-full: 9999px;
+
+  /* ═══ SECTION 1 — MOTION & DEPTH TOKENS ═══ */
+  --ease-snappy: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.8, 0.64, 1);
+  --dur-instant: 80ms;
+  --dur-fast: 150ms;
+  --dur-normal: 250ms;
+  --dur-slow: 400ms;
+  --dur-enter: 350ms;
+
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.15);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.25);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.3);
+  --shadow-gold: 0 8px 24px rgba(200,137,10,0.35);
+  --shadow-purple: 0 8px 24px rgba(168,85,247,0.35);
+  --shadow-success: 0 4px 16px rgba(34,197,94,0.3);
+
+  --glow-gold: 0 0 20px rgba(200,137,10,0.4);
+  --glow-purple: 0 0 20px rgba(168,85,247,0.4);
+  --glow-green: 0 0 16px rgba(34,197,94,0.35);
+
+  /* Fluid type scale */
+  --text-xs: clamp(10px, 2vw, 11px);
+  --text-sm: clamp(12px, 2.5vw, 13px);
+  --text-base: clamp(13px, 3vw, 15px);
+  --text-md: clamp(15px, 3.5vw, 17px);
+  --text-lg: clamp(18px, 4vw, 22px);
+  --text-xl: clamp(22px, 5vw, 28px);
+  --text-2xl: clamp(28px, 6vw, 38px);
+  --text-3xl: clamp(36px, 8vw, 52px);
+}
+
+/* Text selection — gold-tinted */
+::selection {
+  background: rgba(200,137,10,0.25);
+  color: var(--text-primary);
+}
+
+/* Scrollbar thumb turns gold on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
 }
 
 html:not([data-theme]) {
@@ -1253,4 +1295,203 @@ html[data-theme="light"] .mesh-breathing-bg {
   .header-secondary-group {
     display: none; /* simple fallback for very narrow screens */
   }
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 6 — LIGHT THEME: WARM PREMIUM PAPER
+   Cream/gold aesthetic (not washed-out white)
+   ═══════════════════════════════════════════════ */
+
+html[data-theme="light"] {
+  /* Warm cream palette */
+  --bg-base: #F5F1E8;
+  --bg-surface-1: #FDFCF8;
+  --bg-surface-2: #F0ECE0;
+  --bg-surface-3: #E8E2D4;
+
+  --border-subtle: rgba(100,80,40,0.08);
+  --border-default: rgba(100,80,40,0.14);
+  --border-strong: rgba(100,80,40,0.28);
+
+  --text-primary: #1F1B14;
+  --text-secondary: #5C5443;
+  --text-tertiary: #8A8272;
+
+  --gold-glow: rgba(200,137,10,0.12);
+  --purple-glow: rgba(168,85,247,0.10);
+
+  --shadow-xs: 0 1px 2px rgba(100,80,40,0.08);
+  --shadow-sm: 0 2px 8px rgba(100,80,40,0.10);
+  --shadow-md: 0 4px 16px rgba(100,80,40,0.12);
+  --shadow-lg: 0 8px 32px rgba(100,80,40,0.15);
+  --shadow-gold: 0 8px 24px rgba(200,137,10,0.20);
+  --shadow-purple: 0 8px 24px rgba(168,85,247,0.18);
+
+  --chip-bg: #FDFCF8;
+  --chip-border: rgba(100,80,40,0.6);
+  --shadow-hard: rgba(100,80,40,0.35);
+}
+
+/* Body noise overlay + gradients toned down for light theme */
+html[data-theme="light"] body {
+  background-image:
+    radial-gradient(at 100% 0%, rgba(200,137,10,0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(168,85,247,0.05) 0px, transparent 50%);
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+html[data-theme="light"] body::before {
+  opacity: 0.15;
+}
+
+html[data-theme="light"] .mesh-breathing-bg {
+  opacity: 0.18;
+}
+
+/* Cards get subtle warm shadow instead of dark ring */
+html[data-theme="light"] .stat-card,
+html[data-theme="light"] .glass-card,
+html[data-theme="light"] .pipeline-card,
+html[data-theme="light"] .ann-item,
+html[data-theme="light"] .pkg-card,
+html[data-theme="light"] .comm-card,
+html[data-theme="light"] .tier-pub-card {
+  box-shadow: 0 1px 3px rgba(100,80,40,0.06),
+              0 0 0 1px rgba(100,80,40,0.05);
+}
+
+html[data-theme="light"] .stat-card::before {
+  background: linear-gradient(90deg,
+    transparent, rgba(200,137,10,0.15), transparent) !important;
+}
+
+/* Modal overlays lighter in light mode */
+html[data-theme="light"] .modal-overlay-custom,
+html[data-theme="light"] .drawer-overlay,
+html[data-theme="light"] .modal-overlay {
+  background: rgba(60,45,20,0.45);
+}
+
+/* Toast tokens */
+html[data-theme="light"] .toast {
+  background: var(--bg-surface-1);
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+/* Login field placeholder color */
+html[data-theme="light"] .login-field-input::placeholder,
+html[data-theme="light"] .glass-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Fix any residual dark hardcodes on light bg */
+html[data-theme="light"] .top-header {
+  background: rgba(250,248,244,0.92) !important;
+  border-bottom-color: var(--border-subtle);
+}
+html[data-theme="light"] .notification-panel {
+  background: rgba(253,252,248,0.98);
+  border-left-color: var(--border-default);
+}
+html[data-theme="light"] .cmd-palette-overlay {
+  background: rgba(60,45,20,0.45);
+}
+html[data-theme="light"] .empty-state {
+  background: var(--bg-surface-2);
+  border-color: rgba(200,137,10,0.15);
+  color: var(--text-secondary);
+}
+html[data-theme="light"] .modal-box-custom {
+  background: var(--bg-surface-1);
+  border-color: var(--border-default);
+  color: var(--text-primary);
+}
+html[data-theme="light"] .modal-close-custom {
+  background: var(--bg-surface-2);
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+}
+html[data-theme="light"] .modal-title-custom { color: var(--text-primary); }
+html[data-theme="light"] .modal-subtitle-custom { color: var(--text-secondary); }
+html[data-theme="light"] .modal-label-custom { color: var(--text-tertiary); }
+html[data-theme="light"] .modal-btn-cancel {
+  background: transparent;
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 5 — SCROLL REVEAL SYSTEM
+   ═══════════════════════════════════════════════ */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+  will-change: opacity, transform;
+}
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-stagger > *:nth-child(1) { transition-delay: 0ms; }
+.reveal-stagger > *:nth-child(2) { transition-delay: 80ms; }
+.reveal-stagger > *:nth-child(3) { transition-delay: 160ms; }
+.reveal-stagger > *:nth-child(4) { transition-delay: 240ms; }
+.reveal-stagger > *:nth-child(5) { transition-delay: 320ms; }
+.reveal-stagger > *:nth-child(6) { transition-delay: 400ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 5 — MICRO-INTERACTION UPGRADES
+   ═══════════════════════════════════════════════ */
+
+/* Gold-glow focus ring for all inputs (partner) */
+.glass-input:focus,
+.login-field-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-glow),
+              inset 0 1px 2px rgba(0,0,0,0.03);
+  outline: none;
+}
+
+/* Purple-glow focus for admin */
+.admin-input:focus,
+html[data-theme] .admin-form .glass-input:focus,
+.login-box.admin-active-theme .login-field-input:focus,
+.login-box.admin-active-theme .glass-input:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px var(--purple-glow);
+}
+
+/* Bell button ring animation */
+.bell-btn.has-items svg {
+  animation: bellRing 0.6s var(--ease-spring);
+}
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-15deg); }
+  40% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  80% { transform: rotate(5deg); }
+}
+
+/* Tab section entrance */
+.tab-section.active {
+  animation: tabSectionEnter var(--dur-normal) var(--ease-out) both;
+}
+@keyframes tabSectionEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tab-section.active { animation: none; }
 }
