@@ -14,9 +14,11 @@
   <meta name="apple-mobile-web-app-title" content="DigiRise OS">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/foundation.css">
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/enhancements.css">
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -43,22 +45,30 @@
   <div id="view-public" class="view active">
     
     <!-- HERO SECTION -->
-    <section class="pub-hero">
-      <div class="hero-eyebrow">
+    <div class="mesh-ambient" aria-hidden="true"></div>
+    <section class="pub-hero" data-testid="hero-section">
+      <div class="hero-eyebrow" data-testid="hero-eyebrow">
         <span></span> Now Recruiting Growth Partners
       </div>
-      <h1 class="hero-h1">
+      <h1 class="hero-h1 display" data-testid="hero-heading">
         Earn While You <span class="grad">Close Deals</span><br>For DigiRise India
       </h1>
       <p class="hero-sub">
         Commission-based. Work from anywhere. Your timing, your freedom. No targets. No salary. Pure performance — the way it should be.
       </p>
-      <div class="hero-btns">
-        <button class="btn-gold offset-btn" onclick="openWhatsAppApply()">Apply on WhatsApp 🚀</button>
-        <a href="#login"><button class="btn-ghost">Partner Login →</button></a>
+      <div class="hero-btns" data-testid="hero-cta-row">
+        <button class="btn-gold offset-btn" data-testid="hero-apply-btn" onclick="openWhatsAppApply()">Apply on WhatsApp 🚀</button>
+        <a href="#login" data-testid="hero-login-link"><button class="btn-ghost">Partner Login →</button></a>
       </div>
-      
-      <div class="hero-stats">
+
+      <div class="hero-live-badge" data-testid="hero-live-badge" aria-live="polite">
+        <span class="hero-live-dot" aria-hidden="true"></span>
+        <span class="hero-live-text">Live from our database —&nbsp;</span>
+        <strong id="heroLivePartnersLabel" data-live="partners-hero">counting…</strong>
+        <span>&nbsp;partners onboarded</span>
+      </div>
+
+      <div class="hero-stats" data-testid="hero-static-strip">
         <div class="hero-stat">
           <div class="hero-stat-val">10–15%</div>
           <div class="hero-stat-label">Commission Per Deal</div>
@@ -154,28 +164,36 @@
 
     <hr class="pub-divider">
 
-    <!-- REAL NUMBERS SECTION -->
-    <section class="pub-section stats-strip reveal-on-scroll">
+    <!-- REAL NUMBERS SECTION — Live from Firebase -->
+    <section class="pub-section stats-strip reveal-on-scroll" data-testid="real-stats-section">
       <div class="section-label">📊 Real Transparency</div>
       <h2 class="sec-h">The Proof is in the Payouts</h2>
-      <div class="real-stats-grid reveal-stagger">
+      <p class="section-sub">
+        These numbers refresh live from our database — not marketing fluff.
+      </p>
+      <div class="real-stats-grid reveal-stagger" data-testid="live-stats-grid">
         <div class="real-stat">
-          <div class="real-stat-val">150+</div>
+          <div class="real-stat-val" data-countup data-live="partners" id="liveStatPartners">—</div>
           <div class="real-stat-label">Active Partners</div>
+          <span class="live-dot" aria-hidden="true"></span>
         </div>
         <div class="real-stat">
-          <div class="real-stat-val">420+</div>
-          <div class="real-stat-label">Deals Closed</div>
+          <div class="real-stat-val" data-countup data-live="deals" id="liveStatDeals">—</div>
+          <div class="real-stat-label">Deals Logged</div>
+          <span class="live-dot" aria-hidden="true"></span>
         </div>
         <div class="real-stat">
-          <div class="real-stat-val">₹2.4M+</div>
-          <div class="real-stat-label">Commission Paid</div>
+          <div class="real-stat-val" data-countup data-live="commission" data-currency id="liveStatCommission">—</div>
+          <div class="real-stat-label">Commission Earned</div>
+          <span class="live-dot" aria-hidden="true"></span>
         </div>
         <div class="real-stat">
-          <div class="real-stat-val">< 24h</div>
-          <div class="real-stat-label">Avg Payout Speed</div>
+          <div class="real-stat-val" data-countup data-live="paid" data-currency id="liveStatPaid">—</div>
+          <div class="real-stat-label">Paid Out to Partners</div>
+          <span class="live-dot" aria-hidden="true"></span>
         </div>
       </div>
+      <p class="live-stats-note eyebrow" style="margin-top:22px; opacity:0.55;">Refreshed live — Firebase Realtime</p>
     </section>
 
     <hr class="pub-divider">
@@ -304,18 +322,33 @@
     </section>
 
     <hr class="pub-divider">
-    <!-- SOCIAL PROOF SECTION -->
-    <section class="pub-section reveal-on-scroll">
-      <div class="section-label">🌟 Partner Success</div>
-      <h2 class="sec-h">Real People Trust This Platform</h2>
-      <div class="proof-grid reveal-stagger">
-        <div class="proof-card offset-card">
-          <p class="proof-quote">"DigiRise is so transparent. I logged a deal and got paid the same day."</p>
-          <div class="proof-author">— Rahul M., Growth Partner</div>
+    <!-- WHY DIGIRISE — TRUST DEEP-DIVE (replaces fake testimonials with
+         real, source-of-truth policy statements already lived by the
+         program).  No invented names, no invented numbers. -->
+    <section class="pub-section reveal-on-scroll" data-testid="why-digirise-section">
+      <div class="section-label">🛡️ Why DigiRise</div>
+      <h2 class="sec-h">Built On Rules, Not Promises</h2>
+      <p class="section-sub">
+        Every policy below is baked into the platform itself — you can inspect it, request a payout against it, and hold us to it.
+      </p>
+      <div class="trust-grid reveal-stagger">
+        <div class="trust-card">
+          <div class="trust-card-badge">01</div>
+          <h4>Instant, Not "Soon"</h4>
+          <p>Payout requests are honored the same day, on your UPI. There is no monthly cycle to wait for.</p>
+          <span class="trust-card-tag">Live in Payouts tab</span>
         </div>
-        <div class="proof-card offset-card">
-          <p class="proof-quote">"Finally, a program that doesn't feel like MLM. Professional all the way."</p>
-          <div class="proof-author">— Sneha K., Silver Partner</div>
+        <div class="trust-card trust-card-featured">
+          <div class="trust-card-badge">02</div>
+          <h4>Transparent Breakdown</h4>
+          <p>Every commission is shown as <code>package × commission %</code> — you can always trace the math to the deal.</p>
+          <span class="trust-card-tag">Preview in every deal</span>
+        </div>
+        <div class="trust-card">
+          <div class="trust-card-badge">03</div>
+          <h4>Full Payment Releases Commission</h4>
+          <p>Commission unlocks only when the client's full payment clears — clean, fair, and audit-able on both sides.</p>
+          <span class="trust-card-tag">Encoded in payout rules</span>
         </div>
       </div>
     </section>
@@ -459,5 +492,6 @@
   <script src="js/firebase-config.js"></script>
   <script src="js/shared.js"></script>
   <script src="js/index.js"></script>
+  <script src="js/enhancements.js"></script>
 </body>
 </html>

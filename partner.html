@@ -14,9 +14,11 @@
   <meta name="apple-mobile-web-app-title" content="DigiRise OS">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/foundation.css">
   <link rel="stylesheet" href="css/partner.css">
+  <link rel="stylesheet" href="css/enhancements.css">
   <link rel="manifest" href="manifest.json">
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js" crossorigin="anonymous"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js" crossorigin="anonymous"></script>
@@ -460,14 +462,29 @@
   <header class="top-header">
     <div class="header-content">
       <div class="header-primary-group">
-        <div class="logo-area">
-          <svg width="28" height="28" viewBox="0 0 40 40" fill="none" class="icon-mr-8">
-            <rect width="40" height="40" rx="10" fill="#C8890A" />
-            <path d="M10 28L20 12L30 28" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M14 22H26" stroke="#000" stroke-width="3" stroke-linecap="round" />
-          </svg>
-          <span class="logo-text">DigiRise <span class="gold-text">OS</span></span>
-        </div>
+        <a href="index.html" class="logo-area brand-lockup" aria-label="DigiRise OS home" data-testid="brand-lockup-partner">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="brandGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#F5C842"/>
+                  <stop offset="55%" stop-color="#E8A020"/>
+                  <stop offset="100%" stop-color="#B87708"/>
+                </linearGradient>
+              </defs>
+              <rect x="0.75" y="0.75" width="38.5" height="38.5" rx="11.5"
+                fill="url(#brandGrad)" stroke="rgba(0,0,0,0.18)" stroke-width="0.5"/>
+              <!-- ascending mark -->
+              <path d="M9 27 L18 15 L23 21 L31 11" stroke="#141414" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="31" cy="11" r="2.6" fill="#141414"/>
+            </svg>
+          </span>
+          <span class="brand-wordmark">
+            <span class="brand-word-primary">DigiRise</span>
+            <span class="brand-word-suffix">OS</span>
+          </span>
+        </a>
         <div class="partner-info">
           <span id="headerPartnerName">Partner</span>
           <span id="headerTierBadge" class="tier-badge">⭐ Joining</span>
@@ -518,12 +535,14 @@
       </div>
     </div>
     <nav class="nav-tabs">
-      <button class="tab-btn active" data-target="overview">Overview</button>
-      <button class="tab-btn" data-target="logDeal">Log Deal</button>
-      <button class="tab-btn" data-target="pipeline">Pipeline</button>
-      <button class="tab-btn" data-target="history">History</button>
-      <button class="tab-btn" data-target="payouts">Payouts</button>
-      <button class="tab-btn" data-target="calculator">Calc</button>
+      <button class="tab-btn active" data-target="overview" data-testid="tab-overview">Overview</button>
+      <button class="tab-btn" data-target="logDeal" data-testid="tab-log-deal">Log Deal</button>
+      <button class="tab-btn" data-target="pipeline" data-testid="tab-pipeline">Pipeline</button>
+      <button class="tab-btn" data-target="history" data-testid="tab-history">History</button>
+      <button class="tab-btn" data-target="payouts" data-testid="tab-payouts">Payouts</button>
+      <button class="tab-btn" data-target="trophies" data-testid="tab-trophies">Trophies</button>
+      <button class="tab-btn" data-target="calculator" data-testid="tab-calc">Calc</button>
+      <button class="tab-btn" data-target="profile" data-testid="tab-profile">Profile</button>
     </nav>
   </header>
 
@@ -636,6 +655,25 @@
               <p>No announcements</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- PHASE 7: INSIGHT CARDS (earnings forecast + smart reminders) -->
+      <div class="insight-grid mt-4" data-testid="insight-grid" id="insightGrid">
+        <div class="insight-card" data-testid="forecast-card" id="forecastCard" style="display:none;">
+          <span class="insight-card-eyebrow">This month · forecast</span>
+          <div class="insight-card-value" id="forecastValue">—</div>
+          <div class="insight-card-desc" id="forecastDesc">
+            Linear projection based on your pace so far — estimate only.
+          </div>
+        </div>
+        <div class="insight-card reminder-card" data-testid="reminder-card" id="reminderCard" style="display:none;">
+          <span class="insight-card-eyebrow">Smart nudge</span>
+          <div class="insight-card-value" id="reminderValue" style="color:var(--warning);">—</div>
+          <div class="insight-card-desc" id="reminderDesc">
+            Deals sitting in Lead / Pitched for 5+ days without movement.
+          </div>
+          <button class="insight-card-action" id="reminderAction" type="button">Open pipeline →</button>
         </div>
       </div>
 
@@ -914,9 +952,167 @@
             </button>
           </div>
         </div>
-        <div class="glass-card">
-          <h3>Payout History</h3>
-          <div id="payoutHistoryList" class="scrollable-list"></div>
+        <div class="glass-card" data-testid="payout-history-card">
+          <div class="section-header" style="justify-content:space-between;">
+            <h3 class="m-0" style="display:inline-flex;align-items:center;gap:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              Payout Timeline
+            </h3>
+            <button class="share-card-btn" id="quickShareBtn" type="button" data-testid="quick-share-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              Share Earnings
+            </button>
+          </div>
+          <div id="payoutTimeline" class="timeline" data-testid="payout-timeline"></div>
+          <div id="payoutHistoryList" class="scrollable-list" style="display:none;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TROPHIES / RECOGNITION -->
+    <section id="trophies" class="tab-section" data-testid="trophies-section">
+      <div class="glass-card" data-testid="trophies-header-card">
+        <div class="trophy-section-header">
+          <div>
+            <span class="eyebrow">Your Achievements · Real Data</span>
+            <h2 class="m-0">Trophy Case &amp; Motivation Engine</h2>
+          </div>
+        </div>
+
+        <div class="motiv-grid" id="motivGrid" data-testid="motiv-grid">
+          <div class="motiv-card projected" data-testid="motiv-projected">
+            <div class="motiv-label">Projected Next Tier</div>
+            <div class="motiv-value" id="motivProjected">—</div>
+            <div class="motiv-sub" id="motivProjectedSub">based on your deal cadence</div>
+          </div>
+          <div class="motiv-card best-month" data-testid="motiv-best-month">
+            <div class="motiv-label">Personal Best Month</div>
+            <div class="motiv-value" id="motivBestMonth">—</div>
+            <div class="motiv-sub" id="motivBestMonthSub">this month vs your best</div>
+          </div>
+          <div class="motiv-card streak-fire" data-testid="motiv-streak">
+            <div class="motiv-label">Current Streak</div>
+            <div class="motiv-value" id="motivStreak">—</div>
+            <div class="motiv-sub" id="motivStreakSub">consecutive weeks closing deals</div>
+          </div>
+          <div class="motiv-card leaderboard" data-testid="motiv-leaderboard">
+            <div class="motiv-label">Your Rank This Month</div>
+            <div class="motiv-value" id="motivRank">—</div>
+            <div class="motiv-sub" id="motivRankSub">by deals closed among all partners</div>
+          </div>
+        </div>
+
+        <div class="trophy-case" id="trophyCase" data-testid="trophy-case">
+          <button class="trophy-tile" type="button" data-tier="bronze" data-testid="trophy-bronze">
+            <div class="trophy-medal trophy-medal-bronze"><span class="trophy-medal-num">3</span></div>
+            <div class="trophy-name">Bronze Partner</div>
+            <div class="trophy-hint" data-role="hint">3 deals to unlock</div>
+          </button>
+          <button class="trophy-tile" type="button" data-tier="silver" data-testid="trophy-silver">
+            <div class="trophy-medal trophy-medal-silver"><span class="trophy-medal-num">7</span></div>
+            <div class="trophy-name">Silver Partner</div>
+            <div class="trophy-hint" data-role="hint">7 deals to unlock</div>
+          </button>
+          <button class="trophy-tile" type="button" data-tier="gold" data-testid="trophy-gold">
+            <div class="trophy-medal trophy-medal-gold"><span class="trophy-medal-num">15</span></div>
+            <div class="trophy-name">Gold Partner</div>
+            <div class="trophy-hint" data-role="hint">15 deals to unlock</div>
+          </button>
+          <div class="trophy-details" id="trophyDetails" data-testid="trophy-details">
+            <h4 class="trophy-details-heading">Select a trophy above</h4>
+            <p class="trophy-details-body">Tap a tier to see its unlock date, perks, and cash bonus.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE / SETTINGS -->
+    <section id="profile" class="tab-section" data-testid="profile-section">
+      <div class="profile-section">
+        <div class="profile-hero" data-testid="profile-hero">
+          <div class="profile-avatar" id="profileAvatar" aria-hidden="true">DR</div>
+          <div class="profile-hero-info">
+            <h2 class="profile-hero-name" id="profileHeroName">Partner</h2>
+            <div>
+              <span class="profile-hero-code" id="profileHeroCode">DR_—</span>
+              <span class="profile-hero-tier" id="profileHeroTier">⭐ Joining</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group" data-testid="settings-personal">
+          <div class="settings-group-title">Personal Information</div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Full name</div>
+              <div class="settings-row-label-hint">Shown on your dashboard and payouts</div>
+            </div>
+            <input type="text" id="profileNameInput" class="glass-input" placeholder="Your name" data-testid="profile-name-input">
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Phone / WhatsApp</div>
+              <div class="settings-row-label-hint">Used only for payout confirmations</div>
+            </div>
+            <input type="tel" id="profilePhoneInput" class="glass-input" placeholder="9xxxxxxxxx" data-testid="profile-phone-input">
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Default UPI</div>
+              <div class="settings-row-label-hint">Prefills your Payout requests</div>
+            </div>
+            <input type="text" id="profileUpiInput" class="glass-input" placeholder="you@upi" data-testid="profile-upi-input">
+          </div>
+        </div>
+
+        <div class="settings-group" data-testid="settings-preferences">
+          <div class="settings-group-title">Preferences</div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Theme</div>
+              <div class="settings-row-label-hint">Dark space or warm cream paper</div>
+            </div>
+            <button type="button" class="spring-toggle" id="profileThemeToggle" aria-label="Toggle theme" data-testid="profile-theme-toggle"></button>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">In-app announcements</div>
+              <div class="settings-row-label-hint">Show pulse on urgent announcements</div>
+            </div>
+            <button type="button" class="spring-toggle is-on" id="profileAnnToggle" aria-label="Toggle announcements" data-testid="profile-ann-toggle"></button>
+          </div>
+        </div>
+
+        <div class="settings-group" data-testid="settings-account">
+          <div class="settings-group-title">Account</div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Partner code</div>
+              <div class="settings-row-label-hint">Read-only — issued by DigiRise India</div>
+            </div>
+            <div><span class="profile-hero-code" id="profileCodeReadonly">DR_—</span></div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Sign out</div>
+              <div class="settings-row-label-hint">You'll be redirected to the login screen</div>
+            </div>
+            <button class="settings-action danger" id="profileLogoutBtn" type="button" data-testid="profile-logout-btn">Log out</button>
+          </div>
+        </div>
+
+        <div class="profile-save-bar" data-testid="profile-save-bar">
+          <button class="settings-action" id="profileResetBtn" type="button" data-testid="profile-reset-btn">Reset</button>
+          <button class="gold-btn" id="profileSaveBtn" type="button" data-testid="profile-save-btn">Save changes</button>
         </div>
       </div>
     </section>
@@ -1006,9 +1202,59 @@
     </div>
   </div>
 
+  <!-- PHASE 6: CUSTOM PWA INSTALL PROMPT (glass material) -->
+  <div id="pwaInstallModal" class="pwa-install-modal" role="dialog" aria-labelledby="pwaInstallTitle" aria-modal="true" data-testid="pwa-install-modal">
+    <div class="pwa-install-card">
+      <div class="pwa-install-header">
+        <div class="pwa-install-icon" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="pwaGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#F5C842"/><stop offset="60%" stop-color="#E8A020"/><stop offset="100%" stop-color="#B87708"/>
+              </linearGradient>
+            </defs>
+            <rect x="1" y="1" width="38" height="38" rx="11" fill="url(#pwaGrad)" stroke="rgba(0,0,0,0.18)"/>
+            <path d="M9 27 L18 15 L23 21 L31 11" stroke="#141414" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="31" cy="11" r="2.6" fill="#141414"/>
+          </svg>
+        </div>
+        <div>
+          <h3 id="pwaInstallTitle" class="pwa-install-title">Install DigiRise&nbsp;OS</h3>
+          <p class="pwa-install-sub">Get it on your home screen</p>
+        </div>
+      </div>
+      <p class="pwa-install-body">
+        One tap and the full partner OS lives on your device — offline-ready, faster load, works like a native app.
+      </p>
+      <ul class="pwa-install-perks">
+        <li>Full-screen dashboard, no browser bar</li>
+        <li>Works offline — deals sync when you're back</li>
+        <li>Instant open from home screen icon</li>
+      </ul>
+      <div class="pwa-install-actions">
+        <button type="button" class="pwa-install-secondary" id="pwaInstallLater" data-testid="pwa-install-later">Maybe Later</button>
+        <button type="button" class="pwa-install-primary" id="pwaInstallAccept" data-testid="pwa-install-accept">Install App</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 7: QUICK-SHARE EARNINGS PREVIEW -->
+  <div id="sharePreviewModal" class="share-preview-modal" role="dialog" aria-labelledby="sharePreviewTitle" aria-modal="true" data-testid="share-preview-modal">
+    <div class="share-preview-inner">
+      <h3 id="sharePreviewTitle" style="margin:0 0 12px;font-family:var(--font-display);font-size:18px;">Share your earnings</h3>
+      <canvas id="shareCanvas" width="1080" height="1350" aria-label="Earnings share preview"></canvas>
+      <div class="share-preview-actions">
+        <button type="button" id="shareCloseBtn" data-testid="share-close-btn">Close</button>
+        <button type="button" id="shareDownloadBtn" class="share-preview-primary" data-testid="share-download-btn">Download PNG</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/firebase-config.js"></script>
   <script src="js/shared.js"></script>
   <script src="js/partner.js"></script>
+  <script src="js/enhancements.js"></script>
+  <script src="js/partner-enhancements.js"></script>
 
   <!-- SESSION 4: PHASE G1 — Command Palette Overlay -->
   <div id="cmdPaletteOverlay" class="cmd-palette-overlay">

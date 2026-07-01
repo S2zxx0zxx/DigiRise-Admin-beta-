@@ -22,38 +22,78 @@ try {
     database = firebase.database();
     console.log("Firebase initialized successfully.");
 
+    // Compat SDK behavior: `.on('value', cb)` with NO error handler will
+    // silently UNREGISTER the listener when the first read returns
+    // permission_denied.  On the preview URL, anon auth sometimes flaps
+    // on cold-start, so ALL early listeners get permanently removed
+    // — leaving the dashboard stuck at 0.  Patch `.on()` here to always
+    // pass a benign error handler so Firebase keeps the listener attached
+    // and retries automatically once auth stabilises.
+    try {
+      const Ref = firebase.database.Reference;
+      if (Ref && Ref.prototype && Ref.prototype.on && !Ref.prototype.__drPatchedOn) {
+        const originalOn = Ref.prototype.on;
+        Ref.prototype.on = function (eventType, cb, cancelCb, ctx) {
+          if (typeof cancelCb !== 'function') {
+            const path = (this.toString && this.toString()) || '';
+            cancelCb = function (err) {
+              // Log at warning level; do NOT rethrow so Firebase keeps
+              // the listener attached and retries after auth stabilises.
+              console.warn('[DR] on(' + eventType + ') @ ' + path + ' error:', err && err.code);
+            };
+          }
+          return originalOn.call(this, eventType, cb, cancelCb, ctx);
+        };
+        Ref.prototype.__drPatchedOn = true;
+      }
+    } catch (patchErr) {
+      console.warn('[DR] could not patch Reference.on:', patchErr && patchErr.message);
+    }
+
     // Sign in anonymously so all subsequent database requests carry
     // a valid Firebase auth token (required by the updated security rules).
-    firebase.auth().signInAnonymously()
-      .then(() => {
-        console.log("Firebase: Signed in anonymously — auth token is now active.");
+    // Wrapped in a small retry loop so a single network flake at cold-start
+    // doesn't leave the whole session with auth=null (which cascades into
+    // permission_denied on every read).
+    function anonSignInWithRetry(attempt) {
+      attempt = attempt || 0;
+      firebase.auth().signInAnonymously()
+        .then(() => {
+          console.log("Firebase: Signed in anonymously — auth token is now active.");
 
-        // Phase 0: Test connection / read-write wiring
-        const connectedRef = database.ref(".info/connected");
-        connectedRef.on("value", (snap) => {
-          if (snap.val() === true) {
-            console.log("Firebase Realtime DB: Connected.");
-            // Perform a test write to verify permissions/wiring
-            const testRef = database.ref("test_wiring");
-            testRef.set({
-              lastChecked: new Date().toISOString(),
-              status: "success"
-            }).then(() => {
-              console.log("Test write successful.");
-            }).catch(err => {
-              console.warn("Test write failed (expected if rules deny write):", err);
-            });
+          // Phase 0: Test connection / read-write wiring
+          const connectedRef = database.ref(".info/connected");
+          connectedRef.on("value", (snap) => {
+            if (snap.val() === true) {
+              console.log("Firebase Realtime DB: Connected.");
+              // Perform a test write to verify permissions/wiring
+              const testRef = database.ref("test_wiring");
+              testRef.set({
+                lastChecked: new Date().toISOString(),
+                status: "success"
+              }).then(() => {
+                console.log("Test write successful.");
+              }).catch(err => {
+                console.warn("Test write failed (expected if rules deny write):", err);
+              });
+            } else {
+              console.log("Firebase Realtime DB: Disconnected.");
+            }
+          });
+
+          // Seed demo data only after auth is confirmed
+          setTimeout(seedDemoData, 1500);
+        })
+        .catch(err => {
+          console.warn("Firebase anonymous sign-in failed (attempt " + attempt + "):", err && err.code);
+          if (attempt < 6) {
+            setTimeout(() => anonSignInWithRetry(attempt + 1), 800 + attempt * 600);
           } else {
-            console.log("Firebase Realtime DB: Disconnected.");
+            console.error("Firebase anonymous sign-in gave up after retries:", err);
           }
         });
-
-        // Seed demo data only after auth is confirmed
-        setTimeout(seedDemoData, 1500);
-      })
-      .catch(err => {
-        console.error("Firebase anonymous sign-in failed:", err);
-      });
+    }
+    anonSignInWithRetry(0);
   }
 } catch (e) {
   console.error("Error initializing Firebase:", e);

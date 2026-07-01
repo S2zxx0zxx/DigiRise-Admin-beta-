@@ -1,103 +1,158 @@
-# DigiRise Partner OS — PRD
+# DigiRise OS — Partner Program Platform
+## Product Requirement Document
 
-## Original problem statement
-Market-best UI/UX master upgrade for DigiRise Partner OS: transform a functional Firebase‑backed staff/partner management app into a premium, emotionally engaging platform.
-Constraint: CSS + HTML visual structure only — do NOT touch JS logic, Firebase connections, ID/class hooks, or tab-switching logic. Fix a critical light-mode invisible-text bug first, then apply Sections 1–6 of the design system.
+## Original Problem Statement
+Complete ground-up premium UI/UX transformation of an existing DigiRise India
+partner program platform (static HTML/CSS/JS + Firebase Realtime DB).  User
+wanted every phase executed in exact order with real Firebase-driven data (no
+placeholders, no fake testimonials), asymmetric layouts, gold/dark identity,
+distinct display typography, glass/depth material system, ambient motion,
+and full mobile responsiveness.
 
-## Tech stack
-- Pure static HTML/CSS/JS (no build step) served via Vercel
-- Firebase Realtime Database + Auth (client-side SDKs)
-- Vanilla JS (no framework)
+## Architecture
+- **Frontend**: Static HTML5 (`index.html`, `partner.html`, `admin.html`)
+  served by a lightweight Node/Express static server on port 3000.
+- **Data**: Firebase Realtime Database + Firebase Auth (anonymous).
+- **CSS**: `shared.css` → `foundation.css` (new — Phase 1) →
+  `partner.css`/`admin.css`/`index.css` → `enhancements.css` (new — Phases 2–7).
+- **JS**: `firebase-config.js` → `shared.js` (with new `.on()` monkey-patch
+  + anon-auth retry) → `partner.js`/`admin.js`/`index.js` →
+  `enhancements.js` (new — homepage + PWA) → `partner-enhancements.js`
+  (new — profile, trophies, motivation engine, forecast, timeline, share).
+- **Fonts**: Inter (body) + Bricolage Grotesque (display, variable) +
+  Instrument Serif (editorial accents).
 
-## User personas
-1. **Growth Partner** — logs deals, tracks pipeline, requests payouts. Wants a "₹10k/mo enterprise tool" feel while earning commissions.
-2. **Admin (Satyam)** — manages partners, reviews deals/payouts, posts announcements. Wants data-dense authority.
-3. **Prospect (landing page)** — evaluates program, needs to convert on Hero → CTA.
+## User Personas
+1. **Growth Partner** (primary) — logs in with a partner code, tracks deals,
+   requests payouts, watches tier progress, and now: sees their trophy case,
+   personal best, streak, projected next-tier date, self-anchored monthly
+   rank, and can share earnings as a canvas image.
+2. **Admin** (Satyam) — oversees all partners, all deals, payouts approvals,
+   announcements.  Header rebuilt with a purple-gradient brand lockup.
+3. **Public visitor** — lands on the homepage, sees live Firebase counters
+   (real partners / real deals / real commission earned / real paid out),
+   real trust cards (no fake testimonials), and can apply via WhatsApp.
 
-## Core requirements (static)
-- Dark mode: deep space black + gold accents (power/exclusivity)
-- Light mode: warm cream + gold (trust/premium paper — NOT stark white)
-- Firebase deal logging, payouts, announcements, auth — unchanged
-- Fully responsive on 360–390 px mobile
-- Zero JS logic changes; only additive scroll-reveal function
+## Core Requirements (Static)
+- ZERO placeholders — every number on screen must trace back to Firebase.
+- Preserve all Firebase read/write logic, auth flow, session handling, and
+  any element ID/class name that JS queries.
+- Distinct gold/dark brand identity, asymmetric layouts, mixed display/body
+  typography, glass + depth material, ambient motion, reduced-motion support,
+  360–390px mobile responsiveness.
 
-## What's been implemented (2026-01)
-### Section 0 — Critical light-mode bug fix
-- Replaced entire inline `<style>` block in `partner.html` (~400 lines) with theme-token driven rules
-- All hardcoded darks (#0f0f0f → #2a2a2a) replaced with `var(--bg-surface-*)` / `var(--border-*)`
-- All hardcoded grays (#333–#888) replaced with `var(--text-secondary)` / `var(--text-tertiary)`
-- Pipeline `mini-stage-btn`, `pipeline-notes`, `ann-item`, `pipeline-card` etc. now render correctly in both themes
-- Pipeline filter buttons ("All / Lead / Pitched / Negotiating / Closed") visible in light mode ✅
+## What's Been Implemented (2026-01-01)
 
-### Section 1 — Design system foundation
-- Added motion tokens (`--ease-*`, `--dur-*`), depth tokens (`--shadow-*`, `--glow-*`), fluid type scale (`--text-xs`…`--text-3xl`) to `shared.css :root`
-- Gold-tinted `::selection`, gold-on-hover scrollbar
+### Phase 0 — Bug fixes
+- Restored **Logout** visibility on 320–400px mobile (was hidden by
+  `@media(max-width:380px){display:none}` on `.header-secondary-group`).
+- Rebuilt **DigiRise OS wordmark** as an icon+wordmark lockup:
+  gold-gradient rounded-square mark with an ascending path glyph +
+  Bricolage Grotesque wordmark + a small "OS" (or "ADMIN") pill.
+- Applied the same rebuild to `admin.html`.
 
-### Section 2 — Homepage premium upgrades
-- Animated multi-layer mesh gradient hero (`heroFloat` 22s)
-- Animated gold gradient shine on `.hero-h1 .grad` (`goldFlow` 5s)
-- Pulsing hero badge with blinking dot
-- Step cards, commission cards, tier cards, showcase cards — all hover-lift with glow variants
-- Stats strip with vertical dividers, real-stats grid, proof cards, culture do/don't
-- Premium FAQ accordion (45° rotate + gold hover)
-- Final CTA with gradient background + top gold divider
-- Scroll reveal (`.reveal-on-scroll` + `.reveal-stagger`) applied to all sections
+### Phase 1 — Design system foundation (`css/foundation.css`)
+- Elevation tokens: soft / medium / strong + gold + purple halos.
+- Motion tokens: `--ease-expo-out`, `--ease-spring`, `--ease-hover`,
+  duration tokens tap/hover/transition/page/ambient.
+- Ambient animated mesh (`.mesh-ambient`) with two gradient blobs.
+- Glass material tokens + `.glass-panel` reusable.
+- Typography scale (`.display-1/2/3`, `.editorial-italic`, `.eyebrow`)
+  with tabular-nums.
+- Spring toggle (`.spring-toggle`), shine sweep, focus-visible polish.
+- Scroll-reveal + stagger patterns with reduced-motion fallback.
 
-### Section 3 — Partner dashboard premium
-- Cleaner sticky header with backdrop-blur, tier badge, logo mark
-- Unified 34×34 header icon buttons (bell, theme, logout) with hover states
-- Stat cards with subtle top gradient and hover-lift
-- Tier ring using SVG stroke with gold drop-shadow
-- Pipeline cards with color-coded left accent (Lead=blue, Pitched=purple, Negotiating=amber, Closed=green, Payment=gold), progress bars, expanding accent on hover
-- Form inputs with gold focus ring
-- Announcement urgency pulse animation
+### Phase 2 — Homepage (`index.html`, `enhancements.js`)
+- Hero rebuilt with ambient mesh + Bricolage Grotesque display heading +
+  a **live-partner-count badge** ("Live from our database — 7 partners
+  onboarded") reading straight from Firebase.
+- Fake "150+ partners / 420+ deals / ₹2.4M+" **replaced with a live grid**
+  reading real numbers: partners, deals, commission earned, paid out.
+- Fake testimonials removed, replaced by a "Built On Rules, Not Promises"
+  trust card grid citing the real payout policy already in the platform.
+- Existing pricing/tier/steps sections inherit new tactile hover +
+  count-up + featured Pro glow via `enhancements.css`.
+- Homepage 3D pointer-tilt on step/showcase cards.
 
-### Section 4 — Admin panel premium
-- Purple as authority color (`admin-badge`, tab active state)
-- Data-dense table with tiny uppercase headers, hover row highlight
-- Purple gradient primary buttons, outline variants (green/red)
-- Premium drawer with backdrop blur + right slide-in
-- Complete light-theme override for scoped `--admin-*` tokens (fixed invisible text)
+### Phase 3 — Partner dashboard polish
+- Stat card values use display font + tabular-nums.
+- Announcement pulse re-attached with entrance animation.
+- Pipeline card stage-shift transition (`.pipeline-card.stage-shifting`).
 
-### Section 5 — Motion & micro-interactions
-- Bell shake animation on new notification
-- Tab section enter animation (`tabSectionEnter`)
-- Button press-down active state
-- Additive `initScrollReveal()` in `js/index.js` — IntersectionObserver toggles `.revealed` class
-- `prefers-reduced-motion` respected throughout
+### Phase 4 — Profile / Settings (new tab)
+- Editable profile hero with initials avatar generated from real name.
+- Personal Info: name / phone / default UPI — all reads AND writes go to
+  `partners/{code}` in Firebase.
+- Preferences: theme toggle (spring toggle, mirrors header toggle) +
+  `partners/{code}/prefs/announcements` bool.
+- Account section: read-only partner code + secondary logout.
 
-### Section 6 — Light theme: warm premium paper
-- Cream palette (`#F5F1E8` base, `#FDFCF8` surface-1)
-- Warm shadows (rgb 100,80,40 tint) instead of black
-- Subpixel font smoothing for light bg
-- Reduced backdrop opacity for mesh gradient in light mode
-- Modal/drawer overlays use warm tint
+### Phase 5 — Trophy / recognition system (new tab)
+- Motivation grid: projected next tier (computed from historical deal
+  cadence), personal best month (computed from `deals[].commission` by
+  month), streak (consecutive ISO weeks with at least one deal), and
+  partner rank ("#N of X this month by deals").
+- 3D-styled Bronze / Silver / Gold medals with lock / next-pulse / unlocked
+  shine-sweep states.
+- Tap-a-trophy detail popover with real unlock date (`addedAt` of the Nth
+  deal) + cash bonus + perks.
+- Milestone celebrations (first_deal / 5th / ₹10k / ₹50k / silver / gold)
+  fire a toast + confetti, and the "already-shown" flags persist to
+  `partners/{code}/milestones/{key}` in Firebase (cross-device).
+- Leaderboard is self-anchored — only the partner's own rank + total
+  partners + top-partner deal count are exposed; no other partners' names
+  or amounts.
 
-## Files modified
-- `/app/partner.html` (inline `<style>` block fully re-tokenised — Section 0 fix)
-- `/app/css/shared.css` (motion tokens, fluid type, scrollbar, selection, Section 5 reveal + Section 6 light theme)
-- `/app/css/index.css` (Section 2 — homepage premium upgrades appended)
-- `/app/css/partner.css` (Section 3 — dashboard upgrades appended)
-- `/app/css/admin.css` (Section 4 — admin upgrades + light-theme scoped-token override appended)
-- `/app/index.html` (added `.reveal-on-scroll` / `.reveal-stagger` classes)
-- `/app/js/index.js` (added standalone `initScrollReveal()` — additive only)
+### Phase 6 — Custom PWA install modal
+- Glass-material modal appears ~3s after page load, IF the app has
+  captured `beforeinstallprompt` AND user hasn't already installed AND
+  hasn't recently dismissed (`digirise-pwa-dismissed-at` in localStorage).
+- On-brand icon + wordmark, 3 perks, "Install App" primary + "Maybe Later"
+  secondary.  Dismissal snoozes for 3 days.
+- The old header `#installAppBtn` is hidden so we don't double-prompt.
 
-## Verification performed
-- Playwright screenshots at 390×800 viewport in both themes:
-  - Homepage (hero, how-it-works, tiers, FAQ, CTA)
-  - Partner dashboard (stats, tier ring, announcements)
-  - Partner pipeline in LIGHT MODE — all filter buttons + card text visible ✅ (critical bug fix confirmed)
-  - Partner Log Deal (package cards, stage pills, form)
-  - Admin dashboard (leaderboard, live activity) both themes
-  - Admin Partners table both themes
-- Zero JS logic changes; Firebase globals still intact
-- CSS brace-balance verified across all 4 files
+### Phase 7 — High-value partner features
+- **Earnings forecast** — linear projection this month based on MTD earnings
+  and days elapsed.  Auto-hidden if less than 3 days into month.
+- **Smart reminder** — flags deals sitting in Lead / Pitched / Negotiating
+  for > 5 days (uses `addedAt` timestamps).  Click jumps to Pipeline.
+- **Payout timeline** — replaces the plain table with a visual timeline
+  reading `payouts/{code}` — amount, date, UPI, UTR, paid date.
+- **Quick-share earnings card** — canvas-rendered PNG (1080×1350) with
+  partner name, code, tier, this month's earnings, lifetime earnings,
+  brand footer.  Download button opens a native save dialog.
+- **Deal velocity insight** — INTENTIONALLY OMITTED because per-stage
+  timestamps aren't in the current schema (stated to user explicitly in
+  the brief per user's own instruction).
 
-## Deployment
-- User will push to GitHub `main` via Emergent "Save to GitHub" — Vercel auto-deploys.
+### Root-cause fix bundled with Phase 3
+- Firebase compat SDK: `.on('value', cb)` without an error handler would
+  silently unregister the listener on `permission_denied`.  Combined with
+  a preview-URL anon-auth network flap, this stranded partner.html /
+  admin.html with `0` deals / no data.  `shared.js` now:
+  - retries `signInAnonymously()` up to 6× with backoff.
+  - monkey-patches `firebase.database.Reference.prototype.on` to always
+    attach a benign `cancelCb`, keeping listeners alive across auth flaps.
+- `partner-enhancements.js` includes a defensive mirror shim so even when
+  partner.js listeners get delayed, the Overview tab (stat cards, tier
+  ring, announcements) surfaces real numbers within 1–2s.
 
-## Backlog / next actions
-- P1: Verify on real device @ 360 px (iPhone SE, small Android)
-- P1: Live-test Firebase deal logging / payout after Vercel deploy
-- P2: Consider small enter-animation for individual pipeline card additions (currently only tab section animates)
-- P2: Analytics events on hero CTA clicks (Apply on WhatsApp, Partner Login)
+## Backlog / Next
+- **P1** — ~~Extend the mirror shim to Pipeline + History + Payouts lists~~
+  **DONE** — mirror shim now renders Pipeline, History, Payout timeline,
+  and Announcements when partner.js's listeners get delayed.
+- **P2** — Wire the `insight-card-action` "Open pipeline →" to also filter
+  to the "Lead"/"Pitched" stages.
+- **P2** — Add per-stage timestamps on `updateDealStage` so Phase 7
+  velocity insight can be built for real.
+- **P2** — Add scroll-triggered stagger to the new Trust card grid and
+  Live-stats grid (currently instant-visible).
+- **P3** — Instrument the share-canvas action with a Web Share API path so
+  mobile can share directly (falls back to download today).
+
+## Enhancement idea (revenue / conversion)
+Since the platform is a growth-partner program, the highest-leverage next
+improvement is a **"Refer a partner → earn ₹500 when they close their
+first deal"** loop, gated on the partner's own tier.  It piggy-backs on
+existing partner-code infrastructure and would multiply top-of-funnel
+without any paid channel spend.

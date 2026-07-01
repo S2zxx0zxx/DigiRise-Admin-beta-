@@ -1,0 +1,1134 @@
+/* =====================================================================
+   DIGIRISE — PHASE 2..7 VISUAL ENHANCEMENTS
+   Builds on css/foundation.css.  Nothing here overrides working logic
+   selectors — only additive presentation.
+   ===================================================================== */
+
+/* =========================================================
+   PHASE 2 — HOMEPAGE  Hero live badge + typography lift
+   ========================================================= */
+
+.hero-h1.display,
+.pub-hero .hero-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  font-variation-settings: 'opsz' 96;
+}
+
+.hero-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 28px auto 4px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(200,137,10,0.08);
+  border: 1px solid rgba(200,137,10,0.28);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--elevation-soft);
+}
+.hero-live-badge strong {
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.hero-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22C55E;
+  box-shadow: 0 0 0 4px rgba(34,197,94,0.18);
+  animation: livePulse 2.2s var(--ease-expo-out) infinite;
+}
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(34,197,94,0.18); }
+  50%      { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-live-dot { animation: none; }
+}
+
+/* Live stat card dot (small green pulse in the corner) */
+.real-stat { position: relative; }
+.live-dot {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22C55E;
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.16);
+  animation: livePulse 2.4s var(--ease-expo-out) infinite;
+}
+.real-stat .real-stat-val {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* =========================================================
+   PHASE 2 — Trust cards (replaces fake testimonials)
+   ========================================================= */
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 28px;
+}
+.trust-card {
+  position: relative;
+  padding: 28px 22px 24px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
+    var(--bg-surface-1);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--elevation-soft);
+  transition: transform var(--dur-hover) var(--ease-hover),
+              box-shadow var(--dur-hover) var(--ease-hover),
+              border-color var(--dur-hover) var(--ease-hover);
+  overflow: hidden;
+}
+.trust-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 100% at 100% 0%, rgba(200,137,10,0.15), transparent 60%);
+  opacity: 0;
+  transition: opacity var(--dur-hover) var(--ease-hover);
+  pointer-events: none;
+}
+.trust-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(200,137,10,0.3);
+  box-shadow: var(--elevation-strong);
+}
+.trust-card:hover::before { opacity: 1; }
+
+.trust-card-badge {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--gold);
+  opacity: 0.24;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  margin-bottom: 12px;
+}
+.trust-card h4 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+  color: var(--text-primary);
+}
+.trust-card p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+.trust-card p code {
+  font-family: var(--font-numeric);
+  background: rgba(200,137,10,0.09);
+  border: 1px solid rgba(200,137,10,0.22);
+  color: var(--gold);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+.trust-card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(34,197,94,0.10);
+  border: 1px solid rgba(34,197,94,0.22);
+  color: #22C55E;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.trust-card-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22C55E;
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.18);
+}
+.trust-card-featured {
+  border-color: rgba(200,137,10,0.35);
+  box-shadow: var(--elevation-medium);
+  background:
+    linear-gradient(180deg, rgba(200,137,10,0.08), rgba(200,137,10,0.02)),
+    var(--bg-surface-1);
+}
+.trust-card-featured .trust-card-badge { opacity: 0.45; }
+
+/* =========================================================
+   PHASE 2 — Featured pricing card (Pro tier gets a distinct halo)
+   ========================================================= */
+.comm-card {
+  transition: transform var(--dur-hover) var(--ease-hover),
+              box-shadow var(--dur-hover) var(--ease-hover),
+              border-color var(--dur-hover) var(--ease-hover);
+}
+.comm-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--elevation-strong);
+}
+.comm-card .comm-earn {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.comm-card.featured {
+  position: relative;
+  border-color: rgba(200,137,10,0.45);
+  box-shadow: var(--elevation-halo-gold), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.comm-card.featured:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--elevation-halo-gold), var(--elevation-strong);
+}
+
+/* =========================================================
+   PHASE 2 — 3D tilt for step + showcase cards
+   The tilt itself is driven by JS setting --tilt-x / --tilt-y.
+   ========================================================= */
+.step-card,
+.showcase-card {
+  --tilt-x: 0;
+  --tilt-y: 0;
+  transform-style: preserve-3d;
+  transform: perspective(900px)
+    rotateX(calc(var(--tilt-x) * 1deg))
+    rotateY(calc(var(--tilt-y) * 1deg));
+  transition: transform 180ms var(--ease-hover),
+              box-shadow 220ms var(--ease-hover);
+  will-change: transform;
+}
+.step-card:hover,
+.showcase-card:hover {
+  box-shadow: var(--elevation-strong);
+}
+@media (prefers-reduced-motion: reduce) {
+  .step-card,
+  .showcase-card {
+    transform: none !important;
+    transition: box-shadow 220ms var(--ease-hover);
+  }
+}
+
+/* =========================================================
+   PHASE 2 — FAQ smooth height accordion
+   Uses grid-template-rows trick for animated height without JS
+   ========================================================= */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 380ms var(--ease-expo-out);
+  overflow: hidden;
+}
+.faq-answer > * {
+  overflow: hidden;
+  min-height: 0;
+}
+.faq-item.active .faq-answer {
+  grid-template-rows: 1fr;
+}
+.faq-icon {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  transition: transform 280ms var(--ease-spring),
+              color 220ms var(--ease-hover);
+  font-weight: 300;
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+  color: var(--gold);
+}
+
+/* =========================================================
+   PHASE 3 — PARTNER DASHBOARD  count-up baseline + card lift
+   (Most treatments already exist in partner.css; adding polish.)
+   ========================================================= */
+
+.stat-card .stat-value {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.stat-card {
+  transition: transform var(--dur-hover) var(--ease-hover),
+              box-shadow var(--dur-hover) var(--ease-hover);
+}
+.stat-card:hover { transform: translateY(-2px); }
+
+.ann-item {
+  animation: annEnter 480ms var(--ease-expo-out) both;
+}
+@keyframes annEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ann-item { animation: none; }
+}
+
+/* Pipeline stage transition smoothing */
+.pipeline-card {
+  transition:
+    transform 320ms var(--ease-spring),
+    border-color 240ms var(--ease-hover),
+    box-shadow 240ms var(--ease-hover) !important;
+}
+.pipeline-card.stage-shifting {
+  transform: scale(0.985);
+  opacity: 0.85;
+}
+
+/* =========================================================
+   PHASE 4 — PROFILE / SETTINGS SECTION
+   ========================================================= */
+.profile-section { max-width: 720px; margin: 0 auto; }
+
+.profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 26px 24px;
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(200,137,10,0.14), rgba(168,85,247,0.06)),
+    var(--bg-surface-1);
+  border: 1px solid rgba(200,137,10,0.24);
+  box-shadow: var(--elevation-medium);
+  position: relative;
+  overflow: hidden;
+}
+.profile-hero::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(circle at 20% 20%, rgba(200,137,10,0.18), transparent 55%);
+  pointer-events: none;
+}
+
+.profile-avatar {
+  --sz: 76px;
+  width: var(--sz);
+  height: var(--sz);
+  flex-shrink: 0;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold), #B87708);
+  color: #141414;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  box-shadow: var(--elevation-halo-gold), inset 0 2px 3px rgba(255,255,255,0.35), inset 0 -3px 6px rgba(0,0,0,0.18);
+  z-index: 1;
+}
+.profile-hero-info { z-index: 1; min-width: 0; }
+.profile-hero-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+  line-height: 1.1;
+}
+.profile-hero-code {
+  display: inline-block;
+  font-family: var(--font-numeric);
+  font-size: 12px;
+  color: var(--gold);
+  background: rgba(200,137,10,0.10);
+  border: 1px solid rgba(200,137,10,0.28);
+  padding: 3px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
+  margin-right: 8px;
+  font-weight: 600;
+}
+.profile-hero-tier {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: rgba(200,137,10,0.13);
+  color: var(--gold);
+  border: 1px solid rgba(200,137,10,0.3);
+}
+
+.settings-group {
+  margin-top: 24px;
+  padding: 6px 0;
+  border-radius: 16px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+}
+.settings-group-title {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding: 14px 20px 8px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border-subtle);
+  background: transparent;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--dur-hover) var(--ease-hover);
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-row:hover { background: var(--bg-surface-2); }
+.settings-row-label {
+  flex: 1;
+  min-width: 0;
+}
+.settings-row-label-title {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.settings-row-label-hint {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+.settings-row .glass-input,
+.settings-row input[type="text"],
+.settings-row input[type="tel"],
+.settings-row input[type="email"] {
+  max-width: 260px;
+  font-family: var(--font-body);
+}
+.settings-row .settings-action {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.settings-row .settings-action:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.settings-row .settings-action.danger {
+  color: #EF4444;
+  border-color: rgba(239,68,68,0.35);
+}
+.settings-row .settings-action.danger:hover {
+  background: rgba(239,68,68,0.08);
+  border-color: rgba(239,68,68,0.6);
+}
+.profile-save-bar {
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(to top, var(--bg-base) 60%, transparent);
+  padding: 20px 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  z-index: 5;
+}
+
+/* =========================================================
+   PHASE 5 — TROPHY / RECOGNITION SYSTEM
+   ========================================================= */
+.trophy-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.trophy-section-header h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.trophy-section-header .eyebrow { display: block; margin-bottom: 6px; }
+
+/* Trophy case grid */
+.trophy-case {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.trophy-tile {
+  position: relative;
+  padding: 20px 14px 18px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)),
+    var(--bg-surface-1);
+  border: 1px solid var(--border-subtle);
+  text-align: center;
+  overflow: hidden;
+  transition:
+    transform var(--dur-hover) var(--ease-hover),
+    border-color var(--dur-hover) var(--ease-hover),
+    box-shadow var(--dur-hover) var(--ease-hover);
+  cursor: pointer;
+  isolation: isolate;
+}
+.trophy-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--elevation-strong);
+}
+.trophy-tile.is-locked {
+  opacity: 0.62;
+  filter: saturate(0.4);
+}
+.trophy-tile.is-next {
+  border-color: rgba(200,137,10,0.4);
+  animation: nextTierPulse 2.6s ease-in-out infinite;
+  opacity: 0.85;
+  filter: none;
+}
+@keyframes nextTierPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200,137,10,0.0), var(--elevation-soft); }
+  50%      { box-shadow: 0 0 0 6px rgba(200,137,10,0.08), var(--elevation-medium); }
+}
+.trophy-tile.is-unlocked {
+  border-color: rgba(200,137,10,0.4);
+  box-shadow: var(--elevation-halo-gold), var(--elevation-inset);
+}
+
+/* Medal — layered gradient with 3D-ish rendering */
+.trophy-medal {
+  --medal-color: var(--gold);
+  --medal-bright: var(--gold-bright);
+  width: 72px;
+  height: 72px;
+  margin: 4px auto 12px;
+  border-radius: 50%;
+  position: relative;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.6), transparent 45%),
+    radial-gradient(circle at 65% 75%, rgba(0,0,0,0.28), transparent 55%),
+    linear-gradient(135deg, var(--medal-bright), var(--medal-color) 55%, #7a5606 100%);
+  box-shadow:
+    inset 0 -6px 12px rgba(0,0,0,0.3),
+    inset 0 6px 12px rgba(255,255,255,0.22),
+    0 6px 18px rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.trophy-medal::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid var(--medal-color);
+  opacity: 0.4;
+  filter: blur(1.5px);
+}
+.trophy-medal::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  top: -14px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #EF4444 0%, #B91C1C 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  opacity: 0.85;
+}
+.trophy-medal-num {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  color: rgba(20,20,20,0.85);
+  letter-spacing: -0.03em;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+}
+
+.trophy-medal-bronze { --medal-color: #CD7F32; --medal-bright: #E9A46F; }
+.trophy-medal-silver { --medal-color: #C0C0C0; --medal-bright: #E8E8E8; }
+.trophy-medal-gold   { --medal-color: #C8890A; --medal-bright: #F5C842; }
+
+.trophy-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+  color: var(--text-primary);
+}
+.trophy-hint {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  line-height: 1.35;
+}
+.trophy-tile.is-unlocked .trophy-hint {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* Trophy detail popover (shown on tap) */
+.trophy-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-subtle);
+  animation: trophyDetailsIn 320ms var(--ease-expo-out);
+}
+.trophy-details.is-open { display: block; }
+@keyframes trophyDetailsIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.trophy-details-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0 0 6px;
+}
+.trophy-details-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.trophy-details-body strong { color: var(--gold); }
+
+/* Motivation stat row (personal best / streak / projected next-tier) */
+.motiv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.motiv-card {
+  padding: 16px 16px 14px;
+  border-radius: 16px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-subtle);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--dur-hover) var(--ease-hover), box-shadow var(--dur-hover) var(--ease-hover);
+}
+.motiv-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--elevation-medium);
+}
+.motiv-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  font-weight: 700;
+}
+.motiv-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.motiv-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.motiv-card.streak-fire::after {
+  content: '🔥';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 22px;
+  filter: drop-shadow(0 0 6px rgba(239,68,68,0.4));
+}
+.motiv-card.best-month  .motiv-value { color: #22C55E; }
+.motiv-card.projected   .motiv-value { color: var(--gold); }
+.motiv-card.leaderboard .motiv-value { color: var(--purple-bright); }
+
+/* Milestone celebration toast — extends existing toast */
+.milestone-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 14px 22px;
+  background: linear-gradient(135deg, rgba(200,137,10,0.94), rgba(184,119,8,0.94));
+  color: #141414;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: var(--elevation-halo-gold), 0 22px 48px rgba(0,0,0,0.4);
+  z-index: 90;
+  opacity: 0;
+  transition: opacity 320ms var(--ease-expo-out), transform 320ms var(--ease-spring);
+  pointer-events: none;
+  letter-spacing: -0.01em;
+}
+.milestone-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* =========================================================
+   PHASE 6 — CUSTOM PWA INSTALL PROMPT
+   ========================================================= */
+.pwa-install-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(6,7,10,0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 16px 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 380ms var(--ease-expo-out);
+}
+.pwa-install-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (min-width: 720px) {
+  .pwa-install-modal {
+    align-items: center;
+    padding: 24px;
+  }
+}
+.pwa-install-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--glass-tint-dark);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: var(--glass-border-dark);
+  box-shadow: var(--elevation-strong), var(--glass-inner-glow-dark);
+  border-radius: 24px;
+  padding: 24px;
+  transform: translateY(30px) scale(0.98);
+  transition: transform 450ms var(--ease-spring);
+}
+html[data-theme="light"] .pwa-install-card {
+  background: var(--glass-tint-light);
+  border: var(--glass-border-light);
+  box-shadow: var(--elevation-strong), var(--glass-inner-glow-light);
+}
+.pwa-install-modal.is-open .pwa-install-card {
+  transform: translateY(0) scale(1);
+}
+.pwa-install-header {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.pwa-install-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--elevation-halo-gold);
+  flex-shrink: 0;
+}
+.pwa-install-icon svg { width: 100%; height: 100%; }
+.pwa-install-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+.pwa-install-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 2px 0 0;
+  line-height: 1.4;
+}
+.pwa-install-body {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 6px 0 18px;
+}
+.pwa-install-perks {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: grid;
+  gap: 8px;
+}
+.pwa-install-perks li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.pwa-install-perks li::before {
+  content: '✓';
+  color: #22C55E;
+  font-weight: 800;
+  font-size: 13px;
+  background: rgba(34,197,94,0.14);
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pwa-install-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pwa-install-actions button {
+  flex: 1;
+  min-width: 130px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: 1px solid var(--border-default);
+  background: transparent;
+  color: var(--text-primary);
+  transition: transform var(--dur-tap) var(--ease-hover),
+              background var(--dur-hover) var(--ease-hover),
+              border-color var(--dur-hover) var(--ease-hover),
+              box-shadow var(--dur-hover) var(--ease-hover);
+}
+.pwa-install-actions .pwa-install-primary {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: #141414;
+  border-color: transparent;
+  box-shadow: var(--elevation-halo-gold);
+}
+.pwa-install-actions .pwa-install-primary:hover {
+  transform: translateY(-1px);
+}
+.pwa-install-actions .pwa-install-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* =========================================================
+   PHASE 7 — Earnings forecast, timeline, reminder nudges
+   ========================================================= */
+
+/* Forecast + reminder card row */
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-top: 4px;
+}
+.insight-card {
+  padding: 18px 18px 16px;
+  border-radius: 16px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--elevation-soft);
+  position: relative;
+  overflow: hidden;
+}
+.insight-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), transparent 60%);
+  opacity: 0.65;
+}
+.insight-card.reminder-card::before {
+  background: linear-gradient(90deg, var(--warning), transparent 60%);
+}
+.insight-card-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: block;
+}
+.insight-card-value {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.insight-card-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.insight-card-action {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(200,137,10,0.35);
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.insight-card-action:hover { background: rgba(200,137,10,0.08); }
+
+/* Payout timeline */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+  margin-top: 12px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(200,137,10,0.4), rgba(200,137,10,0.05));
+}
+.timeline-item {
+  position: relative;
+  padding: 8px 0 22px;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg-surface-2);
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 0 4px rgba(200,137,10,0.15);
+}
+.timeline-item.is-paid::before {
+  background: var(--gold);
+  box-shadow: 0 0 0 4px rgba(200,137,10,0.25);
+}
+.timeline-item.is-rejected::before {
+  border-color: var(--danger);
+  background: rgba(239,68,68,0.15);
+  box-shadow: 0 0 0 4px rgba(239,68,68,0.1);
+}
+.timeline-item-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.timeline-amount {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.timeline-status {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.timeline-status.is-paid    { background: rgba(34,197,94,0.14); color: #22C55E; border: 1px solid rgba(34,197,94,0.3); }
+.timeline-status.is-pending { background: rgba(245,158,11,0.14); color: #F59E0B; border: 1px solid rgba(245,158,11,0.3); }
+.timeline-status.is-rejected{ background: rgba(239,68,68,0.14); color: #EF4444; border: 1px solid rgba(239,68,68,0.3); }
+.timeline-meta {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+/* Quick-share card floating button */
+.share-card-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: #141414;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  box-shadow: var(--elevation-halo-gold);
+}
+.share-card-btn:hover { transform: translateY(-1px); }
+
+/* Preview canvas for quick-share modal */
+.share-preview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 210;
+  background: rgba(6,7,10,0.7);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.share-preview-modal.is-open { display: flex; }
+.share-preview-inner {
+  max-width: 520px;
+  width: 100%;
+  background: var(--bg-surface-1);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--elevation-strong);
+}
+.share-preview-inner canvas {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  display: block;
+  margin-bottom: 14px;
+  background: #111;
+}
+.share-preview-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.share-preview-actions button {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-default);
+  background: transparent;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+.share-preview-actions .share-preview-primary {
+  background: var(--gold);
+  color: #141414;
+  border-color: transparent;
+}
+
+/* =========================================================
+   RESPONSIVE / SMALL-SCREEN POLISH
+   ========================================================= */
+@media (max-width: 480px) {
+  .profile-hero { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .profile-avatar { --sz: 60px; font-size: 24px; }
+  .trust-grid { gap: 14px; }
+  .motiv-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .trophy-case { gap: 10px; }
+  .trophy-medal { width: 60px; height: 60px; }
+  .trophy-medal-num { font-size: 19px; }
+}
+
+@media (max-width: 380px) {
+  .motiv-grid { grid-template-columns: 1fr; }
+  .trophy-case { grid-template-columns: 1fr; }
+  .hero-live-badge { font-size: 11.5px; padding: 6px 12px; }
+}
+
+/* =========================================================
+   LIGHT THEME OVERRIDES (warm cream / paper)
+   ========================================================= */
+html[data-theme="light"] .trust-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7)),
+    var(--bg-surface-1);
+}
+html[data-theme="light"] .trust-card-featured {
+  background:
+    linear-gradient(180deg, rgba(200,137,10,0.14), rgba(200,137,10,0.04)),
+    var(--bg-surface-1);
+}
+html[data-theme="light"] .trophy-tile {
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6)), var(--bg-surface-1);
+}
+html[data-theme="light"] .motiv-card {
+  background: var(--bg-surface-1);
+}
+html[data-theme="light"] .brand-word-suffix { background: rgba(200,137,10,0.10); }
+html[data-theme="light"] .brand-word-suffix-admin { background: rgba(168,85,247,0.08); }

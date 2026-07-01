@@ -1291,10 +1291,36 @@ html[data-theme="light"] .mesh-breathing-bg {
     white-space: nowrap;
   }
 }
-@media (max-width: 380px) {
+/* PHASE 0 FIX — Never hide header controls on small phones.
+   Logout must remain accessible at 320–390px.  We compress the
+   button footprint instead of hiding the whole group. */
+@media (max-width: 400px) {
   .header-secondary-group {
-    display: none; /* simple fallback for very narrow screens */
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
   }
+  .header-secondary-group button,
+  .header-secondary-group .bell-btn,
+  .header-secondary-group .theme-toggle-btn,
+  .header-secondary-group .logout-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    padding: 0;
+  }
+  .header-secondary-group .install-app-btn { display: none !important; }
+}
+@media (max-width: 340px) {
+  /* At the very narrowest widths (older phones) shrink further so
+     essentials still fit on one row. */
+  .header-secondary-group button,
+  .header-secondary-group .bell-btn,
+  .header-secondary-group .theme-toggle-btn,
+  .header-secondary-group .logout-btn { width: 28px; height: 28px; }
+  .header-secondary-group svg { width: 15px; height: 15px; }
 }
 
 /* ═══════════════════════════════════════════════
