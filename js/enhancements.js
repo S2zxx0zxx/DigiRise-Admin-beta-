@@ -301,7 +301,8 @@
       '<div class="gemini-blob gemini-blob-2"></div>' +
       '<div class="gemini-blob gemini-blob-3"></div>' +
       '<div class="gemini-blob gemini-blob-4"></div>' +
-      '<div class="gemini-blob gemini-blob-5"></div>';
+      '<div class="gemini-blob gemini-blob-5"></div>' +
+      '<div class="gemini-blob gemini-blob-6"></div>';
     // Insert as the first child of body so it stays behind everything
     if (document.body.firstChild) {
       document.body.insertBefore(mesh, document.body.firstChild);

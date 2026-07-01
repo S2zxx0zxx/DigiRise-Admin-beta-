@@ -18,70 +18,78 @@
 }
 html[data-theme="light"] .gemini-mesh { opacity: 1; }
 
-/* Warm paper wash that sits UNDER the blobs — gives the whole page
-   a soft Gemini/Stitch tinted glow instead of pure white. */
+/* Warm paper wash — subtle pink+purple tint instead of full white,
+   so the palette stays unified. */
 html[data-theme="light"] body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(120% 90% at 50% -10%, rgba(255, 233, 200, 0.55), transparent 55%),
-    radial-gradient(90% 70% at 100% 100%, rgba(210, 220, 255, 0.35), transparent 60%),
-    radial-gradient(80% 60% at 0% 110%, rgba(255, 210, 235, 0.30), transparent 60%);
+    radial-gradient(120% 90% at 50% -10%, rgba(255, 245, 250, 0.65), transparent 55%),
+    radial-gradient(90% 70% at 100% 100%, rgba(240, 220, 255, 0.55), transparent 60%),
+    radial-gradient(80% 60% at 0% 110%, rgba(255, 220, 240, 0.55), transparent 60%);
   pointer-events: none;
 }
 
 .gemini-blob {
   position: absolute;
   border-radius: 42% 58% 63% 37% / 42% 62% 38% 58%;
-  filter: blur(70px) saturate(140%);
+  filter: blur(60px) saturate(180%);
   mix-blend-mode: multiply;
-  opacity: 0.55;
+  opacity: 0.85;
   will-change: transform, border-radius;
 }
 
-/* Gemini signature palette — blue / purple / pink / warm-yellow /
-   cyan-teal.  Positioned around the viewport corners so drift feels
-   organic; each blob has its own animation curve + duration to avoid
-   any sense of loop. */
-.gemini-blob-1 { /* electric blue — top-left */
-  width: 62vmax; height: 62vmax;
-  left: -22vmax; top: -20vmax;
-  background: radial-gradient(closest-side, #77A9FF 0%, rgba(119,169,255,0) 72%);
-  animation: geminiDrift1 32s cubic-bezier(.6,.05,.4,.95) infinite alternate,
-             geminiMorph 18s ease-in-out infinite alternate;
+/* PURPLE + PINK ONLY palette — fast visible movement across the page.
+   4 blobs total (2 purple, 2 pink) drifting from opposite corners so the
+   whole background feels alive.  Durations 9–13s per drift + 7–10s
+   morph — Google Gemini / Stitch fast-motion feel. */
+.gemini-blob-1 { /* PURPLE — top-left */
+  width: 72vmax; height: 72vmax;
+  left: -26vmax; top: -24vmax;
+  background: radial-gradient(closest-side, #A855F7 0%, rgba(168,85,247,0) 68%);
+  animation: geminiDrift1 12s cubic-bezier(.6,.05,.4,.95) infinite alternate,
+             geminiMorph 8s ease-in-out infinite alternate;
 }
-.gemini-blob-2 { /* violet-purple — top-right */
+.gemini-blob-2 { /* PINK — top-right */
+  width: 68vmax; height: 68vmax;
+  right: -22vmax; top: -18vmax;
+  background: radial-gradient(closest-side, #EC4899 0%, rgba(236,72,153,0) 68%);
+  animation: geminiDrift2 10s cubic-bezier(.4,.1,.6,.9) infinite alternate,
+             geminiMorph 9s ease-in-out infinite alternate;
+}
+.gemini-blob-3 { /* PINK — bottom-left */
+  width: 66vmax; height: 66vmax;
+  left: -20vmax; bottom: -22vmax;
+  background: radial-gradient(closest-side, #F472B6 0%, rgba(244,114,182,0) 68%);
+  animation: geminiDrift3 13s cubic-bezier(.5,.05,.5,.95) infinite alternate,
+             geminiMorph 10s ease-in-out infinite alternate;
+  animation-delay: -3s, -1s;
+}
+.gemini-blob-4 { /* PURPLE — bottom-right */
+  width: 70vmax; height: 70vmax;
+  right: -22vmax; bottom: -20vmax;
+  background: radial-gradient(closest-side, #C084FC 0%, rgba(192,132,252,0) 68%);
+  animation: geminiDrift4 11s cubic-bezier(.5,.1,.5,.9) infinite alternate,
+             geminiMorph 8s ease-in-out infinite alternate;
+  animation-delay: -5s, -3s;
+}
+.gemini-blob-5 { /* extra deep PURPLE — center-wandering */
   width: 58vmax; height: 58vmax;
-  right: -20vmax; top: -15vmax;
-  background: radial-gradient(closest-side, #C39CFF 0%, rgba(195,156,255,0) 72%);
-  animation: geminiDrift2 38s cubic-bezier(.4,.1,.6,.9) infinite alternate,
-             geminiMorph 22s ease-in-out infinite alternate;
+  left: 25vw; top: 30vh;
+  background: radial-gradient(closest-side, #8B5CF6 0%, rgba(139,92,246,0) 68%);
+  animation: geminiDrift5 9s cubic-bezier(.4,.05,.6,.95) infinite alternate,
+             geminiMorph 7s ease-in-out infinite alternate;
+  animation-delay: -6s, -4s;
 }
-.gemini-blob-3 { /* warm pink — center-right */
+.gemini-blob-6 { /* extra bright PINK — off-center */
   width: 55vmax; height: 55vmax;
-  right: -15vmax; top: 25vh;
-  background: radial-gradient(closest-side, #FFB0D3 0%, rgba(255,176,211,0) 72%);
-  animation: geminiDrift3 44s cubic-bezier(.5,.05,.5,.95) infinite alternate,
-             geminiMorph 26s ease-in-out infinite alternate;
-  animation-delay: -6s, -3s;
-}
-.gemini-blob-4 { /* golden warm — center-left / brand tint */
-  width: 60vmax; height: 60vmax;
-  left: -18vmax; bottom: -20vmax;
-  background: radial-gradient(closest-side, #FFD48A 0%, rgba(255,212,138,0) 72%);
-  animation: geminiDrift4 36s cubic-bezier(.5,.1,.5,.9) infinite alternate,
-             geminiMorph 24s ease-in-out infinite alternate;
-  animation-delay: -12s, -8s;
-}
-.gemini-blob-5 { /* cyan / teal — bottom-right */
-  width: 52vmax; height: 52vmax;
-  right: -18vmax; bottom: -18vmax;
-  background: radial-gradient(closest-side, #94E6D7 0%, rgba(148,230,215,0) 72%);
-  animation: geminiDrift5 40s cubic-bezier(.4,.05,.6,.95) infinite alternate,
-             geminiMorph 20s ease-in-out infinite alternate;
-  animation-delay: -18s, -14s;
+  right: 15vw; bottom: 20vh;
+  background: radial-gradient(closest-side, #F9A8D4 0%, rgba(249,168,212,0) 68%);
+  animation: geminiDrift6 13s cubic-bezier(.5,.1,.5,.9) infinite alternate,
+             geminiMorph 9s ease-in-out infinite alternate;
+  animation-delay: -4s, -2s;
 }
 
 /* Grain / noise overlay adds a tactile Stitch-like paper texture
@@ -96,31 +104,38 @@ html[data-theme="light"] .gemini-mesh::after {
   pointer-events: none;
 }
 
-/* ── Motion keyframes ─────────────────────────────────────────── */
+/* ── Motion keyframes — WIDE movement range for visible motion ─── */
 @keyframes geminiDrift1 {
   0%   { transform: translate3d(0,0,0) scale(1); }
-  50%  { transform: translate3d(10vw, 8vh, 0) scale(1.08); }
-  100% { transform: translate3d(-4vw, 14vh, 0) scale(0.94); }
+  50%  { transform: translate3d(22vw, 18vh, 0) scale(1.15); }
+  100% { transform: translate3d(-8vw, 26vh, 0) scale(0.92); }
 }
 @keyframes geminiDrift2 {
   0%   { transform: translate3d(0,0,0) scale(1); }
-  50%  { transform: translate3d(-8vw, 10vh, 0) scale(1.10); }
-  100% { transform: translate3d(6vw, -4vh, 0) scale(0.96); }
+  50%  { transform: translate3d(-20vw, 22vh, 0) scale(1.18); }
+  100% { transform: translate3d(14vw, -8vh, 0) scale(0.94); }
 }
 @keyframes geminiDrift3 {
   0%   { transform: translate3d(0,0,0) scale(1); }
-  50%  { transform: translate3d(-14vw, -6vh, 0) scale(1.06); }
-  100% { transform: translate3d(4vw, 8vh, 0) scale(0.98); }
+  50%  { transform: translate3d(24vw, -14vh, 0) scale(1.12); }
+  100% { transform: translate3d(8vw, 18vh, 0) scale(1.02); }
 }
 @keyframes geminiDrift4 {
   0%   { transform: translate3d(0,0,0) scale(1); }
-  50%  { transform: translate3d(12vw, -8vh, 0) scale(1.05); }
-  100% { transform: translate3d(-6vw, -12vh, 0) scale(1.02); }
+  50%  { transform: translate3d(-22vw, -18vh, 0) scale(1.14); }
+  100% { transform: translate3d(-10vw, -26vh, 0) scale(1.05); }
 }
 @keyframes geminiDrift5 {
   0%   { transform: translate3d(0,0,0) scale(1); }
-  50%  { transform: translate3d(-10vw, -12vh, 0) scale(1.07); }
-  100% { transform: translate3d(-2vw, -4vh, 0) scale(0.94); }
+  33%  { transform: translate3d(-24vw, -22vh, 0) scale(1.15); }
+  66%  { transform: translate3d(20vw, 16vh, 0) scale(0.90); }
+  100% { transform: translate3d(-6vw, -10vh, 0) scale(1.08); }
+}
+@keyframes geminiDrift6 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  33%  { transform: translate3d(18vw, -20vh, 0) scale(0.95); }
+  66%  { transform: translate3d(-16vw, 22vh, 0) scale(1.15); }
+  100% { transform: translate3d(4vw, -8vh, 0) scale(1.02); }
 }
 
 @keyframes geminiMorph {
