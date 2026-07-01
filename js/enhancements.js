@@ -272,6 +272,7 @@
 
   // Kick everything off on DOMContentLoaded
   document.addEventListener('DOMContentLoaded', () => {
+    injectGeminiMesh();
     initHomepageLiveStats();
     initCardTilt();
     initPwaModal();
@@ -283,4 +284,29 @@
     // Featured pricing card tilt on hover — reuse tilt initialization
     // is skipped for comm-cards on purpose (they get the glow instead).
   });
+
+  // ─────────────────────────────────────────────────────────────
+  // GEMINI-MESH INJECTOR
+  //   Adds the five-blob animated mesh element once per page.  The
+  //   CSS in gemini-mesh.css keeps it invisible in dark mode, so we
+  //   inject unconditionally and let the theme flip control visibility.
+  // ─────────────────────────────────────────────────────────────
+  function injectGeminiMesh() {
+    if (document.querySelector('.gemini-mesh')) return;
+    const mesh = document.createElement('div');
+    mesh.className = 'gemini-mesh';
+    mesh.setAttribute('aria-hidden', 'true');
+    mesh.innerHTML =
+      '<div class="gemini-blob gemini-blob-1"></div>' +
+      '<div class="gemini-blob gemini-blob-2"></div>' +
+      '<div class="gemini-blob gemini-blob-3"></div>' +
+      '<div class="gemini-blob gemini-blob-4"></div>' +
+      '<div class="gemini-blob gemini-blob-5"></div>';
+    // Insert as the first child of body so it stays behind everything
+    if (document.body.firstChild) {
+      document.body.insertBefore(mesh, document.body.firstChild);
+    } else {
+      document.body.appendChild(mesh);
+    }
+  }
 })();

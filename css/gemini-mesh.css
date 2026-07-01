@@ -1,0 +1,202 @@
+/* =====================================================================
+   DIGIRISE — GEMINI / STITCH-STYLE ANIMATED LIGHT-MODE BACKGROUND
+   Multi-color morphing blob mesh that renders ONLY in light mode.
+   Uses CSS-only animation: transform drift + organic border-radius
+   morph.  Blur softens; mix-blend-mode blends into the cream page.
+   Fully performant on mobile; respects prefers-reduced-motion.
+   ===================================================================== */
+
+.gemini-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 480ms var(--ease-expo-out, ease-out);
+  contain: layout paint;
+}
+html[data-theme="light"] .gemini-mesh { opacity: 1; }
+
+/* Warm paper wash that sits UNDER the blobs — gives the whole page
+   a soft Gemini/Stitch tinted glow instead of pure white. */
+html[data-theme="light"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(255, 233, 200, 0.55), transparent 55%),
+    radial-gradient(90% 70% at 100% 100%, rgba(210, 220, 255, 0.35), transparent 60%),
+    radial-gradient(80% 60% at 0% 110%, rgba(255, 210, 235, 0.30), transparent 60%);
+  pointer-events: none;
+}
+
+.gemini-blob {
+  position: absolute;
+  border-radius: 42% 58% 63% 37% / 42% 62% 38% 58%;
+  filter: blur(70px) saturate(140%);
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  will-change: transform, border-radius;
+}
+
+/* Gemini signature palette — blue / purple / pink / warm-yellow /
+   cyan-teal.  Positioned around the viewport corners so drift feels
+   organic; each blob has its own animation curve + duration to avoid
+   any sense of loop. */
+.gemini-blob-1 { /* electric blue — top-left */
+  width: 62vmax; height: 62vmax;
+  left: -22vmax; top: -20vmax;
+  background: radial-gradient(closest-side, #77A9FF 0%, rgba(119,169,255,0) 72%);
+  animation: geminiDrift1 32s cubic-bezier(.6,.05,.4,.95) infinite alternate,
+             geminiMorph 18s ease-in-out infinite alternate;
+}
+.gemini-blob-2 { /* violet-purple — top-right */
+  width: 58vmax; height: 58vmax;
+  right: -20vmax; top: -15vmax;
+  background: radial-gradient(closest-side, #C39CFF 0%, rgba(195,156,255,0) 72%);
+  animation: geminiDrift2 38s cubic-bezier(.4,.1,.6,.9) infinite alternate,
+             geminiMorph 22s ease-in-out infinite alternate;
+}
+.gemini-blob-3 { /* warm pink — center-right */
+  width: 55vmax; height: 55vmax;
+  right: -15vmax; top: 25vh;
+  background: radial-gradient(closest-side, #FFB0D3 0%, rgba(255,176,211,0) 72%);
+  animation: geminiDrift3 44s cubic-bezier(.5,.05,.5,.95) infinite alternate,
+             geminiMorph 26s ease-in-out infinite alternate;
+  animation-delay: -6s, -3s;
+}
+.gemini-blob-4 { /* golden warm — center-left / brand tint */
+  width: 60vmax; height: 60vmax;
+  left: -18vmax; bottom: -20vmax;
+  background: radial-gradient(closest-side, #FFD48A 0%, rgba(255,212,138,0) 72%);
+  animation: geminiDrift4 36s cubic-bezier(.5,.1,.5,.9) infinite alternate,
+             geminiMorph 24s ease-in-out infinite alternate;
+  animation-delay: -12s, -8s;
+}
+.gemini-blob-5 { /* cyan / teal — bottom-right */
+  width: 52vmax; height: 52vmax;
+  right: -18vmax; bottom: -18vmax;
+  background: radial-gradient(closest-side, #94E6D7 0%, rgba(148,230,215,0) 72%);
+  animation: geminiDrift5 40s cubic-bezier(.4,.05,.6,.95) infinite alternate,
+             geminiMorph 20s ease-in-out infinite alternate;
+  animation-delay: -18s, -14s;
+}
+
+/* Grain / noise overlay adds a tactile Stitch-like paper texture
+   without needing an image asset — pure SVG data URI. */
+html[data-theme="light"] .gemini-mesh::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.12 0 0 0 0 0.06 0 0 0 0.25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ── Motion keyframes ─────────────────────────────────────────── */
+@keyframes geminiDrift1 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(10vw, 8vh, 0) scale(1.08); }
+  100% { transform: translate3d(-4vw, 14vh, 0) scale(0.94); }
+}
+@keyframes geminiDrift2 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(-8vw, 10vh, 0) scale(1.10); }
+  100% { transform: translate3d(6vw, -4vh, 0) scale(0.96); }
+}
+@keyframes geminiDrift3 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(-14vw, -6vh, 0) scale(1.06); }
+  100% { transform: translate3d(4vw, 8vh, 0) scale(0.98); }
+}
+@keyframes geminiDrift4 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(12vw, -8vh, 0) scale(1.05); }
+  100% { transform: translate3d(-6vw, -12vh, 0) scale(1.02); }
+}
+@keyframes geminiDrift5 {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(-10vw, -12vh, 0) scale(1.07); }
+  100% { transform: translate3d(-2vw, -4vh, 0) scale(0.94); }
+}
+
+@keyframes geminiMorph {
+  0%   { border-radius: 42% 58% 63% 37% / 42% 62% 38% 58%; }
+  20%  { border-radius: 61% 39% 41% 59% / 55% 43% 57% 45%; }
+  40%  { border-radius: 34% 66% 47% 53% / 63% 38% 62% 37%; }
+  60%  { border-radius: 55% 45% 58% 42% / 40% 61% 39% 60%; }
+  80%  { border-radius: 40% 60% 55% 45% / 47% 55% 45% 53%; }
+  100% { border-radius: 58% 42% 40% 60% / 60% 45% 55% 40%; }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .gemini-blob { animation: none !important; }
+}
+
+/* ── Dark mode: hide the whole layer + remove the wash ────────── */
+html:not([data-theme="light"]) .gemini-mesh { display: none; }
+
+/* Ensure dashboard/card surfaces stay legible over the mesh in light
+   mode by lifting them onto their own opaque paper layer. */
+html[data-theme="light"] .glass-card,
+html[data-theme="light"] .stat-card,
+html[data-theme="light"] .glass-panel,
+html[data-theme="light"] .trust-card,
+html[data-theme="light"] .comm-card,
+html[data-theme="light"] .step-card,
+html[data-theme="light"] .showcase-card,
+html[data-theme="light"] .tier-pub-card,
+html[data-theme="light"] .payout-item,
+html[data-theme="light"] .cult-box,
+html[data-theme="light"] .settings-group,
+html[data-theme="light"] .profile-hero,
+html[data-theme="light"] .motiv-card,
+html[data-theme="light"] .trophy-tile,
+html[data-theme="light"] .insight-card,
+html[data-theme="light"] .real-stats-grid,
+html[data-theme="light"] .hero-live-badge {
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background-color: rgba(255, 253, 248, 0.72);
+}
+
+html[data-theme="light"] .top-header {
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  background: rgba(255, 253, 248, 0.72);
+  border-bottom: 1px solid rgba(120, 90, 30, 0.08);
+}
+
+/* =====================================================================
+   Partner Login button visibility fix (BOTH themes)
+   ===================================================================== */
+.btn-ghost {
+  color: var(--text-primary) !important;
+  border: 1.5px solid var(--border-default);
+  background: rgba(200, 137, 10, 0.05);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: var(--elevation-soft);
+}
+.btn-ghost:hover {
+  background: rgba(200, 137, 10, 0.12);
+  border-color: var(--gold);
+  color: var(--gold) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--elevation-halo-gold);
+}
+html[data-theme="light"] .btn-ghost {
+  color: #4a3410 !important;
+  border-color: rgba(200, 137, 10, 0.35);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 12px rgba(120, 90, 30, 0.10);
+}
+html[data-theme="light"] .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #a67509 !important;
+  border-color: var(--gold);
+}
