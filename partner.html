@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigiRise Growth Partner OS</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg">
+  <meta name="theme-color" content="#C8890A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DigiRise OS">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/foundation.css">
+  <link rel="stylesheet" href="css/partner.css">
+  <link rel="stylesheet" href="css/enhancements.css">
+  <link rel="stylesheet" href="css/gemini-mesh.css">
+  <link rel="stylesheet" href="css/digirise-nextgen.css">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js" crossorigin="anonymous"></script>
+  <style>
+    /* ── PARTNER INLINE UPGRADES — THEME-TOKENISED (SECTION 0 FIX) ── */
+    /* All previously hardcoded darks/grays now resolve via theme tokens
+       so both dark AND light modes render correctly. */
+
+    .pkg-card {
+      background: var(--bg-surface-1);
+      border: 2px solid var(--border-default);
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all .25s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+    .pkg-card:hover {
+      border-color: rgba(200, 137, 10, 0.35);
+      transform: translateY(-2px);
+    }
+    .pkg-card.active {
+      border-color: var(--gold);
+      background: rgba(200, 137, 10, 0.08);
+    }
+    .pkg-card.active::before {
+      content: '✓';
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .pkg-card-name {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 2px;
+      color: var(--text-primary);
+    }
+    .pkg-card-price {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .pkg-card-earn {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--success);
+    }
+    .pkg-card-pct {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+    .pct-15 {
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--purple-bright);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+    .pct-10 {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60A5FA;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .stage-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 50px;
+      border: 1.5px solid var(--border-default);
+      background: var(--bg-surface-2);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all .2s var(--ease-out);
+      white-space: nowrap;
+    }
+    .stage-pill.active {
+      border-color: var(--gold);
+      background: rgba(200, 137, 10, 0.1);
+      color: var(--gold);
+    }
+    .stage-pill:hover:not(.active) {
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+    .stage-pill svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+    .stage-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .form-field { margin-bottom: 16px; }
+    .form-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .form-field .req { color: var(--danger); }
+    .input-with-icon { position: relative; }
+    .input-with-icon svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--text-tertiary);
+    }
+    .input-with-icon input,
+    .input-with-icon textarea {
+      padding-left: 38px !important;
+    }
+    .char-count {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    /* ── Pipeline upgrades ── */
+    .pipeline-card {
+      background: var(--bg-surface-1);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s ease, transform .2s var(--ease-out), box-shadow .2s ease;
+    }
+    .pipeline-card:hover {
+      border-color: var(--border-default);
+      transform: translateX(2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .pipeline-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+      transition: width .2s ease;
+    }
+    .pipeline-card:hover::before { width: 5px; }
+    .pipeline-card.stage-lead::before { background: linear-gradient(180deg,#60A5FA,#3B82F6); }
+    .pipeline-card.stage-pitched::before { background: linear-gradient(180deg,#C084FC,#A855F7); }
+    .pipeline-card.stage-negotiating::before { background: linear-gradient(180deg,#FCD34D,#F59E0B); }
+    .pipeline-card.stage-closed::before { background: linear-gradient(180deg,#4ADE80,#22C55E); }
+    .pipeline-card.stage-payment::before { background: linear-gradient(180deg,var(--gold-bright),var(--gold)); }
+
+    .pipeline-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .pipeline-client {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .pipeline-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .pipeline-commission { text-align: right; }
+    .pipeline-commission-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--success);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+    .pipeline-commission-pkg {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .pipeline-progress {
+      display: flex;
+      gap: 4px;
+      margin: 12px 0;
+      align-items: center;
+    }
+    .prog-step {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--bg-surface-3);
+      transition: background .3s;
+    }
+    .prog-step.done { background: var(--success); }
+    .prog-step.current {
+      background: var(--gold);
+      box-shadow: 0 0 6px rgba(200,137,10,0.5);
+    }
+
+    .prog-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--text-tertiary);
+      margin-bottom: 10px;
+    }
+
+    .pipeline-stage-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .mini-stage-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-default);
+      background: var(--bg-surface-2);
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s var(--ease-out);
+      font-family: inherit;
+    }
+    .mini-stage-btn.active {
+      border-color: var(--gold);
+      background: rgba(200, 137, 10, 0.1);
+      color: var(--gold);
+    }
+    .mini-stage-btn:hover:not(.active) {
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+    }
+
+    .followup-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      color: #F59E0B;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .followup-badge svg { width: 12px; height: 12px; }
+    .followup-overdue {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.2);
+      color: #EF4444;
+    }
+
+    .pipeline-notes {
+      background: var(--bg-surface-2);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      border-left: 2px solid var(--border-default);
+    }
+
+    .phone-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #60A5FA;
+    }
+    .phone-badge svg { width: 11px; height: 11px; }
+
+    /* ── Announcement upgrades ── */
+    .ann-item {
+      background: var(--bg-surface-1);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+      transition: all .3s ease;
+    }
+    .ann-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 3px 0 0 3px;
+    }
+    .ann-item.normal::before { background: var(--gold); }
+    .ann-item.urgent {
+      border-color: rgba(239, 68, 68, 0.2);
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.04), var(--bg-surface-1));
+    }
+    .ann-item.urgent::before {
+      background: var(--danger);
+      animation: urgentPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes urgentPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .35; }
+    }
+
+    .ann-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .ann-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .ann-badge-update {
+      background: rgba(200, 137, 10, 0.12);
+      color: var(--gold);
+      border: 1px solid rgba(200, 137, 10, 0.2);
+    }
+    .ann-badge-urgent {
+      background: rgba(239, 68, 68, 0.12);
+      color: #EF4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    .ann-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 5px;
+      color: var(--text-primary);
+    }
+    .ann-body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .ann-date {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 8px;
+    }
+    .ann-new-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--success);
+      color: #08090b;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* SVG Icon styles */
+    .svg-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tab-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+      opacity: .7;
+    }
+    .tab-btn.active .tab-icon { opacity: 1; }
+
+    /* Phone field */
+    .phone-input-row {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 8px;
+    }
+    .country-code-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      padding: 0 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SESSION 5: PHASE I1 — Connectivity + queue banner -->
+  <div id="connectivityBanner" class="connectivity-banner" style="display:none;"></div>
+  <div id="offline-banner" class="offline-banner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      class="icon-mr-6">
+      <path
+        d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" />
+    </svg>
+    No internet connection — changes may not save
+  </div>
+
+  <header class="top-header">
+    <div class="header-content">
+      <div class="header-primary-group">
+        <a href="index.html" class="logo-area brand-lockup" aria-label="DigiRise OS home" data-testid="brand-lockup-partner">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="brandGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#F5C842"/>
+                  <stop offset="55%" stop-color="#E8A020"/>
+                  <stop offset="100%" stop-color="#B87708"/>
+                </linearGradient>
+              </defs>
+              <rect x="0.75" y="0.75" width="38.5" height="38.5" rx="11.5"
+                fill="url(#brandGrad)" stroke="rgba(0,0,0,0.18)" stroke-width="0.5"/>
+              <!-- ascending mark -->
+              <path d="M9 27 L18 15 L23 21 L31 11" stroke="#141414" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="31" cy="11" r="2.6" fill="#141414"/>
+            </svg>
+          </span>
+          <span class="brand-wordmark">
+            <span class="brand-word-primary">DigiRise</span>
+            <span class="brand-word-suffix">OS</span>
+          </span>
+        </a>
+        <div class="partner-info">
+          <span id="headerPartnerName">Partner</span>
+          <span id="headerTierBadge" class="tier-badge">⭐ Joining</span>
+        </div>
+      </div>
+      <div class="header-secondary-group">
+        <button id="notificationBtn" class="bell-btn" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span id="notificationBadge" class="badge hidden">0</span>
+        </button>
+        <!-- SESSION 5: PHASE I1 — Offline queue badge -->
+        <span id="offlineQueueBadge" class="offline-queue-badge" style="display:none;" title="Items waiting to sync"></span>
+        <!-- SESSION 5: PHASE I3 — PWA Install button -->
+        <button id="installAppBtn" class="install-app-btn" style="display:none;" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Install App
+        </button>
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle dark/light mode" type="button">
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+        <button id="logoutBtn" class="logout-btn" title="Logout">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-target="overview" data-testid="tab-overview">Overview</button>
+      <button class="tab-btn" data-target="logDeal" data-testid="tab-log-deal">Log Deal</button>
+      <button class="tab-btn" data-target="pipeline" data-testid="tab-pipeline">Pipeline</button>
+      <button class="tab-btn" data-target="history" data-testid="tab-history">History</button>
+      <button class="tab-btn" data-target="payouts" data-testid="tab-payouts">Payouts</button>
+      <button class="tab-btn" data-target="trophies" data-testid="tab-trophies">Trophies</button>
+      <button class="tab-btn" data-target="calculator" data-testid="tab-calc">Calc</button>
+      <button class="tab-btn" data-target="profile" data-testid="tab-profile">Profile</button>
+    </nav>
+  </header>
+
+  <div id="notificationPanel" class="notification-panel">
+    <div class="panel-header">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          class="icon-mr-6">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+        Notifications
+      </h3>
+      <div>
+        <button id="clearNotifBtn" class="text-btn">Clear All</button>
+        <button id="closeNotifBtn" class="close-btn">✕</button>
+      </div>
+    </div>
+    <div id="notificationList" class="panel-content"></div>
+  </div>
+
+  <main class="main-content">
+
+    <!-- OVERVIEW -->
+    <section id="overview" class="tab-section active">
+      <div class="stats-grid">
+        <div class="stat-card offset-card gradient-border-card fadeInUp delay-1 stagger-fade-in">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="icon-mr-4">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>Total Deals
+            </div>
+            <div class="stat-value" id="statTotalDeals">0</div>
+          </div>
+        </div>
+        <div class="stat-card offset-card gradient-border-card fadeInUp delay-2 stagger-fade-in">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="icon-mr-4">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>Total Earned
+            </div>
+            <div class="stat-value text-green" id="statTotalEarned">₹0</div>
+          </div>
+        </div>
+        <div class="stat-card offset-card gradient-border-card fadeInUp delay-3 stagger-fade-in">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="icon-mr-4">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>Pending Payout
+            </div>
+            <div class="stat-value text-amber" id="statPendingPayout">₹0</div>
+          </div>
+        </div>
+        <div class="stat-card offset-card gradient-border-card fadeInUp delay-4 stagger-fade-in">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="icon-mr-4">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>Performance
+            </div>
+            <div class="stat-value text-gold" id="statPerfScore">0<span class="score-max">/100</span></div>
+            <div class="progress-bar-bg mt-2">
+              <div class="progress-bar-fill" id="perfScoreFill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid mt-4">
+        <div class="glass-card gradient-border-card flex-row-card">
+          <div class="gradient-border-card-inner">
+            <div class="ring-container">
+              <svg viewBox="0 0 100 100" class="tier-ring">
+                <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
+                <circle class="ring-progress" id="tierRingProgress" cx="50" cy="50" r="40" stroke-dasharray="251"
+                  stroke-dashoffset="251"></circle>
+              </svg>
+              <div class="ring-center-text" id="tierRingText">0</div>
+            </div>
+            <div class="tier-info">
+              <h3 id="currentTierName">Joining Tier</h3>
+              <p id="tierProgressText" class="muted-text">0 deals to next tier</p>
+              <div class="tier-perks" id="tierPerks">No bonus active</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div class="section-header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8890A" stroke-width="2">
+              <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0" />
+            </svg>
+            <h3 class="m-0">Announcements</h3>
+            <span id="annUnreadBadge" class="badge hidden ann-unread-badge">0</span>
+          </div>
+          <div id="announcementsList" class="scrollable-list max-h-280">
+            <div class="empty-state">
+              <p>No announcements</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 7: INSIGHT CARDS (earnings forecast + smart reminders) -->
+      <div class="insight-grid mt-4" data-testid="insight-grid" id="insightGrid">
+        <div class="insight-card" data-testid="forecast-card" id="forecastCard" style="display:none;">
+          <span class="insight-card-eyebrow">This month · forecast</span>
+          <div class="insight-card-value" id="forecastValue">—</div>
+          <div class="insight-card-desc" id="forecastDesc">
+            Linear projection based on your pace so far — estimate only.
+          </div>
+        </div>
+        <div class="insight-card reminder-card" data-testid="reminder-card" id="reminderCard" style="display:none;">
+          <span class="insight-card-eyebrow">Smart nudge</span>
+          <div class="insight-card-value" id="reminderValue" style="color:var(--warning);">—</div>
+          <div class="insight-card-desc" id="reminderDesc">
+            Deals sitting in Lead / Pitched for 5+ days without movement.
+          </div>
+          <button class="insight-card-action" id="reminderAction" type="button">Open pipeline →</button>
+        </div>
+      </div>
+
+      <div class="glass-card mt-4">
+        <h3>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="icon-mr-6">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+            <polyline points="16 7 22 7 22 13" />
+          </svg>
+          Earnings — Last 6 Months
+        </h3>
+        <div class="chart-container" id="earningsChart"></div>
+      </div>
+    </section>
+
+    <!-- LOG DEAL -->
+    <section id="logDeal" class="tab-section">
+      <div class="glass-card">
+        <div class="section-header-lg">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8890A" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+          <h2 class="m-0">Log a New Deal</h2>
+        </div>
+
+        <div class="form-field">
+          <label>Select Package <span class="req">*</span></label>
+          <div class="form-grid-2col" id="pkgSelectGrid"></div>
+        </div>
+
+        <div class="form-field">
+          <label for="dealClientName">Client Business Name <span class="req">*</span></label>
+          <div class="input-with-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <input type="text" id="dealClientName" class="glass-input" placeholder="e.g. Sharma Electronics Pvt Ltd"
+              required>
+          </div>
+        </div>
+
+        <div class="form-grid-2col-gap12">
+          <div class="form-field">
+            <label for="dealIndustry">Industry</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
+              <input type="text" id="dealIndustry" class="glass-input" placeholder="e.g. Retail, IT, Food">
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="dealClientPhone">Client Phone</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+              <input type="tel" id="dealClientPhone" class="glass-input" placeholder="e.g. 9876543210">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Current Stage</label>
+          <div class="stage-pills-row" id="stageSelectGrid">
+            <button class="stage-pill active" data-stage="Lead Found">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              Lead Found
+            </button>
+            <button class="stage-pill" data-stage="Pitched">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              Pitched
+            </button>
+            <button class="stage-pill" data-stage="Negotiating">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              Negotiating
+            </button>
+            <button class="stage-pill" data-stage="Closed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Closed
+            </button>
+            <button class="stage-pill" data-stage="Payment Received">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
+              Payment Received
+            </button>
+          </div>
+        </div>
+
+        <div class="form-grid-2col-gap12">
+          <div class="form-field">
+            <label for="dealFollowup">Follow-up Date</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              <input type="date" id="dealFollowup" class="glass-input">
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="dealCityArea">City / Area</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <input type="text" id="dealCityArea" class="glass-input" placeholder="e.g. Kolkata, Delhi">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="dealNotes">Notes <span
+              class="label-optional">(Optional)</span></label>
+          <textarea id="dealNotes" class="glass-input" rows="3"
+            placeholder="Key points from conversation, client requirements, pricing discussed..."
+            maxlength="300"></textarea>
+          <div class="char-count"><span id="dealNotesCount">0</span>/300</div>
+        </div>
+
+        <div class="preview-box mt-4" id="dealPreviewBox">
+          <div class="preview-box-label">
+            Commission Preview</div>
+          <div class="flex-between">
+            <span class="muted-text">Package</span>
+            <span id="previewPkg" class="gold-text font-bold">-</span>
+          </div>
+          <div class="flex-between mt-2">
+            <span class="muted-text">Rate</span>
+            <span id="previewRate">-</span>
+          </div>
+          <div class="flex-between mt-2 pt-2 border-top">
+            <strong>YOUR EARNING</strong>
+            <strong id="previewEarning" class="text-green text-lg">₹0</strong>
+          </div>
+        </div>
+
+        <button id="submitDealBtn" class="gold-btn offset-btn mt-4 w-full" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="icon-mr-6">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          Submit Deal
+        </button>
+      </div>
+    </section>
+
+    <!-- PIPELINE -->
+    <section id="pipeline" class="tab-section">
+      <div class="glass-card pipeline-header-card">
+        <div class="pipeline-header-row">
+          <div>
+            <h2 class="pipeline-title">Active Pipeline</h2>
+            <p class="muted-text pipeline-subtitle">Tap any stage button to move deal forward</p>
+          </div>
+          <div class="pipeline-filter-group" id="pipelineStageFilter">
+            <button class="mini-stage-btn active" data-filter="all" onclick="filterPipeline('all',this)">All</button>
+            <button class="mini-stage-btn border-l-blue" data-filter="Lead Found" onclick="filterPipeline('Lead Found',this)">Lead</button>
+            <button class="mini-stage-btn border-l-purple" data-filter="Pitched" onclick="filterPipeline('Pitched',this)">Pitched</button>
+            <button class="mini-stage-btn border-l-amber" data-filter="Negotiating" onclick="filterPipeline('Negotiating',this)">Negotiating</button>
+            <button class="mini-stage-btn border-l-green" data-filter="Closed" onclick="filterPipeline('Closed',this)">Closed</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="pipelineList">
+        <div class="empty-state glass-card">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"
+            class="icon-mb-12">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>
+          <p class="muted-text">No active deals. Log your first deal!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="history" class="tab-section">
+      <div class="glass-card">
+        <div class="history-header-row">
+          <h2 class="m-0">Deal History</h2>
+          <div class="history-controls">
+            <input type="text" id="historySearch" class="glass-input history-search-input" placeholder="Search client...">
+            <select id="historyFilter" class="glass-input history-filter-select" title="History Filter"
+              aria-label="History Filter">
+              <option value="all">All Stages</option>
+              <option value="Lead Found">Lead Found</option>
+              <option value="Pitched">Pitched</option>
+              <option value="Negotiating">Negotiating</option>
+              <option value="Closed">Closed</option>
+              <option value="Payment Received">Payment Received</option>
+            </select>
+          </div>
+        </div>
+        <div id="historyList" class="history-list mt-4"></div>
+      </div>
+    </section>
+
+    <!-- PAYOUTS -->
+    <section id="payouts" class="tab-section">
+      <div class="stats-grid mb-4 payout-stats-grid">
+        <div class="stat-card offset-card gradient-border-card">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">Total Earned</div>
+            <div class="stat-value text-green" id="payoutTotalEarned">₹0</div>
+          </div>
+        </div>
+        <div class="stat-card offset-card gradient-border-card">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">Pending Amount</div>
+            <div class="stat-value text-amber" id="payoutPending">₹0</div>
+          </div>
+        </div>
+        <div class="stat-card offset-card gradient-border-card">
+          <div class="gradient-border-card-inner">
+            <div class="stat-label">Received</div>
+            <div class="stat-value text-blue" id="payoutReceived">₹0</div>
+          </div>
+        </div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="glass-card">
+          <h3>Request Payout</h3>
+          <p class="muted-text mb-4 muted-desc">Pending amount will be calculated automatically.</p>
+          <div class="form-field">
+            <label for="payoutUpi">UPI ID <span class="req">*</span></label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
+              <input type="text" id="payoutUpi" class="glass-input" placeholder="yourname@upi">
+            </div>
+          </div>
+          <button id="requestPayoutBtn" class="gold-btn offset-btn mt-4 w-full" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              class="icon-mr-6">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+            Request Payout
+          </button>
+          <div class="mt-4 pt-4 border-top">
+            <label for="payoutMsg" class="payout-whatsapp-label">WhatsApp Message
+              (tap to copy)</label>
+            <textarea id="payoutMsg" class="glass-input payout-msg-textarea" rows="5" readonly onclick="copyPayoutMsg()"
+              title="Payout Message"
+              placeholder="Your payout message"></textarea>
+            <button id="copyMsgBtn" class="outline-gold-btn mt-2 w-full">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="icon-mr-4">
+                <rect x="9" y="9" width="13" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy Message
+            </button>
+          </div>
+        </div>
+        <div class="glass-card" data-testid="payout-history-card">
+          <div class="section-header" style="justify-content:space-between;">
+            <h3 class="m-0" style="display:inline-flex;align-items:center;gap:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              Payout Timeline
+            </h3>
+            <button class="share-card-btn" id="quickShareBtn" type="button" data-testid="quick-share-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              Share Earnings
+            </button>
+          </div>
+          <div id="payoutTimeline" class="timeline" data-testid="payout-timeline"></div>
+          <div id="payoutHistoryList" class="scrollable-list" style="display:none;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TROPHIES / RECOGNITION -->
+    <section id="trophies" class="tab-section" data-testid="trophies-section">
+      <div class="glass-card" data-testid="trophies-header-card">
+        <div class="trophy-section-header">
+          <div>
+            <span class="eyebrow">Your Achievements · Real Data</span>
+            <h2 class="m-0">Trophy Case &amp; Motivation Engine</h2>
+          </div>
+        </div>
+
+        <div class="motiv-grid" id="motivGrid" data-testid="motiv-grid">
+          <div class="motiv-card projected" data-testid="motiv-projected">
+            <div class="motiv-label">Projected Next Tier</div>
+            <div class="motiv-value" id="motivProjected">—</div>
+            <div class="motiv-sub" id="motivProjectedSub">based on your deal cadence</div>
+          </div>
+          <div class="motiv-card best-month" data-testid="motiv-best-month">
+            <div class="motiv-label">Personal Best Month</div>
+            <div class="motiv-value" id="motivBestMonth">—</div>
+            <div class="motiv-sub" id="motivBestMonthSub">this month vs your best</div>
+          </div>
+          <div class="motiv-card streak-fire" data-testid="motiv-streak">
+            <div class="motiv-label">Current Streak</div>
+            <div class="motiv-value" id="motivStreak">—</div>
+            <div class="motiv-sub" id="motivStreakSub">consecutive weeks closing deals</div>
+          </div>
+          <div class="motiv-card leaderboard" data-testid="motiv-leaderboard">
+            <div class="motiv-label">Your Rank This Month</div>
+            <div class="motiv-value" id="motivRank">—</div>
+            <div class="motiv-sub" id="motivRankSub">by deals closed among all partners</div>
+          </div>
+        </div>
+
+        <div class="trophy-case" id="trophyCase" data-testid="trophy-case">
+          <button class="trophy-tile" type="button" data-tier="bronze" data-testid="trophy-bronze">
+            <div class="trophy-medal trophy-medal-bronze"><span class="trophy-medal-num">3</span></div>
+            <div class="trophy-name">Bronze Partner</div>
+            <div class="trophy-hint" data-role="hint">3 deals to unlock</div>
+          </button>
+          <button class="trophy-tile" type="button" data-tier="silver" data-testid="trophy-silver">
+            <div class="trophy-medal trophy-medal-silver"><span class="trophy-medal-num">7</span></div>
+            <div class="trophy-name">Silver Partner</div>
+            <div class="trophy-hint" data-role="hint">7 deals to unlock</div>
+          </button>
+          <button class="trophy-tile" type="button" data-tier="gold" data-testid="trophy-gold">
+            <div class="trophy-medal trophy-medal-gold"><span class="trophy-medal-num">15</span></div>
+            <div class="trophy-name">Gold Partner</div>
+            <div class="trophy-hint" data-role="hint">15 deals to unlock</div>
+          </button>
+          <div class="trophy-details" id="trophyDetails" data-testid="trophy-details">
+            <h4 class="trophy-details-heading">Select a trophy above</h4>
+            <p class="trophy-details-body">Tap a tier to see its unlock date, perks, and cash bonus.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE / SETTINGS -->
+    <section id="profile" class="tab-section" data-testid="profile-section">
+      <div class="profile-section">
+        <div class="profile-hero" data-testid="profile-hero">
+          <div class="profile-avatar" id="profileAvatar" aria-hidden="true">DR</div>
+          <div class="profile-hero-info">
+            <h2 class="profile-hero-name" id="profileHeroName">Partner</h2>
+            <div>
+              <span class="profile-hero-code" id="profileHeroCode">DR_—</span>
+              <span class="profile-hero-tier" id="profileHeroTier">⭐ Joining</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group" data-testid="settings-personal">
+          <div class="settings-group-title">Personal Information</div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Full name</div>
+              <div class="settings-row-label-hint">Shown on your dashboard and payouts</div>
+            </div>
+            <input type="text" id="profileNameInput" class="glass-input" placeholder="Your name" data-testid="profile-name-input">
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Phone / WhatsApp</div>
+              <div class="settings-row-label-hint">Used only for payout confirmations</div>
+            </div>
+            <input type="tel" id="profilePhoneInput" class="glass-input" placeholder="9xxxxxxxxx" data-testid="profile-phone-input">
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Default UPI</div>
+              <div class="settings-row-label-hint">Prefills your Payout requests</div>
+            </div>
+            <input type="text" id="profileUpiInput" class="glass-input" placeholder="you@upi" data-testid="profile-upi-input">
+          </div>
+        </div>
+
+        <div class="settings-group" data-testid="settings-preferences">
+          <div class="settings-group-title">Preferences</div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Theme</div>
+              <div class="settings-row-label-hint">Dark space or warm cream paper</div>
+            </div>
+            <button type="button" class="spring-toggle" id="profileThemeToggle" aria-label="Toggle theme" data-testid="profile-theme-toggle"></button>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">In-app announcements</div>
+              <div class="settings-row-label-hint">Show pulse on urgent announcements</div>
+            </div>
+            <button type="button" class="spring-toggle is-on" id="profileAnnToggle" aria-label="Toggle announcements" data-testid="profile-ann-toggle"></button>
+          </div>
+        </div>
+
+        <div class="settings-group" data-testid="settings-account">
+          <div class="settings-group-title">Account</div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Partner code</div>
+              <div class="settings-row-label-hint">Read-only — issued by DigiRise India</div>
+            </div>
+            <div><span class="profile-hero-code" id="profileCodeReadonly">DR_—</span></div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label">
+              <div class="settings-row-label-title">Sign out</div>
+              <div class="settings-row-label-hint">You'll be redirected to the login screen</div>
+            </div>
+            <button class="settings-action danger" id="profileLogoutBtn" type="button" data-testid="profile-logout-btn">Log out</button>
+          </div>
+        </div>
+
+        <div class="profile-save-bar" data-testid="profile-save-bar">
+          <button class="settings-action" id="profileResetBtn" type="button" data-testid="profile-reset-btn">Reset</button>
+          <button class="gold-btn" id="profileSaveBtn" type="button" data-testid="profile-save-btn">Save changes</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALCULATOR -->
+    <section id="calculator" class="tab-section">
+      <div class="glass-card">
+        <h2>Earnings Calculator</h2>
+        <p class="muted-text mb-4 muted-desc">Calculate potential earnings including tier bonuses.</p>
+        <div class="calc-grid">
+          <div class="pkg-calc-grid form-grid-2col" id="calcPkgGrid">
+          </div>
+          <div class="calc-controls glass-card-inner">
+            <label class="text-center block mb-2 calc-deal-label">Number of Deals</label>
+            <div class="qty-control">
+              <button id="calcMinus" class="qty-btn">−</button>
+              <input type="number" id="calcQty" value="1" min="1" max="30" class="qty-input" readonly title="Quantity"
+                placeholder="1" aria-label="Number of Deals">
+              <button id="calcPlus" class="qty-btn">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="calc-result-box mt-4">
+          <div class="flex-between mb-2"><span>Package Value</span><span id="calcPkgPrice">-</span></div>
+          <div class="flex-between mb-2"><span>Base Commission Rate</span><span id="calcBaseRate">-</span></div>
+          <div class="flex-between mb-2"><span>Per Deal Earning</span><span id="calcPerDeal">-</span></div>
+          <div class="flex-between mb-2"><span>× Quantity</span><span id="calcTotalQty">-</span></div>
+          <div class="flex-between mb-2 text-gold"><span>Tier Bonus</span><span id="calcTierBonus">+₹0</span></div>
+          <div class="flex-between mb-2 text-gold"><span>Extra Commission</span><span id="calcExtraComm">+₹0</span>
+          </div>
+          <div class="flex-between mt-4 pt-4 border-top">
+            <strong>TOTAL EARNINGS</strong>
+            <span id="calcGrandTotal" class="text-green text-xl"><strong>₹0</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- EDIT DEAL MODAL -->
+  <div id="editDealModal" class="modal-overlay-custom">
+    <div class="modal-box-custom">
+      <div class="modal-top-line"></div>
+      <button onclick="closeEditModal()" class="modal-close-custom">✕</button>
+      <h3 class="modal-title-custom">Edit Deal</h3>
+      <p class="modal-subtitle-custom">Current Stage: <span id="editStageDisplay"
+          class="edit-stage-display"></span></p>
+      <div class="modal-field-group">
+        <label class="modal-label-custom">Client
+          Name *</label>
+        <input id="editClientName" type="text" class="glass-input" placeholder="Client business name">
+      </div>
+      <div class="form-grid-2col-gap12 modal-field-group">
+        <div>
+          <label class="modal-label-custom">Industry</label>
+          <input id="editIndustry" type="text" class="glass-input" placeholder="e.g. Retail">
+        </div>
+        <div>
+          <label class="modal-label-custom">Client
+            Phone</label>
+          <input id="editClientPhone" type="tel" class="glass-input" placeholder="9876543210">
+        </div>
+      </div>
+      <div class="form-grid-2col-gap12 modal-field-group">
+        <div>
+          <label class="modal-label-custom">City
+            / Area</label>
+          <input id="editCityArea" type="text" class="glass-input" placeholder="e.g. Delhi">
+        </div>
+        <div>
+          <label for="editFollowup" class="modal-label-custom">Follow-up
+            Date</label>
+          <input id="editFollowup" type="date" class="glass-input">
+        </div>
+      </div>
+      <div class="modal-field-group-lg">
+        <label class="modal-label-custom">Notes</label>
+        <textarea id="editNotes" class="glass-input" rows="3" placeholder="Key details..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button onclick="closeEditModal()" class="modal-btn-cancel">Cancel</button>
+        <button onclick="saveEditDeal()" class="modal-btn-save">Save
+          Changes ✅</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 6: CUSTOM PWA INSTALL PROMPT (glass material) -->
+  <div id="pwaInstallModal" class="pwa-install-modal" role="dialog" aria-labelledby="pwaInstallTitle" aria-modal="true" data-testid="pwa-install-modal">
+    <div class="pwa-install-card">
+      <div class="pwa-install-header">
+        <div class="pwa-install-icon" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="pwaGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#F5C842"/><stop offset="60%" stop-color="#E8A020"/><stop offset="100%" stop-color="#B87708"/>
+              </linearGradient>
+            </defs>
+            <rect x="1" y="1" width="38" height="38" rx="11" fill="url(#pwaGrad)" stroke="rgba(0,0,0,0.18)"/>
+            <path d="M9 27 L18 15 L23 21 L31 11" stroke="#141414" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="31" cy="11" r="2.6" fill="#141414"/>
+          </svg>
+        </div>
+        <div>
+          <h3 id="pwaInstallTitle" class="pwa-install-title">Install DigiRise&nbsp;OS</h3>
+          <p class="pwa-install-sub">Get it on your home screen</p>
+        </div>
+      </div>
+      <p class="pwa-install-body">
+        One tap and the full partner OS lives on your device — offline-ready, faster load, works like a native app.
+      </p>
+      <ul class="pwa-install-perks">
+        <li>Full-screen dashboard, no browser bar</li>
+        <li>Works offline — deals sync when you're back</li>
+        <li>Instant open from home screen icon</li>
+      </ul>
+      <div class="pwa-install-actions">
+        <button type="button" class="pwa-install-secondary" id="pwaInstallLater" data-testid="pwa-install-later">Maybe Later</button>
+        <button type="button" class="pwa-install-primary" id="pwaInstallAccept" data-testid="pwa-install-accept">Install App</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 7: QUICK-SHARE EARNINGS PREVIEW -->
+  <div id="sharePreviewModal" class="share-preview-modal" role="dialog" aria-labelledby="sharePreviewTitle" aria-modal="true" data-testid="share-preview-modal">
+    <div class="share-preview-inner">
+      <h3 id="sharePreviewTitle" style="margin:0 0 12px;font-family:var(--font-display);font-size:18px;">Share your earnings</h3>
+      <canvas id="shareCanvas" width="1080" height="1350" aria-label="Earnings share preview"></canvas>
+      <div class="share-preview-actions">
+        <button type="button" id="shareCloseBtn" data-testid="share-close-btn">Close</button>
+        <button type="button" id="shareDownloadBtn" class="share-preview-primary" data-testid="share-download-btn">Download PNG</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/partner.js"></script>
+  <script src="js/enhancements.js"></script>
+  <script src="js/partner-enhancements.js"></script>
+  <script src="js/digirise-nextgen.js"></script>
+
+  <!-- SESSION 4: PHASE G1 — Command Palette Overlay -->
+  <div id="cmdPaletteOverlay" class="cmd-palette-overlay">
+    <div class="cmd-palette-box">
+      <div class="cmd-palette-header">
+        <svg width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input id="cmdPaletteInput" type="text"
+          placeholder="Type a command or search..."
+          autocomplete="off">
+        <kbd class="cmd-palette-esc">ESC</kbd>
+      </div>
+      <div id="cmdPaletteResults" class="cmd-palette-results"></div>
+    </div>
+  </div>
+</body>
+
+</html>

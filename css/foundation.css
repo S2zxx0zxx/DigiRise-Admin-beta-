@@ -1,0 +1,452 @@
+/* =====================================================================
+   DIGIRISE — PHASE 1 DESIGN SYSTEM FOUNDATION
+   Additive layer on top of existing shared.css tokens.  Everything
+   here is reusable — no per-component hardcoding downstream.
+   ===================================================================== */
+
+:root {
+  /* ── Typography stack ─────────────────────────────────────────── */
+  --font-body: 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  --font-editorial: 'Instrument Serif', 'Georgia', 'Times New Roman', serif;
+  --font-numeric: 'Inter', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ── Fluid display type scale (bigger than body scale) ───────── */
+  --display-sm: clamp(20px, 4.2vw, 26px);
+  --display-md: clamp(28px, 5.5vw, 40px);
+  --display-lg: clamp(36px, 7vw, 58px);
+  --display-xl: clamp(48px, 10vw, 96px);
+
+  /* ── Elevation system — 4 rungs of depth + gold halo ─────────── */
+  --elevation-soft:   0 1px 2px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.12);
+  --elevation-medium: 0 2px 6px rgba(0,0,0,0.14), 0 8px 22px rgba(0,0,0,0.22);
+  --elevation-strong: 0 4px 12px rgba(0,0,0,0.22), 0 22px 48px rgba(0,0,0,0.34);
+  --elevation-halo-gold:   0 10px 40px rgba(200,137,10,0.28), 0 2px 6px rgba(0,0,0,0.24);
+  --elevation-halo-purple: 0 10px 40px rgba(168,85,247,0.28), 0 2px 6px rgba(0,0,0,0.24);
+  --elevation-inset:  inset 0 1px 0 rgba(255,255,255,0.06);
+
+  /* ── Motion tokens (formal, named) ───────────────────────────── */
+  --ease-expo-out:   cubic-bezier(0.16, 1, 0.3, 1);       /* entrances */
+  --ease-expo-in:    cubic-bezier(0.7, 0, 0.84, 0);       /* exits */
+  --ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);   /* interactive feedback */
+  --ease-hover:      cubic-bezier(0.2, 0.8, 0.2, 1);      /* general hover */
+  --ease-linear:     linear;
+
+  --dur-tap:      120ms;
+  --dur-hover:    220ms;
+  --dur-transition: 380ms;
+  --dur-page:     620ms;
+  --dur-ambient:  22s;
+
+  /* ── Glass / material tokens ─────────────────────────────────── */
+  --glass-blur: 18px;
+  --glass-blur-strong: 28px;
+  --glass-tint-dark:  rgba(14, 15, 18, 0.62);
+  --glass-tint-light: rgba(255, 253, 248, 0.78);
+  --glass-border-dark: 1px solid rgba(255,255,255,0.08);
+  --glass-border-light: 1px solid rgba(20,17,10,0.08);
+  --glass-inner-glow-dark: inset 0 1px 0 rgba(255,255,255,0.06);
+  --glass-inner-glow-light: inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+html[data-theme="light"] {
+  --elevation-soft:   0 1px 2px rgba(120,90,30,0.06), 0 2px 8px rgba(120,90,30,0.08);
+  --elevation-medium: 0 2px 6px rgba(120,90,30,0.10), 0 8px 22px rgba(120,90,30,0.14);
+  --elevation-strong: 0 4px 12px rgba(120,90,30,0.14), 0 22px 48px rgba(120,90,30,0.20);
+  --elevation-halo-gold:   0 10px 40px rgba(200,137,10,0.22), 0 2px 6px rgba(120,90,30,0.10);
+  --elevation-halo-purple: 0 10px 40px rgba(168,85,247,0.20), 0 2px 6px rgba(120,90,30,0.10);
+  --elevation-inset:  inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+/* =========================================================
+   TYPOGRAPHY UTILITIES
+   Mix bold display weight with refined body weight.
+   ========================================================= */
+
+.display,
+.display-1,
+.display-2,
+.display-3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  font-variation-settings: 'opsz' 96;
+}
+.display-1 { font-size: var(--display-xl); }
+.display-2 { font-size: var(--display-lg); }
+.display-3 { font-size: var(--display-md); }
+
+.editorial-italic {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.tabular-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* =========================================================
+   BRAND LOCKUP  —  DigiRise OS wordmark
+   Used in partner.html + admin.html header
+   ========================================================= */
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  padding: 4px 6px 4px 4px;
+  border-radius: 12px;
+  transition: transform var(--dur-hover) var(--ease-hover),
+              background var(--dur-hover) var(--ease-hover);
+}
+.brand-lockup:hover {
+  background: rgba(200,137,10,0.06);
+  transform: translateY(-1px);
+}
+.brand-lockup:active { transform: translateY(0); }
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--elevation-halo-gold);
+  transition: transform var(--dur-hover) var(--ease-spring),
+              box-shadow var(--dur-hover) var(--ease-hover);
+}
+.brand-mark svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.brand-lockup:hover .brand-mark {
+  transform: rotate(-4deg) scale(1.04);
+}
+.brand-mark-admin { box-shadow: var(--elevation-halo-purple); }
+
+.brand-wordmark {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  line-height: 1;
+  min-width: 0;
+}
+
+.brand-word-primary {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.035em;
+  color: var(--text-primary);
+  line-height: 1;
+  font-variation-settings: 'opsz' 24;
+}
+
+.brand-word-suffix {
+  font-family: var(--font-body);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-top: 3px;
+  color: var(--gold);
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid rgba(200,137,10,0.35);
+  border-radius: 4px;
+  line-height: 1.1;
+  background: rgba(200,137,10,0.06);
+}
+.brand-word-suffix-admin {
+  color: var(--purple-bright);
+  border-color: rgba(168,85,247,0.4);
+  background: rgba(168,85,247,0.07);
+}
+
+@media (max-width: 400px) {
+  .brand-mark { width: 30px; height: 30px; border-radius: 9px; }
+  .brand-word-primary { font-size: 15px; }
+  .brand-word-suffix { font-size: 8.5px; padding: 1px 5px; letter-spacing: 0.24em; }
+  .brand-lockup { gap: 8px; padding: 4px; }
+}
+@media (max-width: 340px) {
+  .brand-word-suffix { display: none; }
+}
+
+/* Legacy .logo-text still used by other places — no visual change */
+
+/* =========================================================
+   GLASS / DEPTH UTILITIES (reusable across cards, modals, popups)
+   ========================================================= */
+.glass-panel {
+  background: var(--glass-tint-dark);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: var(--glass-border-dark);
+  box-shadow: var(--elevation-medium), var(--glass-inner-glow-dark);
+  border-radius: var(--radius-lg, 16px);
+}
+html[data-theme="light"] .glass-panel {
+  background: var(--glass-tint-light);
+  border: var(--glass-border-light);
+  box-shadow: var(--elevation-medium), var(--glass-inner-glow-light);
+}
+.glass-panel-strong {
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(200%);
+  backdrop-filter: blur(var(--glass-blur-strong)) saturate(200%);
+}
+
+.elevate-soft   { box-shadow: var(--elevation-soft); }
+.elevate-medium { box-shadow: var(--elevation-medium); }
+.elevate-strong { box-shadow: var(--elevation-strong); }
+.elevate-halo-gold   { box-shadow: var(--elevation-halo-gold); }
+.elevate-halo-purple { box-shadow: var(--elevation-halo-purple); }
+
+/* Reusable interactive card lift */
+.tactile,
+.tactile-hover {
+  transition: transform var(--dur-hover) var(--ease-hover),
+              box-shadow var(--dur-hover) var(--ease-hover);
+  will-change: transform;
+}
+.tactile-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--elevation-strong);
+}
+.tactile:active { transform: translateY(0) scale(0.99); transition-duration: var(--dur-tap); }
+
+/* =========================================================
+   AMBIENT MESH GRADIENT BACKGROUND
+   Extends the existing .mesh-breathing-bg with a second layer
+   for extra depth.  Respects prefers-reduced-motion.
+   ========================================================= */
+.mesh-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.mesh-ambient::before,
+.mesh-ambient::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.mesh-ambient::before {
+  width: 55vmax;
+  height: 55vmax;
+  left: -18vmax;
+  top: -18vmax;
+  background: radial-gradient(circle, rgba(200,137,10,0.32) 0%, rgba(200,137,10,0) 70%);
+  animation: meshDriftA var(--dur-ambient) var(--ease-expo-out) infinite alternate;
+}
+.mesh-ambient::after {
+  width: 60vmax;
+  height: 60vmax;
+  right: -22vmax;
+  bottom: -22vmax;
+  background: radial-gradient(circle, rgba(168,85,247,0.24) 0%, rgba(168,85,247,0) 70%);
+  animation: meshDriftB calc(var(--dur-ambient) * 1.35) var(--ease-expo-out) infinite alternate;
+}
+html[data-theme="light"] .mesh-ambient::before { opacity: 0.24; }
+html[data-theme="light"] .mesh-ambient::after  { opacity: 0.18; }
+
+@keyframes meshDriftA {
+  0%   { transform: translate3d(0,0,0)     scale(1); }
+  50%  { transform: translate3d(4vw,3vh,0) scale(1.08); }
+  100% { transform: translate3d(-2vw,5vh,0) scale(1.02); }
+}
+@keyframes meshDriftB {
+  0%   { transform: translate3d(0,0,0)      scale(1); }
+  50%  { transform: translate3d(-3vw,-4vh,0) scale(1.10); }
+  100% { transform: translate3d(2vw,-1vh,0)  scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh-ambient::before,
+  .mesh-ambient::after { animation: none; }
+}
+
+/* =========================================================
+   TACTILE BUTTON MICRO-INTERACTIONS
+   Applies to any button / .btn / gold-btn / outline button.
+   Uses per-property transitions (not `all`) to avoid
+   destroying transforms on hover.
+   ========================================================= */
+button,
+.btn,
+.gold-btn,
+.outline-gold-btn,
+.gold-btn-large,
+.purple-btn {
+  transition: transform var(--dur-tap) var(--ease-hover),
+              background-color var(--dur-hover) var(--ease-hover),
+              box-shadow var(--dur-hover) var(--ease-hover),
+              color var(--dur-hover) var(--ease-hover),
+              opacity var(--dur-hover) var(--ease-hover),
+              border-color var(--dur-hover) var(--ease-hover);
+}
+.gold-btn:hover:not(:disabled),
+.gold-btn-large:hover:not(:disabled) {
+  box-shadow: var(--elevation-halo-gold);
+  transform: translateY(-1px);
+}
+.gold-btn:active:not(:disabled),
+.gold-btn-large:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.outline-gold-btn:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(200,137,10,0.06);
+}
+.outline-gold-btn:active:not(:disabled) { transform: scale(0.98); }
+
+/* =========================================================
+   SCROLL REVEAL — reuse existing .reveal-on-scroll pattern
+   but harden reduced-motion handling.
+   ========================================================= */
+.reveal-on-scroll { opacity: 0; transform: translateY(24px); transition: opacity var(--dur-transition) var(--ease-expo-out), transform var(--dur-transition) var(--ease-expo-out); }
+.reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+
+/* Stagger reveals — children fade in sequentially once their nearest
+   .reveal-on-scroll ancestor (or the stagger element itself) is revealed. */
+.reveal-stagger > * { opacity: 0; transform: translateY(20px); transition: opacity var(--dur-transition) var(--ease-expo-out), transform var(--dur-transition) var(--ease-expo-out); }
+.reveal-stagger.revealed > *,
+.reveal-on-scroll.revealed .reveal-stagger > * { opacity: 1; transform: translateY(0); }
+.reveal-stagger.revealed > *:nth-child(1),
+.reveal-on-scroll.revealed .reveal-stagger > *:nth-child(1) { transition-delay: 60ms; }
+.reveal-stagger.revealed > *:nth-child(2),
+.reveal-on-scroll.revealed .reveal-stagger > *:nth-child(2) { transition-delay: 140ms; }
+.reveal-stagger.revealed > *:nth-child(3),
+.reveal-on-scroll.revealed .reveal-stagger > *:nth-child(3) { transition-delay: 220ms; }
+.reveal-stagger.revealed > *:nth-child(4),
+.reveal-on-scroll.revealed .reveal-stagger > *:nth-child(4) { transition-delay: 300ms; }
+.reveal-stagger.revealed > *:nth-child(5),
+.reveal-on-scroll.revealed .reveal-stagger > *:nth-child(5) { transition-delay: 380ms; }
+.reveal-stagger.revealed > *:nth-child(6),
+.reveal-on-scroll.revealed .reveal-stagger > *:nth-child(6) { transition-delay: 460ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll,
+  .reveal-stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* =========================================================
+   FOCUS-VISIBLE POLISH (a11y + premium feel)
+   ========================================================= */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* =========================================================
+   COUNTUP HELPER  (so any number can animate on load)
+   ========================================================= */
+[data-countup] {
+  font-variant-numeric: tabular-nums;
+  transition: opacity var(--dur-hover) var(--ease-hover);
+}
+[data-countup].countup-init { opacity: 0.65; }
+
+/* =========================================================
+   SPRING TOGGLE (used in Profile / Settings)
+   ========================================================= */
+.spring-toggle {
+  --toggle-w: 40px;
+  --toggle-h: 22px;
+  width: var(--toggle-w);
+  height: var(--toggle-h);
+  border-radius: 999px;
+  background: var(--bg-surface-3);
+  border: 1px solid var(--border-default);
+  position: relative;
+  cursor: pointer;
+  transition: background var(--dur-hover) var(--ease-hover),
+              border-color var(--dur-hover) var(--ease-hover);
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.spring-toggle::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(var(--toggle-h) - 6px);
+  height: calc(var(--toggle-h) - 6px);
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  transition: transform var(--dur-hover) var(--ease-spring);
+}
+.spring-toggle.is-on {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.spring-toggle.is-on::before {
+  transform: translateX(calc(var(--toggle-w) - var(--toggle-h)));
+}
+.spring-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* =========================================================
+   SUBTLE SHINE SWEEP (for unlocked trophies / achievement)
+   ========================================================= */
+.shine-sweep {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.shine-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255,255,255,0.22) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  animation: shineSweep 4.5s var(--ease-expo-out) infinite;
+  pointer-events: none;
+}
+@keyframes shineSweep {
+  0%, 60% { transform: translateX(-120%); }
+  75%     { transform: translateX(120%); }
+  100%    { transform: translateX(120%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shine-sweep::after { animation: none; opacity: 0; }
+}

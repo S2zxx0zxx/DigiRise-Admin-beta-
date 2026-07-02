@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigiRise India — Growth Partner Program</title>
+  <meta name="description" content="DigiRise India Growth Partner Program - Earn 10-15% commission per deal. Work from home with instant payouts and zero targets.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg">
+  <meta name="theme-color" content="#C8890A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DigiRise OS">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/foundation.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/enhancements.css">
+  <link rel="stylesheet" href="css/gemini-mesh.css">
+  <link rel="stylesheet" href="css/digirise-nextgen.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+  <!-- VIEW 1: PUBLIC LANDING PAGE -->
+  <div class="theme-toggle-wrapper">
+    <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle dark/light mode" type="button">
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+  </div>
+  <div id="view-public" class="view active">
+    
+    <!-- HERO SECTION -->
+    <div class="mesh-ambient" aria-hidden="true"></div>
+    <section class="pub-hero" data-testid="hero-section">
+      <div class="hero-eyebrow" data-testid="hero-eyebrow">
+        <span></span> Now Recruiting Growth Partners
+      </div>
+      <h1 class="hero-h1 display" data-testid="hero-heading">
+        Earn While You <span class="grad">Close Deals</span><br>For DigiRise India
+      </h1>
+      <p class="hero-sub">
+        Commission-based. Work from anywhere. Your timing, your freedom. No targets. No salary. Pure performance — the way it should be.
+      </p>
+      <div class="hero-btns" data-testid="hero-cta-row">
+        <button class="btn-gold offset-btn" data-testid="hero-apply-btn" onclick="openWhatsAppApply()">Apply on WhatsApp 🚀</button>
+        <a href="#login" data-testid="hero-login-link"><button class="btn-ghost">Partner Login →</button></a>
+      </div>
+
+      <div class="hero-live-badge" data-testid="hero-live-badge" aria-live="polite">
+        <span class="hero-live-dot" aria-hidden="true"></span>
+        <span class="hero-live-text">Live from our database —&nbsp;</span>
+        <strong id="heroLivePartnersLabel" data-live="partners-hero">counting…</strong>
+        <span>&nbsp;partners onboarded</span>
+      </div>
+
+      <div class="hero-stats" data-testid="hero-static-strip">
+        <div class="hero-stat">
+          <div class="hero-stat-val">10–15%</div>
+          <div class="hero-stat-label">Commission Per Deal</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">⚡ Instant</div>
+          <div class="hero-stat-label">Payout Speed</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">₹11,250</div>
+          <div class="hero-stat-label">Max Per Deal</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">100%</div>
+          <div class="hero-stat-label">Work From Home</div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="pub-divider">
+
+    <!-- HOW IT WORKS SECTION -->
+    <section class="pub-section reveal-on-scroll">
+      <div class="section-label">🛠️ How It Works</div>
+      <h2 class="sec-h">Simple Steps to Start Earning</h2>
+      <p class="section-sub">
+        No complicated registration. No hidden fees. Just 4 steps between you and your first payout.
+      </p>
+      <div class="steps-grid reveal-stagger">
+        <div class="step-card offset-card">
+          <div class="step-num">1</div>
+          <div class="step-title">Apply on WhatsApp</div>
+          <div class="step-desc">1 day approval process directly with the founders.</div>
+        </div>
+        <div class="step-card offset-card">
+          <div class="step-num">2</div>
+          <div class="step-title">Get Dashboard Access</div>
+          <div class="step-desc">Receive your unique Partner Code and login credentials.</div>
+        </div>
+        <div class="step-card offset-card">
+          <div class="step-num">3</div>
+          <div class="step-title">Log & Track Deals</div>
+          <div class="step-desc">Find a business, log the deal, and track its status live.</div>
+        </div>
+        <div class="step-card offset-card">
+          <div class="step-num">4</div>
+          <div class="step-title">Get Paid Instantly</div>
+          <div class="step-desc">Request payout as soon as the client pays.</div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="pub-divider">
+
+    <!-- COMMISSION SECTION -->
+    <section class="pub-section reveal-on-scroll">
+      <div class="section-label">💰 What You Earn</div>
+      <h2 class="section-h2">Commission on Every Deal You Close</h2>
+      <p class="section-sub">
+        Starter aur Growth packages pe 10%, Pro aur Elite pe 15% — kyunki bade deals mein mehnat zyada lagti hai, reward bhi zyada milta hai.
+      </p>
+      <div class="comm-grid reveal-stagger">
+        <div class="comm-card featured">
+          <div class="comm-pkg-name">Elite</div>
+          <div class="comm-price">Package Value: ₹75,000</div>
+          <div class="comm-earn">₹11,250</div>
+          <div class="comm-earn-label">You earn per deal</div>
+          <span class="comm-pct-badge pct-15">15% Commission</span>
+        </div>
+        <div class="comm-card featured">
+          <div class="comm-pkg-name">Pro</div>
+          <div class="comm-price">Package Value: ₹35,000</div>
+          <div class="comm-earn">₹5,250</div>
+          <div class="comm-earn-label">You earn per deal</div>
+          <span class="comm-pct-badge pct-15">15% Commission</span>
+        </div>
+        <div class="comm-card">
+          <div class="comm-pkg-name">Growth</div>
+          <div class="comm-price">Package Value: ₹25,000</div>
+          <div class="comm-earn">₹2,500</div>
+          <div class="comm-earn-label">You earn per deal</div>
+          <span class="comm-pct-badge pct-10">10% Commission</span>
+        </div>
+        <div class="comm-card">
+          <div class="comm-pkg-name">Starter</div>
+          <div class="comm-price">Package Value: ₹8,000</div>
+          <div class="comm-earn">₹800</div>
+          <div class="comm-earn-label">You earn per deal</div>
+          <span class="comm-pct-badge pct-10">10% Commission</span>
+        </div>
+      </div>
+    </section>
+
+    <hr class="pub-divider">
+
+    <!-- REAL NUMBERS SECTION — Live from Firebase -->
+    <section class="pub-section stats-strip reveal-on-scroll" data-testid="real-stats-section">
+      <div class="section-label">📊 Real Transparency</div>
+      <h2 class="sec-h">The Proof is in the Payouts</h2>
+      <p class="section-sub">
+        These numbers refresh live from our database — not marketing fluff.
+      </p>
+      <div class="real-stats-grid reveal-stagger" data-testid="live-stats-grid">
+        <div class="real-stat">
+          <div class="real-stat-val" data-countup data-live="partners" id="liveStatPartners">—</div>
+          <div class="real-stat-label">Active Partners</div>
+          <span class="live-dot" aria-hidden="true"></span>
+        </div>
+        <div class="real-stat">
+          <div class="real-stat-val" data-countup data-live="deals" id="liveStatDeals">—</div>
+          <div class="real-stat-label">Deals Logged</div>
+          <span class="live-dot" aria-hidden="true"></span>
+        </div>
+        <div class="real-stat">
+          <div class="real-stat-val" data-countup data-live="commission" data-currency id="liveStatCommission">—</div>
+          <div class="real-stat-label">Commission Earned</div>
+          <span class="live-dot" aria-hidden="true"></span>
+        </div>
+        <div class="real-stat">
+          <div class="real-stat-val" data-countup data-live="paid" data-currency id="liveStatPaid">—</div>
+          <div class="real-stat-label">Paid Out to Partners</div>
+          <span class="live-dot" aria-hidden="true"></span>
+        </div>
+      </div>
+      <p class="live-stats-note eyebrow" style="margin-top:22px; opacity:0.55;">Refreshed live — Firebase Realtime</p>
+    </section>
+
+    <hr class="pub-divider">
+
+    <!-- TIER SECTION -->
+    <section class="pub-section reveal-on-scroll">
+      <div class="section-label">🏆 Partner Tiers</div>
+      <h2 class="section-h2">Grow With Every Deal You Close</h2>
+      <p class="section-sub">
+        3 deals ke baad Bronze unlock hota hai — phir perks, cash bonuses aur priority leads milne shuru. Koi deadline nahi, koi pressure nahi.
+      </p>
+      <div class="tier-grid reveal-stagger">
+        <div class="tier-pub-card t-bronze">
+          <div class="tier-icon">🥉</div>
+          <div class="tier-pub-name">Bronze Partner</div>
+          <div class="tier-unlock">Unlock: 3 deals close karne ke baad</div>
+          <ul class="tier-pub-perks">
+            <li>Bronze Partner Digital Badge</li>
+            <li>₹500 Cash Bonus on 3rd deal</li>
+            <li>Public recognition in Partner Group</li>
+            <li>Warm lead support begins</li>
+          </ul>
+        </div>
+        <div class="tier-pub-card t-silver">
+          <div class="tier-icon">🥈</div>
+          <div class="tier-pub-name">Silver Partner</div>
+          <div class="tier-unlock">Unlock: 7 deals close karne ke baad</div>
+          <ul class="tier-pub-perks">
+            <li>Silver Badge + Certificate</li>
+            <li>₹1,500 Cash Bonus on 7th deal</li>
+            <li>Priority Leads — pehle aapko</li>
+            <li>Instagram Story feature</li>
+            <li>+1% extra commission (all deals)</li>
+          </ul>
+        </div>
+        <div class="tier-pub-card t-gold">
+          <div class="tier-icon">🥇</div>
+          <div class="tier-pub-name">Gold Partner</div>
+          <div class="tier-unlock">Unlock: 15 deals close karne ke baad</div>
+          <ul class="tier-pub-perks">
+            <li>Gold Badge + Framed Certificate</li>
+            <li>₹5,000 Cash Bonus on 15th deal</li>
+            <li>Website pe featured partner</li>
+            <li>Hot leads dedicated pipeline</li>
+            <li>+2% extra commission (all deals)</li>
+            <li>LinkedIn recommendation from Satyam</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <!-- DASHBOARD SHOWCASE SECTION -->
+    <section class="pub-section reveal-on-scroll">
+      <div class="section-label">💻 Your Dashboard, Your Control</div>
+      <h2 class="sec-h">Professional Tools Built For Partners</h2>
+      <p class="section-sub">
+        You're running a business. We give you the tech to run it smoothly.
+      </p>
+      <div class="dash-showcase-grid reveal-stagger">
+        <div class="showcase-card offset-card">
+          <div class="showcase-icon">📊</div>
+          <h4>Real-time deal tracking</h4>
+          <p>Know exactly where your deals stand.</p>
+        </div>
+        <div class="showcase-card offset-card">
+          <div class="showcase-icon">⚡</div>
+          <h4>Instant payout requests</h4>
+          <p>One tap to request your commission.</p>
+        </div>
+        <div class="showcase-card offset-card">
+          <div class="showcase-icon">📈</div>
+          <h4>Visual pipeline management</h4>
+          <p>Drag and drop simplicity.</p>
+        </div>
+        <div class="showcase-card offset-card">
+          <div class="showcase-icon">📈</div>
+          <h4>Performance analytics</h4>
+          <p>Track your earnings growth.</p>
+        </div>
+        <div class="showcase-card offset-card">
+          <div class="showcase-icon">🏆</div>
+          <h4>Tier progress tracking</h4>
+          <p>See how close you are to the next tier.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="pub-divider">
+
+    <!-- PAYOUT RULES -->
+    <section class="pub-section reveal-on-scroll">
+      <div class="section-label">⚡ Payout Rules</div>
+      <h2 class="section-h2">Instant. Transparent. No Drama.</h2>
+      <p class="section-sub">
+        Deal close karo, payout request karo, UPI pe aajao. Koi fixed date nahi, koi monthly cycle nahi.
+      </p>
+      <div class="payout-list reveal-stagger">
+        <div class="payout-item">
+          <div class="payout-item-icon">⚡</div>
+          <div>
+            <div class="payout-item-title">Instant Payout — Jab Chaho</div>
+            <div class="payout-item-desc">Deal confirm hone ke baad jab bhi ready ho — request karo. UPI pe seedha transfer. Koi wait nahi.</div>
+          </div>
+        </div>
+        <div class="payout-item">
+          <div class="payout-item-icon">📋</div>
+          <div>
+            <div class="payout-item-title">Transparent Breakdown</div>
+            <div class="payout-item-desc">Har payout ke saath WhatsApp pe full breakdown milega — deal name, package, commission %, exact amount.</div>
+          </div>
+        </div>
+        <div class="payout-item">
+          <div class="payout-item-icon">📦</div>
+          <div>
+            <div class="payout-item-title">Batch Option Bhi Available</div>
+            <div class="payout-item-desc">Agar sabko ek saath lena hai — woh bhi okay. Aapki marzi. Instant ya monthly — dono supported.</div>
+          </div>
+        </div>
+        <div class="payout-item">
+          <div class="payout-item-icon">🛡️</div>
+          <div>
+            <div class="payout-item-title">Full Payment = Full Commission</div>
+            <div class="payout-item-desc">Client ki full payment aane ke baad hi commission release hota hai. Clear, fair, no games.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="pub-divider">
+    <!-- WHY DIGIRISE — TRUST DEEP-DIVE (replaces fake testimonials with
+         real, source-of-truth policy statements already lived by the
+         program).  No invented names, no invented numbers. -->
+    <section class="pub-section reveal-on-scroll" data-testid="why-digirise-section">
+      <div class="section-label">🛡️ Why DigiRise</div>
+      <h2 class="sec-h">Built On Rules, Not Promises</h2>
+      <p class="section-sub">
+        Every policy below is baked into the platform itself — you can inspect it, request a payout against it, and hold us to it.
+      </p>
+      <div class="trust-grid reveal-stagger">
+        <div class="trust-card">
+          <div class="trust-card-badge">01</div>
+          <h4>Instant, Not "Soon"</h4>
+          <p>Payout requests are honored the same day, on your UPI. There is no monthly cycle to wait for.</p>
+          <span class="trust-card-tag">Live in Payouts tab</span>
+        </div>
+        <div class="trust-card trust-card-featured">
+          <div class="trust-card-badge">02</div>
+          <h4>Transparent Breakdown</h4>
+          <p>Every commission is shown as <code>package × commission %</code> — you can always trace the math to the deal.</p>
+          <span class="trust-card-tag">Preview in every deal</span>
+        </div>
+        <div class="trust-card">
+          <div class="trust-card-badge">03</div>
+          <h4>Full Payment Releases Commission</h4>
+          <p>Commission unlocks only when the client's full payment clears — clean, fair, and audit-able on both sides.</p>
+          <span class="trust-card-tag">Encoded in payout rules</span>
+        </div>
+      </div>
+    </section>
+
+    <hr class="pub-divider">
+
+    <!-- CULTURE SECTION -->
+    <section class="pub-section reveal-on-scroll">
+      <div class="section-label">🛡️ Our Culture</div>
+      <h2 class="section-h2">Professional Partnership — Not MLM</h2>
+      <p class="section-sub">
+        DigiRise India mein join karne ka matlab hai ek real business opportunity — flexible, respectful, honest.
+      </p>
+      <div class="cult-grid reveal-stagger">
+        <div class="cult-box cult-do">
+          <h4>✅ Haan — Ye Milega</h4>
+          <ul>
+            <li>Fully flexible timing — apne schedule pe</li>
+            <li>Instant payout on every deal</li>
+            <li>Public recognition for every win</li>
+            <li>Real commissions, clear percentages</li>
+            <li>No pressure, no micro-management</li>
+            <li>Exit anytime — no hard feelings</li>
+          </ul>
+        </div>
+        <div class="cult-box cult-dont">
+          <h4>❌ Nahi — Kabhi Nahi Hoga</h4>
+          <ul>
+            <li>Doston ko join karwane ki pressure</li>
+            <li>Vague "unlimited earning" promises</li>
+            <li>Public shame for slow months</li>
+            <li>Fixed hours ya daily check-ins</li>
+            <li>Delayed payments without reason</li>
+            <li>MLM-style referral chains</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <!-- FAQ SECTION -->
+    <section class="pub-section reveal-on-scroll">
+      <div class="section-label">❓ FAQ</div>
+      <h2 class="sec-h">Frequently Asked Questions</h2>
+      <div class="faq-accordion">
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">Is this MLM? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>No, this is a direct B2B affiliate partnership. You refer deals directly to us and get paid. No downlines, no joining fees, no referral chains.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">How fast do I actually get paid? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>Instantly. Once the client clears the payment, your commission unlocks. You can hit 'Request Payout' and we send it via UPI/Bank Transfer immediately.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">What if a client doesn't pay? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>Commission is tied to real revenue. If the client doesn't pay for the service, no commission is generated. We are partners in this.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">Do I need experience to start? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>No prior sales experience is required, just good networking and communication skills.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">Can I do this part-time? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>Yes! 100% flexible. Work from anywhere, anytime.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">What happens if I want to stop? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>You can stop anytime. No contracts binding you to a schedule.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="pub-divider">
+    <!-- FOOTER CTA -->
+    <div class="pub-cta">
+      <h2>Ready to Grow With DigiRise India? 🚀</h2>
+      <p>WhatsApp pe message karo — Satyam khud baat karega. Professional onboarding, same day.</p>
+      <button class="btn-gold offset-btn" onclick="openWhatsAppApply()">Apply Now — WhatsApp Me 👋</button>
+    </div>
+
+  </div><!-- /view-public -->
+
+
+  <!-- VIEW 2: LOGIN SCREEN -->
+  <div id="view-login" class="view">
+    <div class="login-wrap" id="login-theme-wrapper">
+      <div class="login-box" id="login-card-container">
+        
+        <div class="login-logo">
+          <div class="login-logo-icon" id="logo-icon-box">DR</div>
+          <h2 id="login-title-h2">DigiRise India</h2>
+          <p id="login-subtitle-p">Growth Partner Login</p>
+        </div>
+
+        <!-- Tab switches -->
+        <div class="login-tab-row">
+          <button id="tab-btn-partner" class="login-tab-btn active">Partner Access</button>
+          <button id="tab-btn-admin" class="login-tab-btn">Admin Command</button>
+        </div>
+
+        <!-- Partner Form -->
+        <div id="partner-login-form" class="login-form login-form-active">
+          <div class="login-field-group">
+            <label for="partner-name" class="login-field-label">Your Full Name</label>
+            <input type="text" id="partner-name" class="login-field-input" placeholder="e.g. Rahul Sharma" autocomplete="off">
+          </div>
+          <div class="login-field-group">
+            <label for="partner-code" class="login-field-label">Partner Code</label>
+            <input type="text" id="partner-code" class="login-field-input" placeholder="e.g. DR_DEMO" autocomplete="off">
+          </div>
+          <p id="partner-login-err" class="login-err"></p>
+          <button id="btn-login-partner" class="btn-gold offset-btn login-submit-btn" onclick="doPartnerLogin()">
+            <span>Login to Dashboard →</span>
+          </button>
+        </div>
+
+        <!-- Admin Form -->
+        <div id="admin-login-form" class="login-form">
+          <div class="login-field-group">
+            <label for="admin-password" class="login-field-label">Admin Secret Code</label>
+            <input type="password" id="admin-password" class="login-field-input" placeholder="Enter admin code">
+          </div>
+          <p id="admin-login-err" class="login-err"></p>
+          <button id="btn-login-admin" class="btn-gold offset-btn login-submit-btn" onclick="doAdminLogin()">
+            <span>Enter Admin Panel →</span>
+          </button>
+        </div>
+
+        <div class="login-switch-footer">
+          <a href="#public">← Back to Program</a>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /view-login -->
+
+  <!-- Firebase Compat SDKs (via CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.0/firebase-app-compat.js" integrity="sha512-jfs96YAnGTMC9xFGnAfRbzueW8flWwP4tapHGGNbu6c1yppm/G68RRPZ3vmu54vZgY/Bd9y9XPnk3j9Pb+esQw==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.0/firebase-database-compat.js" integrity="sha512-owH35e48w1EdX1QRDR1OQttI6W+wHMBT1tNMcQt4bwvVQU1+9CBRyjLV1ngbhfoiQvSg9lWdQ3qxw3prHEK77w==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.0/firebase-auth-compat.js" crossorigin="anonymous"></script>
+
+  <!-- Local Script Files -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/index.js"></script>
+  <script src="js/enhancements.js"></script>
+  <script src="js/digirise-nextgen.js"></script>
+</body>
+</html>
