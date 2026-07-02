@@ -26,7 +26,7 @@ git add . && git commit -m "OS 2.0 next-gen features" && git push origin main
 Vercel + GitHub Pages auto-deploy on push.
 
 ## IMPORTANT: Firebase Rules
-database.rules.json now includes the new `presence` node.
+database.rules.json now includes the new `presence` and `notifications` nodes.
 Paste updated rules in Firebase Console → Realtime Database → Rules.
 
 ## Files
@@ -35,3 +35,22 @@ Paste updated rules in Firebase Console → Realtime Database → Rules.
 - js/admin-nextgen.js — NEW admin features  
 - css/digirise-nextgen.css — NEW feature styles
 - service-worker.js — cache bumped to v3
+
+## Architecture
+- **Frontend:** HTML5, Vanilla JavaScript (ES6+), Custom CSS3
+- **Database:** Firebase Realtime Database
+- **Authentication:** Custom Partner Code + Admin Secret Protocol
+
+## Commission Structure
+| Package Name | Package Value | Commission Rate | You Earn (Per Deal) |
+| :--- | :--- | :--- | :--- |
+| **Starter** | ₹8,000 | 10% | **₹800** |
+| **Growth** | ₹25,000 | 10% | **₹2,500** |
+| **Pro** | ₹35,000 | 15% | **₹5,250** |
+| **Elite** | ₹75,000 | 15% | **₹11,250** |
+
+---
+<div align="center">
+  <i>Engineered for Performance. Built for Growth.</i><br>
+  <b>© DigiRise India</b>
+</div>

@@ -307,6 +307,13 @@ html[data-theme="light"] .bn-fab { border-color: #FDFCF8; }
   .bottom-nav { display: flex; }
   body { padding-bottom: 84px; }
   /* On mobile the top tab bar stays scrollable as secondary nav */
+
+  /* C2: Push toast container above the bottom nav */
+  .toast-container,
+  #toastContainer,
+  .toast-wrapper {
+    bottom: calc(84px + 12px) !important;
+  }
 }
 
 /* ─────────────────────────────────────────────
@@ -317,6 +324,25 @@ html[data-theme="light"] .bn-fab { border-color: #FDFCF8; }
   100% { background: transparent; }
 }
 .gold-pulse { animation: goldPulse 1.2s ease-out both; }
+
+/* C4 — Light theme: slider thumb border uses light bg instead of hardcoded dark */
+html[data-theme="light"] .calc-slider::-webkit-slider-thumb {
+  border-color: #FDFCF8;
+}
+html[data-theme="light"] .calc-slider::-moz-range-thumb {
+  border-color: #FDFCF8;
+}
+/* C4 — Light theme: rc-stat and calc-projection box backgrounds */
+html[data-theme="light"] .rc-stat {
+  background: rgba(0,0,0,0.03);
+  border-color: rgba(0,0,0,0.08);
+}
+html[data-theme="light"] .calc-projection {
+  background: rgba(200,137,10,0.08);
+}
+html[data-theme="light"] .followup-banner {
+  background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(239,68,68,0.06));
+}
 
 @media (prefers-reduced-motion: reduce) {
   .followup-banner, .af-item { animation: none; }

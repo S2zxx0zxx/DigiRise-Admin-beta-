@@ -8,7 +8,7 @@ const STATIC_ASSETS = [
   '/css/index.css',
   '/css/partner.css',
   '/css/admin.css',
-  'css/digirise-nextgen.css',
+  '/css/digirise-nextgen.css',
   '/favicon.svg',
   '/manifest.json'
 ];
