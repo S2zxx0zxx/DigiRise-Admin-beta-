@@ -7,7 +7,17 @@
       "$code": {
         ".read": "auth != null",
         ".write": "auth != null",
-        ".validate": "newData.hasChildren(['name', 'code']) && newData.child('name').isString() && newData.child('code').isString()"
+        "goals": {
+          "$month": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 50"
+          }
+        },
+        "referralBonus": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "referralBonusPaid": {
+          ".validate": "newData.isBoolean()"
+        }
       }
     },
 
@@ -30,7 +40,7 @@
         ".read": "auth != null",
         ".write": "auth != null",
         "$payoutId": {
-          ".validate": "newData.hasChildren(['amount', 'status']) && newData.child('amount').isNumber() && newData.child('status').isString()"
+          ".validate": "newData.hasChildren(['amount', 'status']) && newData.child('amount').isNumber() && newData.child('amount').val() > 0 && newData.child('status').isString()"
         }
       }
     },
@@ -46,12 +56,18 @@
     "activity": {
       ".read": "auth != null",
       ".write": "auth != null",
-      ".indexOn": ["time"]
+      ".indexOn": ["time"],
+      "$actId": {
+        ".validate": "newData.hasChildren(['icon', 'text', 'time']) && newData.child('text').isString() && newData.child('time').isNumber()"
+      }
     },
 
     "presence": {
       ".read": "auth != null",
-      ".write": "auth != null"
+      ".write": "auth != null",
+      "$code": {
+        ".validate": "newData.hasChildren(['online']) && newData.child('online').isBoolean()"
+      }
     },
 
     "notifications": {
@@ -59,21 +75,21 @@
       ".write": "auth != null",
       "$code": {
         ".read": "auth != null",
-        ".write": "auth != null"
+        ".write": "auth != null",
+        "$notifId": {
+          ".validate": "newData.hasChildren(['text', 'time']) && newData.child('text').isString() && newData.child('time').isNumber()"
+        }
       }
     },
 
-    "adminNotes": {
-      ".read": "auth != null && auth.token.admin === true",
-      ".write": "auth != null && auth.token.admin === true"
-    },
-
     "settings": {
-      ".read": "auth != null && auth.token.admin === true",
-      ".write": "auth != null && auth.token.admin === true",
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "adminPasswordHash": {
+        ".validate": "newData.isString() && newData.val().length == 64"
+      },
       "whatsappNumber": {
-        ".read": "auth != null",
-        ".write": "auth != null && auth.token.admin === true"
+        ".validate": "newData.isString()"
       }
     },
 
